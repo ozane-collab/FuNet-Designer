@@ -48,7 +48,7 @@
             .phone-container { border-radius: 30px; border: 8px solid #333; }
         }
 
-        /* SPLASH SCREENS WITH BLUR / FADE ANIMATIONS */
+        /* SPLASH SCREENS */
         .splash-one {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--primary); display: flex; flex-direction: column;
@@ -76,16 +76,24 @@
         .hidden { display: none !important; }
 
         /* HEADERS */
-        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: var(--card-light); }
+        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: var(--card-light); flex-shrink: 0; }
         .app-header .logo-area h2 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
         .app-header .logo-area p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; }
         
-        .sub-header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: var(--card-light); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .sub-header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: var(--card-light); border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; }
         .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; }
         .icon-btn { background: none; border: none; color: var(--text-light); font-size: 22px; cursor: pointer; padding: 5px; }
 
+        /* MAIN CONTENT AREA SCRIPTS */
+        .main-scrollable-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
         /* SERVICES LIST */
-        .services-container { display: flex; justify-content: center; gap: 15px; padding: 15px; }
+        .services-container { display: flex; justify-content: center; gap: 15px; padding: 15px; flex-shrink: 0; }
         .service-card {
             background-color: var(--card-light); border-radius: 20px; width: 165px; height: 135px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -96,31 +104,35 @@
         .service-card h4 { margin: 0; font-size: 14px; font-weight: bold; }
         .service-card p { margin: 4px 0 0 0; font-size: 10px; color: var(--grey-text); }
 
-        /* YANGO STYLE SEARCH BAR */
+        /* SEARCH BAR */
         .yango-search-bar {
             background-color: var(--card-light); margin: 10px 15px; padding: 14px 15px;
             border-radius: 14px; display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; border: 1px dashed rgba(252, 52, 36, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; border: 1px dashed rgba(252, 52, 36, 0.2); flex-shrink: 0;
         }
         .yango-search-bar .left-content { display: flex; align-items: center; gap: 12px; }
         .yango-search-bar .left-content i { color: var(--primary); font-size: 18px; }
         .yango-search-bar span { font-size: 14px; font-weight: 600; }
 
         /* RECENT ORDERS LIST */
-        .recent-orders-box { padding: 5px 15px; display: flex; flex-direction: column; width: 100%; margin-bottom: 5px; }
+        .recent-orders-box { padding: 5px 15px; display: flex; flex-direction: column; width: 100%; margin-bottom: 5px; flex-shrink: 0; }
         .recent-section-title { font-size: 13px; font-weight: bold; color: var(--grey-text); margin-bottom: 6px; }
         .recent-item { display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; }
         .recent-item .icon-circle { width: 36px; height: 36px; background-color: rgba(252, 52, 36, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); }
         .recent-item .details { flex-grow: 1; }
         .recent-item .details h5 { margin: 0; font-size: 14px; font-weight: 600; }
-        .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-        .recent-item .time-lbl { font-size: 11px; color: var(--grey-text); }
+        .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+        
+        /* የቀንና የሰዓት አቀማመጥ ማስተካከያ ሳጥን */
+        .time-date-container { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; min-width: 75px; text-align: right; }
+        .time-date-container .time-lbl { font-size: 12px; font-weight: 600; color: var(--text-light); }
+        .time-date-container .date-lbl { font-size: 10px; color: var(--grey-text); font-weight: 500; }
 
-        /* ADVERTISEMENT BANNER SLIDESHOW (ከፍ ብሎ የቀረበ) */
+        /* ADVERTISEMENT BANNER SLIDESHOW */
         .design-showcase-banner {
             margin: 5px 15px 15px 15px; border-radius: 16px; overflow: hidden; position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06); height: 125px;
-            background-size: cover; background-position: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06); height: 125px; min-height: 125px;
+            background-size: cover; background-position: center; flex-shrink: 0;
             transition: background-image 0.8s ease-in-out;
         }
         .banner-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3)); display: flex; flex-direction: column; justify-content: center; padding: 20px; color: white; }
@@ -129,34 +141,44 @@
 
         /* TOAST */
         .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: slideInDown 0.4s ease-out; }
-        @keyframes slideInDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         /* FORM ELEMENTS */
-        .content-padding { padding: 15px 15px; display: flex; flex-direction: column; align-items: center; }
-        .input-group { width: 100%; max-width: 340px; margin-bottom: 12px; display: flex; flex-direction: column; }
+        .content-padding { padding: 15px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        
+        /* ለሞባይል መጠን ኪቦርድ ሲመጣ እንዳይበላሽ የተደረገ ማስተካከያ (Responsive Mobile Size Login Container) */
+        .login-form-scroll-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+        
+        .input-group { width: 100%; max-width: 340px; margin-bottom: 15px; display: flex; flex-direction: column; }
         .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
         .form-control { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 15px; background-color: var(--card-light); color: var(--text-light); outline: none; }
 
         /* BUTTONS */
-        .btn-primary { background-color: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; max-width: 340px; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-primary { background-color: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; max-width: 340px; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-shrink: 0; }
+        .btn-primary:active { transform: scale(0.98); }
         .file-buttons { display: flex; gap: 10px; width: 100%; max-width: 340px; margin: 8px 0; }
         .btn-file { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: white; }
 
         .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
         .menu-item { width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
-        /* CLEAN CARD STYLE ORDER INFO UI (መጀመሪያ በምስል 1000026811.jpg ላይ የነበረው ውብ እይታ) */
+        /* CLEAN CARD STYLE ORDER INFO UI */
         .info-card-container { width: 100%; max-width: 350px; background-color: var(--card-light); border-radius: 16px; padding: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(0,0,0,0.02); }
         .info-section-title { font-size: 14px; font-weight: bold; color: var(--text-light); margin-bottom: 4px; }
         .info-text-box { background-color: #F2F2F2; padding: 12px; border-radius: 10px; font-size: 14px; color: #333; line-height: 1.4; word-break: break-word; }
         .designer-response-box { background-color: var(--light-green); border: 1px dashed var(--border-green); padding: 14px; border-radius: 10px; font-size: 14px; color: #1b5e20; line-height: 1.4; font-style: italic; }
-        .info-image-preview { width: 100%; border-radius: 10px; cursor: pointer; margin-top: 4px; transition: transform 0.2s; max-height: 180px; object-fit: cover; }
-        .info-image-preview:hover { transform: scale(1.02); }
+        .info-image-preview { width: 100%; border-radius: 10px; cursor: pointer; margin-top: 4px; max-height: 180px; object-fit: cover; }
 
         /* FULLSCREEN IMAGE MODAL */
         .fullscreen-modal { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .fullscreen-modal.active { opacity: 1; pointer-events: auto; }
-        .fullscreen-modal img { max-width: 95%; max-height: 85%; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
+        .fullscreen-modal img { max-width: 95%; max-height: 85%; border-radius: 10px; }
         .close-modal-btn { position: absolute; top: 20px; right: 20px; color: white; font-size: 28px; cursor: pointer; background: none; border: none; }
 
         /* TOGGLE SWITCH */
@@ -183,13 +205,11 @@
             <img id="fullscreen-target-img" src="" alt="View">
         </div>
         
-        <!-- 1ኛው SPLASH SCREEN -->
+        <!-- SPLASH SCREENS -->
         <div id="splash-1" class="splash-one">
             <h1>FuNet</h1>
             <p>Designer</p>
         </div>
-
-        <!-- 2ኛው SPLASH SCREEN -->
         <div id="splash-2" class="splash-two">
             <h1>FuNet</h1>
             <p style="color: #FC3424;">Designer</p>
@@ -205,69 +225,74 @@
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-bars"></i></button>
             </div>
 
-            <!-- Login Success Banner -->
-            <div id="login-success-banner" class="login-success-toast hidden">
-                <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
-                <div>
-                    <span style="font-weight: bold; display: block;" id="txt-welcome-back">Welcome back!</span>
-                    <span style="font-size: 11px; opacity: 0.9;" id="txt-login-status-msg">Logged in successfully.</span>
+            <!-- ዋናው ተንቀሳቃሽ ይዘት ማሳያ -->
+            <div class="main-scrollable-content">
+                <!-- Login Success Toast -->
+                <div id="login-success-banner" class="login-success-toast hidden">
+                    <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
+                    <div>
+                        <span style="font-weight: bold; display: block;" id="txt-welcome-back">Welcome back!</span>
+                        <span style="font-size: 11px; opacity: 0.9;" id="txt-login-status-msg">Logged in successfully.</span>
+                    </div>
+                </div>
+
+                <!-- የአገልግሎት ምርጫዎች -->
+                <div class="services-container">
+                    <div class="service-card" onclick="openOrderForm('3D Design')">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <h4 id="lbl-3d-title">3D Design</h4>
+                        <p id="lbl-3d-desc">Architectural Plans</p>
+                    </div>
+                    <div class="service-card" onclick="openOrderForm('Renovation')">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <h4 id="lbl-ren-title">Renovation</h4>
+                        <p id="lbl-ren-desc">Modern Materials</p>
+                    </div>
+                </div>
+
+                <!-- YANGO STYLE SEARCH BAR -->
+                <div class="yango-search-bar" onclick="quickStartOrder()">
+                    <div class="left-content">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span id="lbl-yango-search">Start Your Next Design Project...</span>
+                    </div>
+                    <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary); font-size: 18px;"></i>
+                </div>
+
+                <!-- የቅርብ ጊዜ ትዕዛዞች እውነተኛ ዝርዝር -->
+                <div class="recent-orders-box">
+                    <div class="recent-section-title" id="lbl-recent-title">Recent Requests</div>
+                    <div id="recent-orders-list"></div>
+                </div>
+
+                <!-- 5ቱ ፎቶዎች በየሰኮንዱ የሚቀያየሩበት ባነር -->
+                <div id="slideshow-banner" class="design-showcase-banner">
+                    <div class="banner-overlay">
+                        <h4 id="lbl-banner-title">Premium Spaces</h4>
+                        <p id="lbl-banner-desc">Transforming ideas into modern realistic luxury architectures.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- የአገልግሎት ምርጫዎች -->
-            <div class="services-container">
-                <div class="service-card" onclick="openOrderForm('3D Design')">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <h4 id="lbl-3d-title">3D Design</h4>
-                    <p id="lbl-3d-desc">Architectural Plans</p>
-                </div>
-                <div class="service-card" onclick="openOrderForm('Renovation')">
-                    <i class="fa-solid fa-screwdriver-wrench"></i>
-                    <h4 id="lbl-ren-title">Renovation</h4>
-                    <p id="lbl-ren-desc">Modern Materials</p>
-                </div>
-            </div>
-
-            <!-- YANGO STYLE SEARCH BAR -->
-            <div class="yango-search-bar" onclick="quickStartOrder()">
-                <div class="left-content">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span id="lbl-yango-search">Start Your Next Design Project...</span>
-                </div>
-                <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary); font-size: 18px;"></i>
-            </div>
-
-            <!-- የቅርብ ጊዜ ትዕዛዞች እውነተኛ ዝርዝር -->
-            <div class="recent-orders-box">
-                <div class="recent-section-title" id="lbl-recent-title">Recent Requests</div>
-                <div id="recent-orders-list"></div>
-            </div>
-
-            <!-- 5ቱ ፎቶዎች በየሰኮንዱ የሚቀያየሩበት የማስታወቂያ ባነር (ወደ ላይ ጠጋ የተደረገ) -->
-            <div id="slideshow-banner" class="design-showcase-banner">
-                <div class="banner-overlay">
-                    <h4 id="lbl-banner-title">Premium Spaces</h4>
-                    <p id="lbl-banner-desc">Transforming ideas into modern realistic luxury architectures.</p>
-                </div>
-            </div>
-
-            <!-- ለማዘዝ መጀመሪያ ይግቡ ቁልፍ (ቋንቋው አማርኛ ሲሆን ብቻ ነው የሚታየው) -->
-            <div class="content-padding" style="margin-top: auto; padding-bottom: 25px;" id="login-prompt-box">
+            <!-- ለማዘዝ መጀመሪያ ይግቡ ቁልፍ (ሁልጊዜም ይታያል ፤ በቋንቋው መሰረት ይቀየራል) -->
+            <div class="content-padding" style="margin-top: auto; padding-bottom: 20px; flex-shrink: 0;" id="login-prompt-box">
                 <button class="btn-primary" onclick="showPage('login-page')">
-                    <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order</span>
+                    <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order 🔑</span>
                 </button>
             </div>
         </div>
 
-        <!-- ሎግኢን ገጽ (LOGIN PAGE) -->
+        <!-- ሎግኢን ገጽ (LOGIN PAGE - የሞባይል ስክሪን ሳይዝ ተስማሚ) -->
         <div id="login-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
                 <h3 id="lbl-login-header">Login</h3>
                 <div style="width: 34px;"></div>
             </div>
-            <div class="content-padding" style="justify-content: center; flex-grow: 1; padding-bottom: 80px;">
-                <h2 style="margin: 0 0 25px 0; font-weight: bold; text-align: center;" id="lbl-login-sub">Please login to start your order</h2>
+            
+            <!-- ለሞባይል ቁመት ተስማሚ እንዲሆን በScroll ሳጥን የተጠቀለለ ይዘት -->
+            <div class="login-form-scroll-container">
+                <h2 style="margin: 10px 0 25px 0; font-weight: bold; text-align: center; font-size: 20px;" id="lbl-login-sub">Please login to start your order</h2>
                 
                 <div class="input-group">
                     <label id="lbl-name-field">Full Name</label>
@@ -278,7 +303,7 @@
                     <input type="tel" id="input-phone" class="form-control" value="+251" oninput="validatePhoneNumber(this)">
                 </div>
                 
-                <button class="btn-primary" style="margin-top: 15px;" onclick="handleLoginSubmit()">
+                <button class="btn-primary" style="margin-top: 15px; width: 100%;" onclick="handleLoginSubmit()">
                     <span id="lbl-btn-continue">Login & Continue 🚀</span>
                 </button>
             </div>
@@ -320,7 +345,7 @@
             </div>
         </div>
 
-        <!-- የትዕዛዝ ማሳያ ንፁህ የካርድ ስታይል ገጽ (CLEAN CARD STYLE INFO PAGE - መጀመሪያ በምስል 1000026811.jpg ላይ በነበረው መሰረት) -->
+        <!-- የትዕዛዝ ማሳያ ንፁህ የካርድ ስታይል ገጽ -->
         <div id="order-details-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -328,21 +353,17 @@
                 <div style="width: 34px;"></div>
             </div>
             <div class="content-padding" style="padding-top: 20px;">
-                
                 <div class="info-card-container">
-                    <!-- ርዕስ እና መለያ -->
                     <div>
                         <strong id="det-order-title" style="font-size: 17px; color: var(--primary); display: block;">Project Title</strong>
                         <span id="det-order-id" style="font-size: 12px; color: var(--grey-text); display: block; margin-top: 2px;"><i class="fa-solid fa-calendar-day"></i> Just now (FN-000)</span>
                     </div>
 
-                    <!-- የተጠቃሚው ፍላጎት -->
                     <div>
                         <div class="info-section-title" id="lbl-det-req-title">Your Requirements:</div>
                         <div id="det-order-desc" class="info-text-box">User guidelines text...</div>
                     </div>
 
-                    <!-- የተጫነው ፎቶ -->
                     <div id="det-img-section" class="hidden">
                         <div class="info-section-title" id="lbl-det-img-title">Attached Image:</div>
                         <div id="det-file-name" style="font-size: 12px; color: var(--grey-text); margin-bottom: 5px; word-break: break-all;">image_name.jpg</div>
@@ -351,7 +372,6 @@
 
                     <div style="border-top: 1px dashed var(--primary); margin: 5px 0;"></div>
 
-                    <!-- የዲዛይነሩ ምላሽ -->
                     <div>
                         <div class="info-section-title" style="color: #2e7d32;" id="lbl-det-resp-title"><i class="fa-solid fa-user-tie"></i> Designer Response:</div>
                         <div id="det-designer-reply-text" class="designer-response-box">
@@ -359,11 +379,10 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- プロファイル ገጽ (PROFILE & SETTINGS PAGE) -->
+        <!-- ፕሮፋይል ገጽ -->
         <div id="profile-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -418,7 +437,7 @@
             </div>
         </div>
 
-        <!-- ንዑስ ቅንብሮች ገጽ (SUB-SETTINGS PAGE) -->
+        <!-- ንዕሱ ቅንብሮች ገጽ -->
         <div id="sub-settings-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -450,7 +469,6 @@
         let currentSelectedFileName = "None";
         let currentSelectedFileUrl = ""; 
 
-        // 5ቱ ውብ የአርክቴክቸር ዲዛይን ፎቶዎች ሊንክ
         const advertisementImages = [
             "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
@@ -463,7 +481,7 @@
         const strings = {
             en: {
                 app_subtitle: "Designer", "lbl-3d-title": "3D Design", "lbl-3d-desc": "Architectural Plans",
-                "lbl-ren-title": "Renovation", "lbl-ren-desc": "Modern Materials", "lbl-login-btn": "Login to Order",
+                "lbl-ren-title": "Renovation", "lbl-ren-desc": "Modern Materials", "lbl-login-btn": "Login to Order 🔑",
                 "lbl-login-header": "Login", "lbl-login-sub": "Please login to start your order",
                 "lbl-name-field": "Full Name", "lbl-phone-field": "Phone Number", "lbl-btn-continue": "Login & Continue 🚀",
                 "lbl-order-title": "New Order Form", "lbl-selected-cat": "Selected Category:", "lbl-project-type": "Select Specific Project Type",
@@ -482,7 +500,7 @@
             },
             am: {
                 app_subtitle: "ዲዛይነር", "lbl-3d-title": "3D ዲዛይን", "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
-                "lbl-ren-title": "እድሳት (Renovation)", "lbl-ren-desc": "ዘመናዊ እቃዎችና ግብዓቶች", "lbl-login-btn": "ለማዘዝ መጀመሪያ ይግቡ",
+                "lbl-ren-title": "እድሳት (Renovation)", "lbl-ren-desc": "ዘመናዊ እቃዎችና ግብዓቶች", "lbl-login-btn": "ለመግዛት መጀመሪያ ይግቡ 🔑",
                 "lbl-login-header": "መግቢያ (Login)", "lbl-login-sub": "ትዕዛዝ ለመጀመር መጀመሪያ ይግቡ",
                 "lbl-name-field": "ሙሉ ስም", "lbl-phone-field": "የስልክ ቁጥር", "lbl-btn-continue": "ግባና ቀጥል 🚀",
                 "lbl-order-title": "አዲስ ትዕዛዝ መሙያ", "lbl-selected-cat": "የተመረጠው ዘርፍ:", "lbl-project-type": "የፕሮጀክቱን አይነት ይምረጡ",
@@ -501,11 +519,8 @@
             }
         };
 
-        // Splash screen animations (Fade and Blur)
         window.addEventListener('DOMContentLoaded', () => {
-            // የመጀመሪያውን ባነር ፎቶ መጫን
             updateBannerSlideshow();
-            // በየ 3 ሰኮንዱ ፎቶውን በራሱ ጊዜ እንዲቀይር ማድረግ
             setInterval(updateBannerSlideshow, 3000);
 
             const s1 = document.getElementById('splash-1');
@@ -520,11 +535,10 @@
                         showPage('main-page'); 
                         updateLanguageUI();
                     }, 600);
-                }, 2500);
-            }, 2500);
+                }, 2000);
+            }, 2000);
         });
 
-        // 5ቱን ፎቶዎች በየተራ የመቀያየሪያ ፈንክሽን
         function updateBannerSlideshow() {
             const banner = document.getElementById('slideshow-banner');
             if (banner) {
@@ -537,12 +551,12 @@
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
             
+            // የ"ለማዘዝ መጀመሪያ ይግቡ" ቁልፍ ሁልጊዜም እንዲታይ ተደርጓል (ከተመዘገበ በኋላ ግን ይጠፋል)
             const promptBox = document.getElementById('login-prompt-box');
             if (userState.loggedIn) {
                 promptBox.classList.add('hidden');
             } else {
-                if (userState.lang === 'am') { promptBox.classList.remove('hidden'); } 
-                else { promptBox.classList.add('hidden'); }
+                promptBox.classList.remove('hidden');
             }
         }
 
@@ -624,13 +638,18 @@
 
             const projType = document.getElementById('dropdown-project-type').value;
             
+            const today = new Date();
+            const timeString = today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dateString = today.toLocaleDateString([], {month: 'short', day: 'numeric'});
+
             const orderData = {
                 id: "FN-" + Math.floor(100 + Math.random() * 900),
                 type: projType,
                 desc: desc,
                 fileName: currentSelectedFileName,
                 fileUrl: currentSelectedFileUrl,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                time: timeString,
+                date: "Today, " + dateString // ለዛሬ የተደረገ የቅርብ ጊዜ መለያ
             };
             pastOrders.unshift(orderData);
 
@@ -641,6 +660,7 @@
             showPage('success-page');
         }
 
+        // ከሰዓቱ በታች ቀኑን በንፅህና የሚያሳይ አቀማመጥ ማስተካከያ
         function renderRecentOrdersUI() {
             const container = document.getElementById('recent-orders-list');
             container.innerHTML = '';
@@ -660,19 +680,21 @@
                         <h5>${order.type.split(' / ')[0]}</h5>
                         <p>${order.desc}</p>
                     </div>
-                    <div class="time-lbl">${order.time}</div>
+                    <div class="time-date-container">
+                        <div class="time-lbl">${order.time}</div>
+                        <div class="date-lbl">${order.date.split(',')[0]}</div>
+                    </div>
                 `;
                 container.appendChild(item);
             });
         }
 
-        // የቀድሞው ንፁህ የካርድ ስታይል መረጃ ማሳያ (በምስል 1000026811.jpg ላይ እንዳለው)
         function viewSpecificOrderDetails(index) {
             const order = pastOrders[index];
             if (!order) return;
 
             document.getElementById('det-order-title').innerText = order.type;
-            document.getElementById('det-order-id').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${order.time} (ID: #${order.id})`;
+            document.getElementById('det-order-id').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${order.time} - ${order.date} (ID: #${order.id})`;
             document.getElementById('det-order-desc').innerText = order.desc;
 
             const imgSection = document.getElementById('det-img-section');
@@ -741,10 +763,6 @@
                     <div style="width:100%;">
                         <p><b>App Version:</b> FuNet Designer Premium v1.2.5</p>
                         <p><b>Developer:</b> FuNet Tech Group</p>
-                        <hr style="border:0; border-top:1px solid #ccc; margin: 15px 0;">
-                        <label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">Send Feedback:</label>
-                        <textarea class="form-control" rows="3" placeholder="Message..."></textarea>
-                        <button class="btn-primary" style="margin-top:10px; padding:10px;" onclick="alert('Sent!'); showPage('profile-page');">Submit Feedback</button>
                     </div>
                 `;
             }
@@ -773,10 +791,9 @@
             document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
             
             const promptBox = document.getElementById('login-prompt-box');
-            if (!userState.loggedIn && lang === 'am') { promptBox.classList.remove('hidden'); } 
-            else { promptBox.classList.add('hidden'); }
+            if (userState.loggedIn) { promptBox.classList.add('hidden'); } 
+            else { promptBox.classList.remove('hidden'); }
 
-            // የጽሑፍ ሳጥን placeholder ማስተካከያ
             document.getElementById('input-desc').placeholder = strings[lang]['input_desc_placeholder'];
 
             const ids = [
@@ -793,4 +810,3 @@
     </script>
 </body>
 </html>
-
