@@ -4,874 +4,506 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuNet Designer</title>
-    <!-- FontAwesome for Icons -->
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #f33f2d;
-            --primary-hover: #d63022;
-            --bg-color: #f7f7f9;
-            --card-bg: #ffffff;
-            --text-main: #1a1a1a;
-            --text-sub: #707070;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-
-        /* App Container mimicking Mobile View */
-        .app-container {
-            width: 100%;
-            max-width: 450px;
-            background: #ffffff;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand-zone {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-logo {
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--primary-color);
-            line-height: 1;
-        }
-
-        .brand-sub {
-            font-size: 13px;
-            font-weight: 700;
-            font-style: italic;
-            color: #000;
-            margin-top: 2px;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .lang-switch {
-            background: #f0f0f2;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            color: var(--text-main);
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--text-main);
-        }
-
-        /* Dynamic Header for Sub-pages */
-        .sub-header {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            margin-right: 20px;
-            color: var(--text-main);
-        }
-
-        .page-title {
-            font-size: 18px;
-            font-weight: 700;
-            flex-grow: 1;
-            text-align: center;
-            margin-right: 40px; /* Center balancing */
-        }
-
-        /* View Management */
-        .view {
-            display: none;
-            flex-direction: column;
-            padding: 20px;
-            animation: fadeIn 0.3s ease-in-out;
-            flex-grow: 1;
-        }
-
-        .view.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Home View UI Elements */
-        .category-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .cat-card {
-            background: #fff;
-            border: 1px solid #f0f0f0;
-            border-radius: 24px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            transition: transform 0.2s;
-        }
-
-        .cat-card:active {
-            transform: scale(0.97);
-        }
-
-        .cat-icon {
-            font-size: 32px;
-            color: var(--primary-color);
-            margin-bottom: 12px;
-        }
-
-        .cat-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .cat-desc {
-            font-size: 12px;
-            color: var(--text-sub);
-        }
-
-        .action-banner {
-            background: #fff;
-            border: 2px dashed #fcdad7;
-            border-radius: 16px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            margin-bottom: 25px;
-        }
-
-        .banner-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 15px;
-        }
-
-        .banner-icon {
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-
-        .banner-arrow {
-            background: var(--primary-color);
-            color: #fff;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .section-heading {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 12px;
-        }
-
-        .history-status {
-            font-size: 14px;
-            color: var(--text-sub);
-            margin-bottom: 25px;
-        }
-
-        .promo-card {
-            background: #fff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            position: relative;
-            margin-top: auto;
-        }
-
-        .promo-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .promo-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.85));
-            padding: 20px;
-            color: #fff;
-        }
-
-        .promo-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .promo-desc {
-            font-size: 12px;
-            opacity: 0.9;
-            line-height: 1.4;
-        }
-
-        /* Sticky Footer Login Action Trigger Button */
-        .bottom-action-wrapper {
-            padding: 15px 20px;
-            background: #fff;
-            border-top: 1px solid #eee;
-            margin-top: 20px;
-        }
-
-        /* Order Form UI Elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .category-badge {
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .custom-select {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 15px;
-            background: #fff;
-            outline: none;
-        }
-
-        .media-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .media-btn {
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #fff;
-        }
-
-        .btn-upload { background: #3a3b3c; }
-        .btn-camera { background: var(--primary-color); }
-
-        .file-status {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-sub);
-        }
-
-        .custom-textarea {
-            width: 100%;
-            height: 120px;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 14px;
-            resize: none;
-            outline: none;
-            background: #fafafa;
-        }
-
-        /* Chat and Layout elements for Order Details */
-        .order-card {
-            background: #fff;
-            border: 1px solid #f0f0f0;
-            border-radius: 20px;
-            padding: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            position: relative;
-        }
-
-        .order-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            padding-right: 75px; /* Clear thumbnail path spacing */
-        }
-
-        .order-card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 4px;
-        }
-
-        .order-card-meta {
-            font-size: 13px;
-            color: var(--text-sub);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Dynamic Image Thumbnail Box top right */
-        .order-thumbnail-box {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 65px;
-            height: 65px;
-            border: 2px solid #f0f0f0;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            background: #eee;
-        }
-
-        .order-thumbnail-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .requirements-box {
-            background: #f2f2f7;
-            padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .attached-filename {
-            font-size: 11px;
-            color: var(--text-sub);
-            word-break: break-all;
-            margin-bottom: 15px;
-        }
-
-        .divider-line {
-            border-top: 1px dashed #dcdcdc;
-            margin: 15px 0;
-        }
-
-        /* Telegram-like Chat Mechanism UI */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
         .chat-bubble {
-            max-width: 85%;
-            padding: 12px 14px;
+            max-width: 75%;
+            padding: 10px 14px;
             border-radius: 16px;
+            margin-bottom: 8px;
             font-size: 14px;
             line-height: 1.4;
-            position: relative;
         }
-
-        /* Sent Message bubble layout right side */
-        .chat-bubble.sent {
-            background: #dcf8c6;
-            color: #000;
+        .chat-sent {
+            background-color: #dcf8c6;
+            color: #333;
             align-self: flex-end;
-            border-bottom-right-radius: 4px;
+            border-top-right-radius: 0;
         }
-
-        /* Received Message bubble layout left side */
-        .chat-bubble.received {
-            background: #f1f0f0;
-            color: #000;
+        .chat-received {
+            background-color: #f3f4f6;
+            color: #333;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-
-        /* Core Global Button */
-        .btn-block {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #fff;
-            transition: background 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Lightbox Image Zoom Mechanics */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .lightbox img {
-            max-width: 95%;
-            max-height: 90%;
-            border-radius: 8px;
-            object-fit: contain;
-            animation: zoomIn 0.25s ease-out;
-        }
-
-        @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        /* Hidden standard file inputs */
-        #fileInput, #cameraInput {
-            display: none;
+            border-top-left-radius: 0;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 font-sans text-gray-900 selection:bg-red-200">
 
-    <div class="app-container">
+    <!-- App Container -->
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-xl flex flex-col relative pb-16">
         
-        <!-- Main Navigation Header (Always shared across system states dynamically) -->
-        <div id="appNav" class="navbar">
-            <div class="brand-zone">
-                <span class="brand-logo">FuNet</span>
-                <span class="brand-sub">Designer</span>
+        <!-- Header -->
+        <header id="mainHeader" class="p-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-40">
+            <div>
+                <h1 class="text-2xl font-black text-red-600 tracking-tight">FuNet</h1>
+                <p class="text-xs italic font-bold text-gray-800 -mt-1">Designer</p>
             </div>
-            <div class="nav-right">
-                <button class="lang-switch" id="langToggle" onclick="toggleLanguage()">አማርኛ</button>
-                <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
-
-        <!-- Dynamic Page Sub-Header for inner navigation states -->
-        <div id="subNav" style="display: none;" class="sub-header">
-            <button class="back-btn" onclick="navigateHome()"><i class="fa-solid fa-arrow-left"></i></button>
-            <span id="subNavTitle" class="page-title">Form</span>
-        </div>
-
-        <!-- 1. Home Base Dashboard View (Activated by Default on startup) -->
-        <div id="homeView" class="view active">
-            <div class="category-grid">
-                <div class="cat-card" onclick="openOrderForm('3D Design', 'Architectural Plans', 'Modern Building / ዘመናዊ ሕንፃ')">
-                    <div class="cat-icon"><i class="fa-solid fa-layer-group"></i></div>
-                    <div class="cat-title text-3d-title">3D Design</div>
-                    <div class="cat-desc text-3d-desc">Architectural Plans</div>
-                </div>
-                <div class="cat-card" onclick="openOrderForm('Renovation', 'Modern Materials', 'House Renovation / የቤት እድሳት')">
-                    <div class="cat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-                    <div class="cat-title text-renov-title">Renovation</div>
-                    <div class="cat-desc text-renov-desc">Modern Materials</div>
-                </div>
-            </div>
-
-            <div class="action-banner" onclick="openOrderForm('3D Design', 'Architectural Plans', 'Modern Building / ዘመናዊ ሕንፃ')">
-                <div class="banner-left">
-                    <span class="banner-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-                    <span class="text-banner-action">Start Your Next Design Project...</span>
-                </div>
-                <div class="banner-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </div>
-
-            <h3 class="section-heading text-recent-requests">Recent Requests</h3>
-            <div id="historyStatus" class="history-status">No recent request history found.</div>
-
-            <div class="promo-card">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Premium Architecture" class="promo-img">
-                <div class="promo-overlay">
-                    <div class="promo-title text-promo-title">Premium Architecture</div>
-                    <div class="promo-desc text-promo-desc">Transforming your concept into beautiful realistic design plans.</div>
-                </div>
-            </div>
-
-            <!-- Sticky Base Activation Action Button Grid inside Footer context -->
-            <div class="bottom-action-wrapper" id="homeActionContainer">
-                <button class="btn-block btn-primary" id="loginBtnLabel" onclick="triggerMockLogin()">
-                    <i class="fa-solid fa-lock"></i> Login to Order
+            <div class="flex items-center gap-3">
+                <!-- Language Selector -->
+                <select id="langSelect" onchange="toggleLanguage()" class="text-xs bg-gray-100 border border-gray-300 rounded px-2 py-1 font-semibold focus:outline-none">
+                    <option value="en">English</option>
+                    <option value="am">አማርኛ</option>
+                </select>
+                <button onclick="toggleMenu()" class="text-gray-800 focus:outline-none p-1">
+                    <i class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>
+        </header>
+
+        <!-- Sidebar Navigation Menu -->
+        <div id="sideMenu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 p-5 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <span class="font-bold text-gray-700">Menu</span>
+                <button onclick="toggleMenu()" class="text-gray-500 text-xl">&times;</button>
+            </div>
+            <nav class="flex flex-col gap-4">
+                <a href="#" onclick="showPage('home'); toggleMenu();" class="flex items-center gap-3 py-2 text-gray-700 hover:text-red-600 font-medium">
+                    <i class="fa-solid fa-house w-5"></i> <span class="lang-home-btn">Home</span>
+                </a>
+                <a href="#" onclick="showPage('profile'); toggleMenu();" class="flex items-center gap-3 py-2 text-gray-700 hover:text-red-600 font-medium">
+                    <i class="fa-solid fa-user w-5"></i> <span class="lang-profile-btn">My Profile</span>
+                </a>
+                <a href="#" onclick="showPage('login'); toggleMenu();" id="menuLoginLink" class="flex items-center gap-3 py-2 text-gray-700 hover:text-red-600 font-medium">
+                    <i class="fa-solid fa-right-to-bracket w-5"></i> <span>Login</span>
+                </a>
+            </nav>
         </div>
 
-        <!-- 2. Interactive Request Creation Form UI -->
-        <div id="formView" class="view">
-            <div class="form-group">
-                <label class="form-label text-label-cat">Selected Category:</label>
-                <span id="formCategoryLabel" class="category-badge">3D Design</span>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label text-label-type">Select Specific Project Type</label>
-                <select id="projectTypeSelect" class="custom-select">
-                    <!-- Options populated inside lifecycle handler dynamically -->
-                </select>
-            </div>
-
-            <div class="form-group">
-                <div class="media-actions">
-                    <button class="media-btn btn-upload" onclick="triggerFileInput()"><i class="fa-solid fa-file-arrow-up"></i> Upload File 📂</button>
-                    <button class="media-btn btn-camera" onclick="triggerCameraInput()"><i class="fa-solid fa-camera"></i> Take Camera 📷</button>
+        <!-- PAGE 1: HOME PAGE (App opens directly here) -->
+        <main id="page-home" class="p-4 flex-1 page-section">
+            <!-- Category Cards Grid -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div onclick="openOrderForm('3D Design')" class="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col items-center text-center shadow-sm active:scale-95 transition-transform cursor-pointer">
+                    <div class="text-red-500 text-3xl mb-2"><i class="fa-solid fa-layer-group"></i></div>
+                    <span class="font-bold text-sm text-gray-800">3D Design</span>
+                    <span class="text-xs text-gray-400 mt-0.5">Architectural Plans</span>
                 </div>
-                <!-- Native file fields hidden from accessibility DOM focus structures -->
-                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelection(event)">
-                <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleFileSelection(event)">
-                <div id="fileStatusText" class="file-status">No photo selected (Optional)</div>
+                <div onclick="openOrderForm('Renovation')" class="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col items-center text-center shadow-sm active:scale-95 transition-transform cursor-pointer">
+                    <div class="text-red-500 text-3xl mb-2"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <span class="font-bold text-sm text-gray-800">Renovation</span>
+                    <span class="text-xs text-gray-400 mt-0.5">Modern Materials</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label text-label-guidelines">Additional Project Guidelines:</label>
-                <textarea id="guidelinesText" class="custom-textarea" placeholder="Write specific design requirements here... (e.g., wall colors, item placements)"></textarea>
+            <!-- Start Action Button -->
+            <div onclick="openOrderForm('General')" class="bg-white border border-dashed border-red-200 rounded-xl p-3.5 flex justify-between items-center mb-6 cursor-pointer shadow-sm active:opacity-90">
+                <div class="flex items-center gap-3">
+                    <span class="text-red-500 text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                    <span class="font-bold text-sm text-gray-700 lang-start-project">Start Your Next Design Project...</span>
+                </div>
+                <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </div>
             </div>
 
-            <button class="btn-block btn-primary" onclick="submitDesignOrder()" style="margin-top: 10px;">
-                Finish Order 🚀
-            </button>
-        </div>
+            <!-- Recent Requests History -->
+            <div>
+                <h3 class="font-bold text-sm text-gray-400 mb-3 lang-recent-requests">Recent Requests</h3>
+                <div id="requestsHistoryContainer" class="text-gray-500 text-xs italic py-4 lang-no-history">
+                    No recent requests found.
+                </div>
+            </div>
 
-        <!-- 3. Telegram styled Delivery Conversation Details View UI -->
-        <div id="infoView" class="view">
-            <div class="order-card">
-                <div class="order-card-header">
+            <!-- Promotional Banner Section -->
+            <div class="mt-8 rounded-2xl overflow-hidden relative shadow-md h-40 bg-cover bg-center flex items-end" style="background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80');">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div class="p-4 relative z-10 text-white">
+                    <h4 class="font-bold text-base mb-0.5">Premium Architecture</h4>
+                    <p class="text-[11px] text-gray-200 leading-tight">Transforming your concept into beautiful realistic design plans.</p>
+                </div>
+            </div>
+
+            <!-- Amharic-Only Login Bottom Banner Hint -->
+            <div id="amharicLoginBanner" class="mt-6 hidden">
+                <button onclick="showPage('login')" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 active:bg-red-700 transition-colors text-sm">
+                    <i class="fa-solid fa-lock"></i> ለማዘዝ መጀመሪያ ይግቡ
+                </button>
+            </div>
+        </main>
+
+        <!-- PAGE 2: LOGIN PAGE -->
+        <main id="page-login" class="p-6 flex-1 flex flex-col justify-center page-section hidden">
+            <div class="w-full max-w-sm mx-auto space-y-6 py-8">
+                <div class="space-y-4">
                     <div>
-                        <div id="infoProjectTitle" class="order-card-title">Modern Cafe / ዘመናዊ ካፌ</div>
-                        <div class="order-card-meta">
-                            <i class="fa-solid fa-calendar-days"></i>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="loginName" placeholder="Enter full name" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="loginPhone" value="+251" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 bg-gray-50">
+                    </div>
+                </div>
+                <button onclick="handleLogin()" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-red-700 transition-colors text-sm active:scale-[0.99]">
+                    Login & Continue <i class="fa-solid fa-rocket ml-1"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- PAGE 3: NEW ORDER FORM PAGE -->
+        <main id="page-order-form" class="p-4 flex-1 page-section hidden">
+            <div class="flex items-center gap-3 mb-6">
+                <button onclick="showPage('home')" class="text-gray-700 text-lg p-1"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-bold text-gray-800">New Order Form</h2>
+            </div>
+
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">Selected Category:</label>
+                    <span id="formCategoryDisplay" class="text-sm font-bold text-red-600">3D Design</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Select Specific Project Type</label>
+                    <select id="projectTypeSelect" class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none bg-white font-medium">
+                        <option>Modern Building / ዘመናዊ ህንጻ</option>
+                        <option>Modern Cafe / ዘመናዊ ካፌ</option>
+                        <option>Living Room / ሳሎን ዲዛይን</option>
+                        <option>Kitchen Setup / የኩሽና አደረጃጀት</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="triggerFileInline()" class="bg-gray-800 text-white font-bold py-3 px-2 rounded-xl text-xs flex items-center justify-center gap-1.5 active:opacity-90">
+                        <i class="fa-solid fa-file-arrow-up"></i> Upload File <i class="fa-solid fa-folder-open text-[10px]"></i>
+                    </button>
+                    <button onclick="triggerCameraInline()" class="bg-red-500 text-white font-bold py-3 px-2 rounded-xl text-xs flex items-center justify-center gap-1.5 active:opacity-90">
+                        <i class="fa-solid fa-camera"></i> Take Camera <i class="fa-solid fa-camera-retro text-[10px]"></i>
+                    </button>
+                </div>
+                <input type="file" id="inlineFileInput" accept="image/*" class="hidden" onchange="handleInlineFile(event)">
+                <p id="inlineFileStatus" class="text-center text-xs text-gray-400 italic -mt-2">No photo selected (Optional)</p>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Additional Project Guidelines:</label>
+                    <textarea id="projectGuidelines" rows="4" placeholder="Write specific design requirements here... (e.g., wall colors, item placements)" class="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:border-red-500 bg-gray-50 placeholder:text-gray-400"></textarea>
+                </div>
+
+                <!-- Removed the "Pay with Telebirr" button, only leaving Finish Order -->
+                <button onclick="submitOrder()" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl shadow-lg text-sm flex items-center justify-center gap-2 active:bg-red-700">
+                    Finish Order <i class="fa-solid fa-rocket text-xs"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- PAGE 4: ORDER DETAILS INFO PAGE (Telegram Chat Layout) -->
+        <main id="page-order-info" class="p-4 flex-1 flex flex-col page-section hidden">
+            <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
+                <button onclick="showPage('home')" class="text-gray-700 text-lg p-1"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-bold text-gray-800 mx-auto">Order Info</h2>
+            </div>
+
+            <!-- Combined Main Outer White Box for Info Display -->
+            <div class="bg-white border border-gray-100 shadow-md rounded-2xl p-4 flex-1 flex flex-col">
+                
+                <!-- Upper Info Segment: Title, Time, and Floating Interactive Thumbnail -->
+                <div class="flex justify-between items-start border-b border-dashed border-gray-200 pb-4 mb-4 relative">
+                    <div class="space-y-1 pr-16">
+                        <h3 id="infoProjectTitle" class="text-base font-black text-red-600">Modern Cafe / ዘመናዊ ካፌ</h3>
+                        <div class="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+                            <i class="fa-solid fa-calendar-days text-[11px]"></i>
                             <span id="infoProjectMeta">Just now (FN-490)</span>
                         </div>
                     </div>
+                    <!-- Right Attached Clickable Thumbnail Screen Indicator Box -->
+                    <div class="absolute right-0 top-0">
+                        <img id="infoProjectImage" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=150&q=80" 
+                             onclick="openFullscreenImage(this.src)" 
+                             class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:opacity-90 active:scale-95 transition-all" 
+                             alt="Attached Reference Project Thumbnail Layer">
+                    </div>
                 </div>
 
-                <!-- Floating Thumbnail Box positioned precisely inside relative layout structures -->
-                <div class="order-thumbnail-box" id="infoThumbnailWrapper" onclick="expandImagePreview()">
-                    <img id="infoImagePreview" src="" alt="Attached Context">
-                </div>
-
-                <div class="divider-line"></div>
-
-                <!-- Conversational Thread UI Frame (Telegram Layout Style) -->
-                <div class="chat-container">
-                    <!-- Client requirement block message -->
-                    <div class="chat-bubble sent" id="infoClientBubble">
-                        <!-- Instantiated client specification copy placeholder -->
+                <!-- Telegram-Style Chat Container Body Flow Area -->
+                <div class="flex-1 flex flex-col justify-start overflow-y-auto pt-2 space-y-3">
+                    
+                    <!-- Sent Message: User Requirements (Right Side aligned Bubble) -->
+                    <div class="flex flex-col items-end w-full">
+                        <div class="text-[10px] text-gray-400 font-bold mb-0.5 mr-1">Your Requirements:</div>
+                        <div id="infoUserRequirements" class="chat-bubble chat-sent font-medium">
+                            Blablabla
+                        </div>
                     </div>
-                    <!-- System designer interactive feedback block message -->
-                    <div class="chat-bubble received" id="infoDesignerBubble">
-                        <!-- Translated localized designer responses handled here -->
+
+                    <!-- Received Message: Designer Reply (Left Side aligned Bubble) -->
+                    <div class="flex flex-col items-start w-full">
+                        <div class="text-[10px] text-gray-400 font-bold mb-0.5 ml-1">Designer:</div>
+                        <div class="chat-bubble chat-received italic">
+                            "Your request is received! Our head designer is working on the interior layout, shelf placements, and the custom wall colors. We will upload the 3D preview model here soon."
+                        </div>
                     </div>
+
                 </div>
             </div>
+        </main>
+
+        <!-- PAGE 5: USER PROFILE PAGE -->
+        <main id="page-profile" class="p-4 flex-1 page-section hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">My Profile</h2>
+            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-3">
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-200">
+                    <div class="bg-red-100 text-red-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <h3 id="profileNameDisplay" class="font-bold text-gray-800 text-base">Guest User</h3>
+                        <p id="profilePhoneDisplay" class="text-xs text-gray-500">No phone registered</p>
+                    </div>
+                </div>
+                <div class="pt-1">
+                    <button onclick="handleLogout()" class="text-xs font-bold text-red-600 flex items-center gap-1.5 hover:underline">
+                        <i class="fa-solid fa-right-from-bracket"></i> Clear Session Log Out
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Global Fullscreen Image Modal Overlay View -->
+        <div id="fullscreenModal" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col justify-center items-center p-4">
+            <button onclick="closeFullscreenImage()" class="absolute top-4 right-4 text-white text-3xl p-2 focus:outline-none">&times;</button>
+            <img id="fullscreenTargetImage" src="" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl" alt="Expanded Target Full Screen Reference Document Layer">
         </div>
 
+        <!-- Global Footer Bottom Fixed Navigation Bar Component -->
+        <footer class="absolute bottom-0 left-0 w-full bg-white border-t border-gray-100 h-14 flex justify-around items-center px-2 z-40">
+            <button onclick="showPage('home')" class="flex flex-col items-center text-gray-400 hover:text-red-600 transition-colors focus:outline-none">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-bold mt-0.5 lang-nav-home">Home</span>
+            </button>
+            <button onclick="showPage('profile')" class="flex flex-col items-center text-gray-400 hover:text-red-600 transition-colors focus:outline-none">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] font-bold mt-0.5 lang-nav-profile">Profile</span>
+            </button>
+        </footer>
+
     </div>
 
-    <!-- Image View Lightbox Overlay Container -->
-    <div id="imageLightbox" class="lightbox" onclick="closeImagePreview()">
-        <img id="lightboxTarget" src="" alt="Fullscreen View">
-    </div>
-
-    <!-- Lifecycle Script System Architectures Manager -->
+    <!-- Application Operational Script Logic Module Block -->
     <script>
-        // System wide Reactive Configuration Variables Base
-        let currentLang = 'en'; // Active Language standard track locator state
-        let selectedCategoryGlobal = '';
-        let temporaryCapturedPhotoUrl = '';
-        let dynamicMockFilename = '';
+        // In-memory persistent state storage variable controls
+        let currentLanguage = 'en';
+        let placeholderBase64Image = "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=300&q=80";
+        let capturedImageBase64 = null;
+        let globalOrdersDatabase = [];
 
-        // Mock Static Database Store for App Content Matrix Strings mapping
-        const dictionary = {
-            en: {
-                toggleLabel: "አማርኛ",
-                loginBtn: "Login to Order",
-                recentRequests: "Recent Requests",
-                noHistory: "No recent request history found.",
-                bannerAction: "Start Your Next Design Project...",
-                design3DTitle: "3D Design",
-                design3DDesc: "Architectural Plans",
-                renovTitle: "Renovation",
-                renovDesc: "Modern Materials",
-                promoTitle: "Premium Architecture",
-                promoDesc: "Transforming your concept into beautiful realistic design plans.",
-                formTitle: "New Order Form",
-                infoTitle: "Order Info",
-                lblCat: "Selected Category:",
-                lblType: "Select Specific Project Type",
-                lblGuidelines: "Additional Project Guidelines:",
-                placeholderText: "Write specific design requirements here... (e.g., wall colors, item placements)",
-                noPhoto: "No photo selected (Optional)",
-                photoSelected: "Photo attached successfully",
-                designerMsg: "Your request is received! Our head designer is working on the interior layout, shelf placements, and the custom wall colors. We will upload the 3D preview model here soon."
-            },
-            am: {
-                toggleLabel: "English",
-                loginBtn: "ለማዘዝ መጀመሪያ ይግቡ",
-                recentRequests: "የቅርብ ጊዜ ጥያቄዎች",
-                noHistory: "ምንም የተቀመጠ የቅርብ ጊዜ ታሪክ የለም::",
-                bannerAction: "የንድፍ ፕሮጄክትዎን አሁኑኑ ይጀምሩ...",
-                design3DTitle: "3D ዲዛይን",
-                design3DDesc: "የሕንፃ ፕላኖች",
-                renovTitle: "እድሳት",
-                renovDesc: "ዘመናዊ ዕቃዎች",
-                promoTitle: "ፕሪሚየም አርክቴክቸር",
-                promoDesc: "የእርስዎን ሀሳብ ወደ ውብ እና እውነተኛ የንድፍ እቅዶች መለወጥ::",
-                formTitle: "አዲስ የትዕዛዝ ፎርም",
-                infoTitle: "የትዕዛዝ መረጃ",
-                lblCat: "የተመረጠው ዘርፍ:",
-                lblType: "የፕሮጀክት ዓይነት ይምረጡ",
-                lblGuidelines: "ተጨማሪ የፕሮጀክት መመሪያዎች:",
-                placeholderText: "የተወሰኑ የንድፍ መስፈርቶችን እዚህ ይፃፉ... (ለምሳሌ የግድግዳ ቀለሞች ፣ የዕቃ አቀማመጥ)",
-                noPhoto: "ምንም ፎቶ አልተመረጠም (አማራጭ)",
-                photoSelected: "ፎቶ በትክክል ተያይዟል",
-                designerMsg: "ትዕዛዝዎ ደርሶናል! ዋና ዲዛይነራችን በውስጥ አቀማመጥ፣ በመደርደሪያዎች አቀማመጥ እና በግድግዳ ቀለሞች ላይ እየሰራ ነው። በቅርቡ የ3D እይታውን እዚህ እንጭናለን።"
-            }
-        };
+        // App Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            // Setup default view structure configuration parameters
+            showPage('home');
+            loadSessionData();
+            toggleLanguage(); // Sync UI strings seamlessly
+        });
 
-        // System view switching automation management logic
-        function switchView(viewId) {
-            document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            
-            if (viewId === 'homeView') {
-                document.getElementById('appNav').style.display = 'flex';
-                document.getElementById('subNav').style.display = 'none';
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                setTimeout(() => menu.classList.remove('translate-x-full'), 10);
             } else {
-                document.getElementById('appNav').style.display = 'none';
-                document.getElementById('subNav').style.display = 'flex';
+                menu.classList.add('translate-x-full');
+                setTimeout(() => menu.classList.add('hidden'), 300);
             }
         }
 
-        function navigateHome() {
-            switchView('homeView');
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+            window.scrollTo(0, 0);
         }
 
-        // Language Translation Renderer Engine Configuration Layout
         function toggleLanguage() {
-            currentLang = (currentLang === 'en') ? 'am' : 'en';
-            renderSystemLanguage();
-        }
+            currentLanguage = document.getElementById('langSelect').value;
+            const isAmharic = (currentLanguage === 'am');
 
-        function renderSystemLanguage() {
-            const data = dictionary[currentLang];
-            
-            // Layout Top Navbar Elements Strings
-            document.getElementById('langToggle').innerText = data.toggleLabel;
-            
-            // Home Dashboard Strings Translation Mapping Renderers
-            document.getElementById('loginBtnLabel').innerHTML = `<i class="fa-solid fa-lock"></i> ${data.loginBtn}`;
-            document.querySelector('.text-recent-requests').innerText = data.recentRequests;
-            document.getElementById('historyStatus').innerText = data.noHistory;
-            document.querySelector('.text-banner-action').innerText = data.bannerAction;
-            document.querySelector('.text-3d-title').innerText = data.design3DTitle;
-            document.querySelector('.text-3d-desc').innerText = data.design3DDesc;
-            document.querySelector('.text-renov-title').innerText = data.renovTitle;
-            document.querySelector('.text-renov-desc').innerText = data.renovDesc;
-            document.querySelector('.text-promo-title').innerText = data.promoTitle;
-            document.querySelector('.text-promo-desc').innerText = data.promoDesc;
-
-            // Form Interactive Content Component Strings Engine Layout
-            document.querySelector('.text-label-cat').innerText = data.lblCat;
-            document.querySelector('.text-label-type').innerText = data.lblType;
-            document.querySelector('.text-label-guidelines').innerText = data.lblGuidelines;
-            document.getElementById('guidelinesText').placeholder = data.placeholderText;
-            
-            // Check status for file selection
-            if(!temporaryCapturedPhotoUrl) {
-                document.getElementById('fileStatusText').innerText = data.noPhoto;
+            // Manage conditional Amharic bottom element banner display
+            const amharicBanner = document.getElementById('amharicLoginBanner');
+            if (isAmharic) {
+                amharicBanner.classList.remove('hidden');
+            } else {
+                amharicBanner.classList.add('hidden');
             }
 
-            // Real-time translation update support inside active chat dialogue blocks context
-            const designerBubble = document.getElementById('infoDesignerBubble');
-            if(designerBubble && designerBubble.innerText.trim() !== "") {
-                designerBubble.innerText = data.designerMsg;
+            // UI Translatable Static String Elements Map
+            const translations = {
+                en: {
+                    homeBtn: "Home",
+                    profileBtn: "My Profile",
+                    startProject: "Start Your Next Design Project...",
+                    recentRequests: "Recent Requests",
+                    noHistory: "No recent requests found.",
+                    navHome: "Home",
+                    navProfile: "Profile"
+                },
+                am: {
+                    homeBtn: "ዋና ገጽ",
+                    profileBtn: "የእኔ መገለጫ",
+                    startProject: "ቀጣይ የዲዛይን ፕሮጀክትዎን ይጀምሩ...",
+                    recentRequests: "የቅርብ ጊዜ ጥያቄዎች",
+                    noHistory: "ምንም የተቀመጠ የቅርብ ታሪክ የለም::",
+                    navHome: "ዋና ገጽ",
+                    navProfile: "መገለጫ"
+                }
+            };
+
+            const dictionary = translations[currentLanguage];
+            document.querySelector('.lang-home-btn').innerText = dictionary.homeBtn;
+            document.querySelector('.lang-profile-btn').innerText = dictionary.profileBtn;
+            document.querySelector('.lang-start-project').innerText = dictionary.startProject;
+            document.querySelector('.lang-recent-requests').innerText = dictionary.recentRequests;
+            document.querySelector('.lang-nav-home').innerText = dictionary.navHome;
+            document.querySelector('.lang-nav-profile').innerText = dictionary.navProfile;
+
+            // Render/Refresh layout history view to properly parse textual language state transformations
+            renderRequestsHistory();
+        }
+
+        function loadSessionData() {
+            const savedName = localStorage.getItem('funet_user_name');
+            const savedPhone = localStorage.getItem('funet_user_phone');
+            const storedOrders = localStorage.getItem('funet_orders_db');
+
+            if (storedOrders) {
+                globalOrdersDatabase = JSON.parse(storedOrders);
             }
+
+            if (savedName && savedPhone) {
+                document.getElementById('profileNameDisplay').innerText = savedName;
+                document.getElementById('profilePhoneDisplay').innerText = savedPhone;
+                document.getElementById('menuLoginLink').style.display = 'none';
+            } else {
+                document.getElementById('profileNameDisplay').innerText = "Guest User";
+                document.getElementById('profilePhoneDisplay').innerText = "No phone registered";
+                document.getElementById('menuLoginLink').style.display = 'flex';
+            }
+            renderRequestsHistory();
         }
 
-        // Functional Mock User Session Activator Tracker Trigger Flow
-        function triggerMockLogin() {
-            alert(currentLang === 'en' ? "Login logic bypass completed successfully!" : "የሙከራ መግቢያ በተሳካ ሁኔታ ተጠናቋል!");
+        function handleLogin() {
+            const name = document.getElementById('loginName').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
+
+            if (!name || phone.length < 5) {
+                alert("Please fill in accurate login criteria particulars.");
+                return;
+            }
+
+            localStorage.setItem('funet_user_name', name);
+            localStorage.setItem('funet_user_phone', phone);
+            loadSessionData();
+            showPage('home');
         }
 
-        // Order System Form Initialization Layouts Engine Core
-        function openOrderForm(category, sub, sampleType) {
-            selectedCategoryGlobal = category;
-            document.getElementById('subNavTitle').innerText = dictionary[currentLang].formTitle;
-            document.getElementById('formCategoryLabel').innerText = (currentLang === 'en') ? category : (category === '3D Design' ? '3D ዲዛይን' : 'እድሳት');
-            
-            const dropdown = document.getElementById('projectTypeSelect');
-            dropdown.innerHTML = '';
-            
-            // Populating options inside specialized project selections dynamically
-            const items = (category === '3D Design') 
-                ? ["Modern Building / ዘመናዊ ሕንፃ", "Modern Cafe / ዘመናዊ ካፌ", "Villa Design / የቪላ ዲዛይን"]
-                : ["House Renovation / የቤት እድሳት", "Office Renewal / የቢሮ እድሳት", "Kitchen Update / የወጥ ቤት ማዘመን"];
-                
-            items.forEach(item => {
-                let opt = document.createElement('option');
-                opt.value = item;
-                opt.innerText = item;
-                dropdown.appendChild(opt);
-            });
-
-            // Resets standard entry criteria inputs safely down downstream flows
-            document.getElementById('guidelinesText').value = '';
-            document.getElementById('fileInput').value = '';
-            document.getElementById('cameraInput').value = '';
-            temporaryCapturedPhotoUrl = '';
-            dynamicMockFilename = '';
-            document.getElementById('fileStatusText').innerText = dictionary[currentLang].noPhoto;
-
-            switchView('formView');
+        function handleLogout() {
+            localStorage.removeItem('funet_user_name');
+            localStorage.removeItem('funet_user_phone');
+            loadSessionData();
+            showPage('home');
         }
 
-        // Capture trigger abstractions for modular asset management mapping
-        function triggerFileInput() { document.getElementById('fileInput').click(); }
-        function triggerCameraInput() { document.getElementById('cameraInput').click(); }
+        function openOrderForm(categoryTitle) {
+            document.getElementById('formCategoryDisplay').innerText = categoryTitle;
+            // Clear prior entry values
+            document.getElementById('projectGuidelines').value = "";
+            capturedImageBase64 = null;
+            document.getElementById('inlineFileStatus').innerText = "No photo selected (Optional)";
+            showPage('order-form');
+        }
 
-        // Localized asset intake cache parsing interface core pipeline
-        function handleFileSelection(event) {
+        function triggerFileInline() {
+            document.getElementById('inlineFileInput').click();
+        }
+
+        function triggerCameraInline() {
+            // Emulated fast responsive fallback device file triggers
+            document.getElementById('inlineFileInput').click();
+        }
+
+        function handleInlineFile(event) {
             const file = event.target.files[0];
             if (file) {
-                temporaryCapturedPhotoUrl = URL.createObjectURL(file);
-                // Setup programmatic unique string filename structure matching requirements layout
-                dynamicMockFilename = Math.floor(Math.random() * 100000000000000000) + "_" + file.name;
-                document.getElementById('fileStatusText').innerText = `${dictionary[currentLang].photoSelected}: ${file.name}`;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    capturedImageBase64 = e.target.result;
+                    document.getElementById('inlineFileStatus').innerText = `Attached: ${file.name.substring(0, 20)}...`;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // Package generation assembler workflow engine dispatch logic triggers
-        function submitDesignOrder() {
-            const typeValue = document.getElementById('projectTypeSelect').value;
-            const clientNotes = document.getElementById('guidelinesText').value.trim() || "No specific details entered.";
+        function submitOrder() {
+            const category = document.getElementById('formCategoryDisplay').innerText;
+            const projectType = document.getElementById('projectTypeSelect').value;
+            const guidelines = document.getElementById('projectGuidelines').value.trim() || "No customized guidelines provided.";
             
-            // Setup falling fallback preview state in event media stream captures left empty
-            const presentationPhoto = temporaryCapturedPhotoUrl || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=300&q=80";
-            const attachmentLabel = dynamicMockFilename || "default_project_reference_context.jpg";
+            const generatedId = "FN-" + Math.floor(100 + Math.random() * 900);
+            const relativeTimestamp = "Just now";
 
-            // Structural mapping allocation layout assignments to order execution outputs window state variables
-            document.getElementById('subNavTitle').innerText = dictionary[currentLang].infoTitle;
-            document.getElementById('infoProjectTitle').innerText = typeValue;
-            document.getElementById('infoProjectMeta').innerText = `Just now (FN-${Math.floor(Math.random() * 800 + 100)})`;
-            
-            // Set data properties into communication threads safely layout matching requirements spec
-            document.getElementById('infoImagePreview').src = presentationPhoto;
-            
-            // Telegram Content Matrix structural allocation render injection
-            document.getElementById('infoClientBubble').innerHTML = `
-                <strong>${currentLang === 'en' ? 'Your Requirements:' : 'የእርስዎ መስፈርቶች:'}</strong><br>
-                ${clientNotes}
-                <div class="attached-filename" style="margin-top:8px; opacity:0.7;">Attached Image:<br>${attachmentLabel}</div>
-            `;
-            
-            // Setup localized responding dynamic message block text securely mapping output layout 
-            document.getElementById('infoDesignerBubble').innerText = dictionary[currentLang].designerMsg;
+            const newRecordObject = {
+                id: generatedId,
+                category: category,
+                projectType: projectType,
+                guidelines: guidelines,
+                timestamp: relativeTimestamp,
+                image: capturedImageBase64 || placeholderBase64Image
+            };
 
-            switchView('infoView');
+            globalOrdersDatabase.unshift(newRecordObject);
+            localStorage.setItem('funet_orders_db', JSON.stringify(globalOrdersDatabase));
+            
+            renderRequestsHistory();
+            openOrderDetailsIndex(0); // Route view onto current newly pushed active record instance
         }
 
-        // Zoom image activation lightboxes control pipeline handlers
-        function expandImagePreview() {
-            const srcTarget = document.getElementById('infoImagePreview').src;
-            if(srcTarget) {
-                document.getElementById('lightboxTarget').src = srcTarget;
-                document.getElementById('imageLightbox').style.display = 'flex';
+        function renderRequestsHistory() {
+            const container = document.getElementById('requestsHistoryContainer');
+            if (globalOrdersDatabase.length === 0) {
+                container.className = "text-gray-500 text-xs italic py-4";
+                container.innerText = (currentLanguage === 'am') ? "ምንም የተቀመጠ የቅርብ ታሪክ የለም::" : "No recent requests found.";
+                return;
             }
+
+            container.className = "space-y-2.5 pt-1";
+            container.innerHTML = globalOrdersDatabase.map((order, idx) => `
+                <div onclick="openOrderDetailsIndex(${idx})" class="bg-white border border-gray-100 rounded-xl p-3 flex justify-between items-center shadow-sm cursor-pointer active:bg-gray-50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <img src="${order.image}" class="w-10 h-10 object-cover rounded-lg border border-gray-100 shadow-inner">
+                        <div>
+                            <h4 class="font-bold text-xs text-gray-800">${order.projectType}</h4>
+                            <p class="text-[10px] text-gray-400 font-medium">${order.timestamp} (${order.id})</p>
+                        </div>
+                    </div>
+                    <span class="text-gray-300 text-xs"><i class="fa-solid fa-chevron-right"></i></span>
+                </div>
+            `).join('');
         }
 
-        function closeImagePreview() {
-            document.getElementById('imageLightbox').style.display = 'none';
+        function openOrderDetailsIndex(indexPosition) {
+            const record = globalOrdersDatabase[indexPosition];
+            if (!record) return;
+
+            document.getElementById('infoProjectTitle').innerText = record.projectType;
+            document.getElementById('infoProjectMeta').innerText = `${record.timestamp} (${record.id})`;
+            document.getElementById('infoProjectImage').src = record.image;
+            document.getElementById('infoUserRequirements').innerText = record.guidelines;
+
+            showPage('order-info');
         }
 
-        // Initialize engine sequence triggers safely on execution stack tracking configurations runtime layout
-        renderSystemLanguage();
+        // Fullscreen Modal Zoom Management Functions
+        function openFullscreenImage(imageSourceUri) {
+            const modal = document.getElementById('fullscreenModal');
+            const target = document.getElementById('fullscreenTargetImage');
+            target.src = imageSourceUri;
+            modal.classList.remove('hidden');
+        }
+
+        function closeFullscreenImage() {
+            document.getElementById('fullscreenModal').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
