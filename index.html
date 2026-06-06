@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FuNet Designer - User Client</title>
+    <title>FuNet Designer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root {
             --primary: #FC3424;
@@ -177,8 +179,6 @@
             --light-green: rgba(47, 165, 56, 0.15); --border-green: rgba(47, 165, 56, 0.4);
         }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
@@ -422,6 +422,18 @@
     </div>
 
     <script>
+        // --- FIREBASE CONFIGURATION ---
+        // የራስህን የፋየርቤዝ መረጃ እዚህ መተካት ትችላለህ። ለሙከራ እንዲሰራ በነጻ የሙከራ ሊንክ ተዘጋጅቷል
+        const firebaseConfig = {
+            databaseURL: "https://funet-design-default-rtdb.firebaseio.com/" 
+        };
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
         let userState = { loggedIn: false, name: '', phone: '+251', lang: 'en', darkMode: false };
         let pastOrders = [];
         let currentServiceCategory = "3D Design";
@@ -484,37 +496,9 @@
             }
         };
 
-        // ==========================================
-        //  MOCK FIREBASE CLOUD SYNC SYSTEM (የሙከራ ሲስተም)
-        // ==========================================
-        // ይህ ኮድ እውነተኛ ኔትወርክ ሳይኖር በሁለቱ አፖች መሃል መረጃዎችን በቅጽበት ለማስተላለፍ ይጠቅማል
-        const FuNetCloud = {
-            sendOrderToDatabase: function(orderData) {
-                let database = JSON.parse(localStorage.getItem('funet_cloud_db')) || [];
-                database.unshift(orderData);
-                localStorage.setItem('funet_cloud_db', JSON.stringify(database));
-                
-                // ለአስተዳዳሪው አፕ አዲስ ትዕዛዝ መግባቱን በየክፍሉ የሚያሳውቅ የፓስተር ሲግናል
-                window.dispatchEvent(new CustomEvent('new_funet_order_cloud', { detail: orderData }));
-            },
-            listenForDesignerReplies: function(callback) {
-                window.addEventListener('storage', (e) => {
-                    if (e.key === 'funet_cloud_db') {
-                        callback();
-                    }
-                });
-                setInterval(callback, 2000); // በየ 2 ሰኮንዱ አዳዲስ መልሶችን መፈተሻ
-            }
-        };
-
         window.addEventListener('DOMContentLoaded', () => {
             updateBannerSlideshow();
             setInterval(updateBannerSlideshow, 3000);
-
-            // ከCloud መልስ ሲመጣ የተጠቃሚውን የትዕዛዝ ታሪክ ማደሻ
-            FuNetCloud.listenForDesignerReplies(() => {
-                syncLocalOrdersWithCloud();
-            });
 
             const s1 = document.getElementById('splash-1');
             const s2 = document.getElementById('splash-2');
@@ -573,7 +557,10 @@
                 document.getElementById('txt-welcome-back').innerText = strings[userState.lang]["txt-welcome-back"] + name + "! 👋";
                 banner.classList.remove('hidden');
 
-                syncLocalOrdersWithCloud();
+                // Listen to database for updates on user's specific responses
+                listenForDesignerResponses(phone);
+
+                renderRecentOrdersUI();
                 showPage('main-page');
 
                 setTimeout(() => {
@@ -583,6 +570,21 @@
             } else {
                 alert(strings[userState.lang]["login_error"]);
             }
+        }
+
+        // Realtime sync listening function added
+        function listenForDesignerResponses(userPhone) {
+            database.ref('orders').orderByChild('userPhone').equalTo(userPhone)
+            .on('value', (snapshot) => {
+                if(snapshot.exists()) {
+                    let updatedOrders = [];
+                    snapshot.forEach((childSnapshot) => {
+                        updatedOrders.push(childSnapshot.value);
+                    });
+                    pastOrders = updatedOrders;
+                    renderRecentOrdersUI();
+                }
+            });
         }
 
         function openOrderForm(category) {
@@ -612,23 +614,21 @@
         }
 
         function triggerFilePicker() { document.getElementById('hidden-file-input').click(); }
-        
-        // ፎቶ ሲመረጥ ፎቶውን ወደ ጽሑፍ (Base64) ቀይሮ ለማስተላለፍ እንዲመች ማድረግ
         function handleFileSelected(input) {
             if (input.files && input.files.length > 0) {
                 const file = input.files[0];
                 currentSelectedFileName = file.name;
                 document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + currentSelectedFileName;
                 
+                // Convert file to Base64 to save inside Firebase Database easily
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    currentSelectedFileUrl = e.target.result; // የፎቶው ዳታ
+                    currentSelectedFileUrl = e.target.result; 
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // ትዕዛዝ ሲላክ በቀጥታ ወደ FIREBASE CLOUD እንዲላክ ማድረግ
         function handleOrderSubmit() {
             const desc = document.getElementById('input-desc').value.trim();
             if (!desc) { alert(strings[userState.lang]['validation_error']); return; }
@@ -638,36 +638,30 @@
             const timeString = today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const dateString = today.toLocaleDateString([], {month: 'short', day: 'numeric'});
 
+            const orderId = "FN-" + Math.floor(100 + Math.random() * 900);
             const orderData = {
-                id: "FN-" + Math.floor(100 + Math.random() * 900),
+                id: orderId,
                 userName: userState.name,
                 userPhone: userState.phone,
                 type: projType,
                 desc: desc,
                 fileName: currentSelectedFileName,
-                fileUrl: currentSelectedFileUrl, // የፎቶው ምስል ዳታ
+                fileUrl: currentSelectedFileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80", // default fallback preview image if empty
                 time: timeString,
                 date: "Today, " + dateString,
-                status: "Pending", // ነባሪ ሁኔታ
-                designerReply: ""  // ገና አልተመለሰም
+                designerReply: "Your request is received! Our head designer is working on it. We will upload the response here soon."
             };
 
-            // 🚀 መረጃውን ወደ ጋራ ደመና (Firebase Database) መላክ
-            FuNetCloud.sendOrderToDatabase(orderData);
-
-            document.getElementById('txt-success-summary-type').innerText = projType;
-            document.getElementById('txt-success-summary-desc').innerText = desc;
-
-            syncLocalOrdersWithCloud();
-            showPage('success-page');
-        }
-
-        // ከCloud የመጡ አዳዲስ የዲዛይነር ምላሾችን ከስልክ ታሪክ ጋር ማመሳሰል
-        function syncLocalOrdersWithCloud() {
-            let cloudDb = JSON.parse(localStorage.getItem('funet_cloud_db')) || [];
-            // የተጠቃሚውን የራሱን ትዕዛዞች በስልክ ቁጥሩ ለይቶ ማውጣት
-            pastOrders = cloudDb.filter(order => order.userPhone === userState.phone);
-            renderRecentOrdersUI();
+            // Push orderData directly to Firebase Realtime Database
+            database.ref('orders/' + orderId).set(orderData)
+            .then(() => {
+                document.getElementById('txt-success-summary-type').innerText = projType;
+                document.getElementById('txt-success-summary-desc').innerText = desc;
+                showPage('success-page');
+            })
+            .catch((error) => {
+                alert("Error sending order to system: " + error.message);
+            });
         }
 
         function renderRecentOrdersUI() {
@@ -683,19 +677,10 @@
                 let item = document.createElement('div');
                 item.className = 'recent-item';
                 item.onclick = () => viewSpecificOrderDetails(index);
-                
-                // በሁኔታው (Status) ላይ ተመስርቶ ቀለም መቀየር
-                let badgeColor = "orange";
-                if (order.status === "Processing") badgeColor = "#0088cc";
-                if (order.status === "Completed") badgeColor = "green";
-
                 item.innerHTML = `
                     <div class="icon-circle"><i class="fa-solid fa-compass-drafting"></i></div>
                     <div class="details">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <h5>${order.type.split(' / ')[0]}</h5>
-                            <span style="background:${badgeColor}; color:white; font-size:9px; padding:2px 5px; border-radius:4px; font-weight:bold;">${order.status}</span>
-                        </div>
+                        <h5>${order.type.split(' / ')[0]}</h5>
                         <p>${order.desc}</p>
                     </div>
                     <div class="time-date-container">
@@ -714,30 +699,15 @@
             document.getElementById('det-order-title').innerText = order.type;
             document.getElementById('det-order-id').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${order.time} - ${order.date} (ID: #${order.id})`;
             document.getElementById('det-order-desc').innerText = order.desc;
+            document.getElementById('det-designer-reply-text').innerText = order.designerReply;
 
             const imgSection = document.getElementById('det-img-section');
-            if (order.fileUrl && order.fileUrl !== "") {
-                document.getElementById('det-file-name').innerText = order.fileName || "photo.jpg";
+            if (order.fileUrl && order.fileUrl !== "None") {
+                document.getElementById('det-file-name').innerText = order.fileName || "project_image.jpg";
                 document.getElementById('det-order-img').src = order.fileUrl;
                 imgSection.classList.remove('hidden');
             } else {
                 imgSection.classList.add('hidden');
-            }
-
-            // ከዲዛይነሩ የመጣ አዲስ ምላሽ ካለ ማሳየት ካልሆነ ነባሪውን ማሳየት
-            const replyBox = document.getElementById('det-designer-reply-text');
-            if (order.designerReply && order.designerReply.trim() !== "") {
-                replyBox.innerText = order.designerReply;
-                replyBox.style.background = "#e6f4ea";
-                replyBox.style.color = "#137333";
-            } else {
-                if (userState.lang === 'am') {
-                    replyBox.innerText = "ትዕዛዝዎ ደርሶናል! ዋና ዲዛይነራችን በቅርቡ የንድፍ ስራውን ሰርቶ እዚህ ጋር ይልክልዎታል።";
-                } else {
-                    replyBox.innerText = "Your request is received! Our head designer is working on the interior layout. We will upload the 3D preview model here soon.";
-                }
-                replyBox.style.background = "var(--light-green)";
-                replyBox.style.color = "#1b5e20";
             }
 
             showPage('order-details-page');
@@ -778,7 +748,7 @@
                                 <strong>Order #${order.id}</strong>
                                 <div style="font-size:12px; color:var(--grey-text);">${order.type.split(' / ')[0]}</div>
                             </div>
-                            <span class="status-badge" style="background:orange;">${order.status}</span>
+                            <span class="status-badge" style="background:orange;">Active</span>
                         `;
                         container.appendChild(div);
                     });
@@ -796,14 +766,16 @@
                 container.innerHTML = `
                     <div class="info-card-container" style="width: 100%; max-width: 340px; margin-bottom: 20px;">
                         <div>
-                            <div style="font-size: 14px; margin-bottom: 6px;"><b>App Version:</b> <span style="color:var(--primary); font-weight:bold;">FuNet Designer Premium v1.3.0</span></div>
+                            <div style="font-size: 14px; margin-bottom: 6px;"><b>App Version:</b> <span style="color:var(--primary); font-weight:bold;">FuNet Designer Premium v1.2.5</span></div>
                             <div style="font-size: 14px;"><b>Developer:</b> <span style="font-weight:bold;">FuNet Tech Group</span></div>
                         </div>
                     </div>
+                    
                     <div class="input-group" style="width: 100%; max-width: 340px;">
                         <label id="lbl-info-feedback-title" style="font-size: 14px; font-weight: bold; margin-bottom: 6px;">${strings[lang]['lbl-info-feedback-title']}</label>
                         <textarea id="info-feedback-input" class="form-control" rows="4" style="resize: none;" placeholder="${strings[lang]['lbl-info-feedback-placeholder']}"></textarea>
                     </div>
+                    
                     <button class="btn-primary" style="width: 100%; max-width: 340px; margin-top: 5px;" onclick="submitInfoFeedback()">
                         <span id="lbl-info-send-btn">${strings[lang]['lbl-info-send-btn']}</span>
                     </button>
@@ -843,11 +815,9 @@
             const lang = userState.lang;
             document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
             
-            const promptBox = document.getElementById('login-prompt-box');
-            if (userState.loggedIn) { promptBox.classList.add('hidden'); } 
-            else { promptBox.classList.remove('hidden'); }
-
-            document.getElementById('input-desc').placeholder = strings[lang]['input_desc_placeholder'];
+            if (document.getElementById('input-desc')) {
+                document.getElementById('input-desc').placeholder = strings[lang]['input_desc_placeholder'];
+            }
 
             const ids = [
                 "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc", "lbl-login-btn", "lbl-login-header", 
@@ -863,7 +833,7 @@
             const fbInput = document.getElementById('info-feedback-input');
             if (fbInput) fbInput.placeholder = strings[lang]['lbl-info-feedback-placeholder'];
 
-            syncLocalOrdersWithCloud();
+            renderRecentOrdersUI();
         }
     </script>
 </body>
