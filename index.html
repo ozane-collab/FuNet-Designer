@@ -84,12 +84,7 @@
         .icon-btn { background: none; border: none; color: var(--text-light); font-size: 22px; cursor: pointer; padding: 5px; }
 
         /* MAIN CONTENT AREA */
-        .main-scrollable-content {
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
+        .main-scrollable-content { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; }
 
         /* SERVICES LIST */
         .services-container { display: flex; justify-content: center; gap: 15px; padding: 15px; flex-shrink: 0; }
@@ -122,7 +117,6 @@
         .recent-item .details h5 { margin: 0; font-size: 14px; font-weight: 600; }
         .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
         
-        /* TIME & DATE DISPLAY BOX */
         .time-date-container { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; min-width: 75px; text-align: right; }
         .time-date-container .time-lbl { font-size: 12px; font-weight: 600; color: var(--text-light); }
         .time-date-container .date-lbl { font-size: 10px; color: var(--grey-text); font-weight: 500; }
@@ -143,17 +137,7 @@
 
         /* FORM ELEMENTS */
         .content-padding { padding: 15px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
-        
-        /* RESPONSIVE MOBILE SIZE LOGIN CONTAINER */
-        .login-form-scroll-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 15px;
-            overflow-y: auto;
-        }
-        
+        .login-form-scroll-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-y: auto; }
         .input-group { width: 100%; max-width: 340px; margin-bottom: 15px; display: flex; flex-direction: column; }
         .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
         .form-control { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 15px; background-color: var(--card-light); color: var(--text-light); outline: none; }
@@ -173,12 +157,6 @@
         .info-text-box { background-color: #F2F2F2; padding: 12px; border-radius: 10px; font-size: 14px; color: #333; line-height: 1.4; word-break: break-word; }
         .designer-response-box { background-color: var(--light-green); border: 1px dashed var(--border-green); padding: 14px; border-radius: 10px; font-size: 14px; color: #1b5e20; line-height: 1.4; font-style: italic; }
         .info-image-preview { width: 100%; border-radius: 10px; cursor: pointer; margin-top: 4px; max-height: 180px; object-fit: cover; }
-
-        /* INFORMATION PAGE BRAND APPRECIATION CARDS */
-        .info-brand-card { width: 100%; max-width: 340px; background-color: var(--card-light); padding: 20px; border-radius: 14px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.03); }
-        .info-brand-card i { font-size: 40px; color: var(--primary); margin-bottom: 12px; }
-        .info-brand-card h4 { margin: 0 0 8px 0; font-size: 16px; font-weight: bold; }
-        .info-brand-card p { margin: 0; font-size: 13px; color: var(--grey-text); line-height: 1.5; }
 
         /* FULLSCREEN IMAGE MODAL */
         .fullscreen-modal { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
@@ -283,10 +261,8 @@
                 <h3 id="lbl-login-header">Login</h3>
                 <div style="width: 34px;"></div>
             </div>
-            
             <div class="login-form-scroll-container">
                 <h2 style="margin: 10px 0 25px 0; font-weight: bold; text-align: center; font-size: 20px;" id="lbl-login-sub">Please login to start your order</h2>
-                
                 <div class="input-group">
                     <label id="lbl-name-field">Full Name</label>
                     <input type="text" id="input-name" class="form-control" placeholder="Enter full name">
@@ -295,7 +271,6 @@
                     <label id="lbl-phone-field">Phone Number</label>
                     <input type="tel" id="input-phone" class="form-control" value="+251" oninput="validatePhoneNumber(this)">
                 </div>
-                
                 <button class="btn-primary" style="margin-top: 15px; width: 100%;" onclick="handleLoginSubmit()">
                     <span id="lbl-btn-continue">Login & Continue 🚀</span>
                 </button>
@@ -349,20 +324,16 @@
                         <strong id="det-order-title" style="font-size: 17px; color: var(--primary); display: block;">Project Title</strong>
                         <span id="det-order-id" style="font-size: 12px; color: var(--grey-text); display: block; margin-top: 2px;"><i class="fa-solid fa-calendar-day"></i> Just now (FN-000)</span>
                     </div>
-
                     <div>
                         <div class="info-section-title" id="lbl-det-req-title">Your Requirements:</div>
                         <div id="det-order-desc" class="info-text-box">User guidelines text...</div>
                     </div>
-
                     <div id="det-img-section" class="hidden">
                         <div class="info-section-title" id="lbl-det-img-title">Attached Image:</div>
                         <div id="det-file-name" style="font-size: 12px; color: var(--grey-text); margin-bottom: 5px; word-break: break-all;">image_name.jpg</div>
                         <img id="det-order-img" class="info-image-preview" src="" alt="Project Photo" onclick="openFullscreenImage(this.src)">
                     </div>
-
                     <div style="border-top: 1px dashed var(--primary); margin: 5px 0;"></div>
-
                     <div>
                         <div class="info-section-title" style="color: #2e7d32;" id="lbl-det-resp-title"><i class="fa-solid fa-user-tie"></i> Designer Response:</div>
                         <div id="det-designer-reply-text" class="designer-response-box">
@@ -439,12 +410,10 @@
         <div id="success-page" class="page hidden" style="justify-content: center; align-items: center; text-align: center;">
             <i class="fa-solid fa-circle-check" style="font-size: 65px; color: green; margin-bottom: 15px;"></i>
             <h2 id="lbl-success-msg" style="margin: 0 15px; font-size: 20px;">Your order has been sent successfully! 🎉</h2>
-            
             <div style="background: var(--card-light); padding: 12px 20px; border-radius: 10px; margin: 15px; text-align: left; width: 85%; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                 <div style="font-size: 13px; margin-bottom: 4px;"><b id="lbl-succ-summary-type">Ordered:</b> <span id="txt-success-summary-type" style="color:var(--primary); font-weight:bold;"></span></div>
                 <div style="font-size: 12px; color: var(--text-light); word-break: break-word;"><b id="lbl-succ-summary-desc">Notes:</b> <span id="txt-success-summary-desc"></span></div>
             </div>
-
             <p id="lbl-success-sub" style="color: var(--grey-text); font-size: 13px; margin: 8px 15px 25px 15px;">We will contact you on your phone soon.</p>
             <button class="btn-primary" style="max-width: 150px;" onclick="showPage('main-page')">OK</button>
         </div>
@@ -485,8 +454,9 @@
                 "lbl-succ-summary-type": "Ordered:", "lbl-succ-summary-desc": "Notes:", "lbl-recent-title": "Recent Requests", "no_history": "No recent requests found.",
                 "input_desc_placeholder": "Write specific design requirements here... (e.g., wall colors, item placements)",
                 "lbl-det-req-title": "Your Requirements:", "lbl-det-img-title": "Attached Image:", "lbl-det-resp-title": "Designer Response:",
-                "info_title_1": "Who We Are", "info_desc_1": "FuNet Premium Tech & Design Hub delivers world-class, top-tier interior and architectural rendering layout experiences across the nation.",
-                "info_title_2": "Our Goal", "info_desc_2": "Bringing fully engineered 3D solutions, modern standard decorations, and premium visualizations into one simple mobile application interface."
+                "lbl-info-feedback-title": "Send Us Feedback / Question", "lbl-info-feedback-placeholder": "Write your message or question here...",
+                "lbl-info-send-btn": "Send Message ✉️", "feedback_success": "Thank you! Your message has been sent successfully. 👍",
+                "feedback_empty_error": "Please write a message before sending!"
             },
             am: {
                 app_subtitle: "ዲዛይነር", "lbl-3d-title": "3D ዲዛይን", "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
@@ -504,10 +474,11 @@
                 "txt-welcome-back": "እንኳን በደህና መጡ፣ ", "txt-login-status-msg": "በተሳካ ሁኔታ ሎግኢን አድርገዋል! ✨",
                 "lbl-banner-title": "ዘመናዊ አርክቴክቸር", "lbl-banner-desc": "የአዕምሮዎን የንድፍ ሃሳብ ወደ እውነተኛ ውብ እይታ እንቀይረዋለን።",
                 "lbl-succ-summary-type": "የታዘዘው:", "lbl-succ-summary-desc": "ማስታወሻ:", "lbl-recent-title": "የቅርብ ጊዜ ጥያቄዎች", "no_history": "ምንም የተቀመጠ የቅርብ ታሪክ የለም።",
-                "input_desc_placeholder": "የሚፈልጉትን የተለየ የንድፍ ዝርዝር መግለጫ እዚህ ያስፍሩ...",
+                "input_desc_placeholder": "የሚፈልጉትን የተለየ የንድፍ ዝርዝር መግለጫ እዚህ ያስፍሩ... (ለምሳሌ የግድግዳ ቀለም፣ የእቃዎች አቀማመጥ)",
                 "lbl-det-req-title": "የእርስዎ ፍላጎቶች (Requirements):", "lbl-det-img-title": "የተያያዘ ፎቶ:", "lbl-det-resp-title": "የዲዛይነሩ ምላሽ:",
-                "info_title_1": "እኛ ማን ነን?", "info_desc_1": "የFuNet ፕሪሚየም የንድፍ እና የቴክኖሎጂ ማዕከል በመላው ሀገሪቱ ደረጃቸውን የጠበቁ ዘመናዊ የቤት ውስጥ እና የህንፃ ስራዎችን ጥራት ባለው እይታ የሚያቀርብ ድርጅት ነው።",
-                "info_title_2": "ዓላማችን", "info_desc_2": "ምህንድስና የታከለባቸውን የ3D ፕላን መፍትሄዎችን እና ዘመናዊ ማሳያዎችን በአንድ ቀላል የሞባይል መተግበሪያ በይነገጽ ማቅረብ ነው።"
+                "lbl-info-feedback-title": "አስተያየት ወይም ጥያቄ ይላኩልን", "lbl-info-feedback-placeholder": "የሚልኩትን መልእክት ወይም ጥያቄ እዚህ ይጻፉ...",
+                "lbl-info-send-btn": "መልእክት ላክ ✉️", "feedback_success": "እናመሰግናለን! መልእክትዎ በተሳካ ሁኔታ ተልኳል። 👍",
+                "feedback_empty_error": "እባክዎ መልእክት ሳይጽፉ አይላኩ!"
             }
         };
 
@@ -544,11 +515,8 @@
             document.getElementById(pageId).classList.remove('hidden');
             
             const promptBox = document.getElementById('login-prompt-box');
-            if (userState.loggedIn) {
-                promptBox.classList.add('hidden');
-            } else {
-                promptBox.classList.remove('hidden');
-            }
+            if (userState.loggedIn) { promptBox.classList.add('hidden'); } 
+            else { promptBox.classList.remove('hidden'); }
         }
 
         function validatePhoneNumber(input) {
@@ -628,7 +596,6 @@
             if (!desc) { alert(strings[userState.lang]['validation_error']); return; }
 
             const projType = document.getElementById('dropdown-project-type').value;
-            
             const today = new Date();
             const timeString = today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const dateString = today.toLocaleDateString([], {month: 'short', day: 'numeric'});
@@ -747,26 +714,39 @@
                     <div class="menu-item"><span>Dark Mode Theme</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleThemeMode(this.checked)"><span class="slider"></span></label></div>
                 `;
             } 
+            // የተሻሻለው የ Information ገጽ (App Version, Developer Box እና የመጻፊያ ሳጥን ከነ ቁልፉ)
             else if (type === 'info') {
-                // መጻፊያ ሳጥኑ ሙሉ በሙሉ ተወግዶ በንጹህ የመረጃ ካርዶች ተተክቷል
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
                 container.innerHTML = `
-                    <div class="info-brand-card">
-                        <i class="fa-solid fa-building-shield"></i>
-                        <h4>${strings[lang]['info_title_1']}</h4>
-                        <p>${strings[lang]['info_desc_1']}</p>
+                    <div class="info-card-container" style="width: 100%; max-width: 340px; margin-bottom: 20px;">
+                        <div>
+                            <div style="font-size: 14px; margin-bottom: 6px;"><b>App Version:</b> <span style="color:var(--primary); font-weight:bold;">FuNet Designer Premium v1.2.5</span></div>
+                            <div style="font-size: 14px;"><b>Developer:</b> <span style="font-weight:bold;">FuNet Tech Group</span></div>
+                        </div>
                     </div>
-                    <div class="info-brand-card">
-                        <i class="fa-solid fa-bullseye"></i>
-                        <h4>${strings[lang]['info_title_2']}</h4>
-                        <p>${strings[lang]['info_desc_2']}</p>
+                    
+                    <div class="input-group" style="width: 100%; max-width: 340px;">
+                        <label id="lbl-info-feedback-title" style="font-size: 14px; font-weight: bold; margin-bottom: 6px;">${strings[lang]['lbl-info-feedback-title']}</label>
+                        <textarea id="info-feedback-input" class="form-control" rows="4" style="resize: none;" placeholder="${strings[lang]['lbl-info-feedback-placeholder']}"></textarea>
                     </div>
-                    <div style="font-size: 11px; color: var(--grey-text); text-align: center; margin-top: 10px; width: 100%;">
-                        FuNet Premium Designer • Version 1.2.5
-                    </div>
+                    
+                    <button class="btn-primary" style="width: 100%; max-width: 340px; margin-top: 5px;" onclick="submitInfoFeedback()">
+                        <span id="lbl-info-send-btn">${strings[lang]['lbl-info-send-btn']}</span>
+                    </button>
                 `;
             }
             showPage('sub-settings-page');
+        }
+
+        // የፊድባክ መላኪያ ፋንክሽን
+        function submitInfoFeedback() {
+            const txtInput = document.getElementById('info-feedback-input');
+            if (txtInput && txtInput.value.trim() !== "") {
+                alert(strings[userState.lang]['feedback_success']);
+                txtInput.value = "";
+            } else {
+                alert(strings[userState.lang]['feedback_empty_error']);
+            }
         }
 
         function toggleThemeMode(isDark) {
@@ -790,11 +770,9 @@
             const lang = userState.lang;
             document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
             
-            const promptBox = document.getElementById('login-prompt-box');
-            if (userState.loggedIn) { promptBox.classList.add('hidden'); } 
-            else { promptBox.classList.remove('hidden'); }
-
-            document.getElementById('input-desc').placeholder = strings[lang]['input_desc_placeholder'];
+            if (document.getElementById('input-desc')) {
+                document.getElementById('input-desc').placeholder = strings[lang]['input_desc_placeholder'];
+            }
 
             const ids = [
                 "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc", "lbl-login-btn", "lbl-login-header", 
@@ -802,9 +780,15 @@
                 "lbl-selected-cat", "lbl-project-type", "lbl-upload-btn", "lbl-camera-btn", "lbl-desc-title", "lbl-finish-order", 
                 "lbl-profile-title", "lbl-unreg-title", "lbl-unreg-sub", "lbl-login-short", "lbl-lang-option", "lbl-success-msg", 
                 "lbl-success-sub", "lbl-yango-search", "txt-login-status-msg", "lbl-banner-title", "lbl-banner-desc", 
-                "lbl-succ-summary-type", "lbl-succ-summary-desc", "lbl-recent-title", "lbl-det-req-title", "lbl-det-img-title"
+                "lbl-succ-summary-type", "lbl-succ-summary-desc", "lbl-recent-title", "lbl-det-req-title", "lbl-det-img-title",
+                "lbl-info-feedback-title", "lbl-info-send-btn"
             ];
             ids.forEach(id => { const el = document.getElementById(id); if (el) el.innerText = strings[lang][id]; });
+            
+            // የፊድባክ Placeholder ማስተካከያ
+            const fbInput = document.getElementById('info-feedback-input');
+            if (fbInput) fbInput.placeholder = strings[lang]['lbl-info-feedback-placeholder'];
+
             renderRecentOrdersUI();
         }
     </script>
