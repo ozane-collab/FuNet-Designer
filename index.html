@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuNet Designer</title>
-    <!-- FontAwesome ለአይኮኖች -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -35,7 +34,7 @@
             transition: background-color 0.3s;
         }
 
-        /* በትክክል የስልክ ስክሪን ቅርጽ እንዲይዝ ማድረግ (Responsive Mobile Container) */
+        /* የስልክ ቅርጽ መያዣ (Responsive Mobile Screen) */
         .phone-container {
             width: 100%;
             max-width: 390px;
@@ -48,7 +47,6 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 0;
             transition: background-color 0.3s, color 0.3s;
         }
 
@@ -59,7 +57,7 @@
             }
         }
 
-        /* Splash Screen ገጽታ */
+        /* Splash Screen */
         .splash {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +69,7 @@
             z-index: 1000;
             transition: opacity 0.5s ease, visibility 0.5s;
         }
-        .splash h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; letter-spacing: 1px; }
+        .splash h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; }
         .splash p { color: white; font-size: 26px; margin: 5px 0 0 0; font-style: italic; font-weight: 300; }
 
         /* የገጾች መዋቅር */
@@ -89,11 +87,9 @@
             transition: background-color 0.3s;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* የላይኛው ራስጌ (Header) */
+        /* የላይኛው ማውጫ (Headers) */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -101,10 +97,10 @@
             padding: 20px 15px;
             background-color: var(--card-light);
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-            transition: background-color 0.3s;
         }
         .app-header .logo-area h2 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
         .app-header .logo-area p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; color: var(--text-light); }
+        
         .icon-btn {
             background: none; border: none; color: var(--text-light); font-size: 24px; cursor: pointer; padding: 5px;
         }
@@ -116,11 +112,10 @@
             padding: 15px;
             background-color: var(--card-light);
             border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: background-color 0.3s;
         }
         .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; color: var(--text-light); }
 
-        /* ካርዶች (Cards Section) */
+        /* የአገልግሎት መምረጫ ካርዶች */
         .services-container {
             display: flex;
             justify-content: center;
@@ -139,7 +134,7 @@
             text-align: center;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            transition: transform 0.2s, background-color 0.3s;
+            transition: transform 0.2s;
         }
         .service-card:active { transform: scale(0.95); }
         .service-card i { font-size: 38px; color: var(--primary); margin-bottom: 10px; }
@@ -154,47 +149,33 @@
             width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 15px;
             background-color: var(--card-light); color: var(--text-light); outline: none;
         }
-        .form-control:focus { border-color: var(--primary); }
 
         /* ቁልፎች (Buttons) */
         .btn-primary {
             background-color: var(--primary); color: white; border: none; padding: 15px;
             border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer;
-            width: 100%; max-width: 330px; margin-top: 10px; box-shadow: 0 4px 10px rgba(252, 52, 36, 0.2);
-            display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; max-width: 330px; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
-        .btn-primary:active { opacity: 0.9; }
-
         .file-buttons { display: flex; gap: 10px; width: 100%; max-width: 330px; margin: 10px 0; }
         .btn-file {
             flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 13px;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: white;
         }
 
-        /* ዝርዝር ማሳያዎች (Settings & History Items) */
-        .menu-item {
+        /* ዝርዝር ማሳያዎች */
+        .menu-item, .history-card {
             width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px;
-            border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); cursor: pointer;
-        }
-        .history-card {
-            width: 100%; max-width: 340px; background-color: var(--card-light); padding: 12px;
             border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
+        .history-card { cursor: pointer; }
         .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
 
-        /* ማብሪያ Switch ዲዛይን */
+        /* ማብሪያ Switch */
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc; transition: .3s; border-radius: 24px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
-            background-color: white; transition: .3s; border-radius: 50%;
-        }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
 
@@ -205,21 +186,16 @@
             --text-light: var(--text-dark);
         }
         body.dark-mode-active .form-control { border-color: #444; }
-
-        /* ቋንቋ መምረጫ */
-        .lang-dropdown { width: 100%; max-width: 340px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <div class="phone-container">
-        <!-- 1. SPLASH SCREEN -->
         <div id="splash-screen" class="splash">
             <h1>FuNet</h1>
             <p>Designer</p>
         </div>
 
-        <!-- 2. MAIN PAGE -->
         <div id="main-page" class="page hidden">
             <div class="app-header">
                 <div class="logo-area">
@@ -250,16 +226,15 @@
             </div>
         </div>
 
-        <!-- 3. LOGIN PAGE -->
         <div id="login-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
                 <h3 id="lbl-login-header">Login</h3>
                 <div style="width: 34px;"></div>
             </div>
-            <div class="content-padding">
-                <h2 style="margin-top: 10px;" id="lbl-welcome-msg">Welcome to FuNet</h2>
-                <p style="color: var(--grey-text); font-size: 13px; margin-bottom: 25px;" id="lbl-login-sub">Please login to start your order</p>
+            <div class="content-padding" style="justify-content: center; flex-grow: 1; padding-bottom: 80px;">
+                <h2 style="margin: 0 0 5px 0;" id="lbl-welcome-msg">Welcome to FuNet</h2>
+                <p style="color: var(--grey-text); font-size: 13px; margin: 0 0 25px 0;" id="lbl-login-sub">Please login to start your order</p>
                 
                 <div class="input-group">
                     <label id="lbl-name-field">Full Name</label>
@@ -267,7 +242,6 @@
                 </div>
                 <div class="input-group">
                     <label id="lbl-phone-field">Phone Number</label>
-                    <!-- የተቆለፈ መነሻ +251 ኮድ እና ለቁጥር ብቻ የሚሆን ኪቦርድ -->
                     <input type="tel" id="input-phone" class="form-control" value="+251" oninput="validatePhoneNumber(this)">
                 </div>
                 
@@ -277,7 +251,6 @@
             </div>
         </div>
 
-        <!-- 4. ORDER FORM PAGE -->
         <div id="order-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -286,7 +259,7 @@
             </div>
             <div class="content-padding">
                 <div style="width: 100%; text-align: left; margin-bottom: 15px;">
-                    <span id="lbl-selected-cat" style="font-size: 14px; color: var(--grey-text);">Selected Category:</span>
+                    <span id="lbl-selected-cat">Selected Category:</span>
                     <strong id="txt-selected-service" style="color: var(--primary); font-size: 15px; margin-left: 5px;">3D Design</strong>
                 </div>
 
@@ -313,7 +286,6 @@
             </div>
         </div>
 
-        <!-- 5. PROFILE & SETTINGS PAGE -->
         <div id="profile-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -322,48 +294,45 @@
             </div>
             <div class="content-padding">
                 <div id="profile-user-card" style="text-align: center; margin-bottom: 25px;">
-                    <!-- ያልገባ ተጠቃሚ እይታ -->
                     <div id="unregistered-box">
                         <i class="fa-solid fa-circle-user" style="font-size: 70px; color: #ccc; margin-bottom: 10px;"></i>
                         <h4 style="margin: 0;" id="lbl-unreg-title">Unregistered Account</h4>
                         <p style="color: var(--grey-text); font-size: 12px; margin: 5px 0 15px 0;" id="lbl-unreg-sub">Please login to see your profile.</p>
-                        <button class="btn-primary" style="padding: 10px 20px; font-size: 13px;" onclick="showPage('login-page')"><span id="lbl-login-short">Login</span></button>
+                        <button class="btn-primary" style="padding: 10px 20px; font-size: 13px; width: auto; margin: 0 auto;" onclick="showPage('login-page')"><span id="lbl-login-short">Login</span></button>
                     </div>
-                    <!-- የገባ ተጠቃሚ እይታ -->
                     <div id="registered-box" class="hidden">
                         <i class="fa-solid fa-circle-user" style="font-size: 70px; color: var(--primary); margin-bottom: 10px;"></i>
-                        <h3 style="margin: 0;" id="txt-user-name">Ozan</h3>
-                        <p style="color: var(--grey-text); font-size: 14px; margin: 5px 0 0 0;" id="txt-user-phone">+251911223344</p>
+                        <h3 style="margin: 0;" id="txt-user-name"></h3>
+                        <p style="color: var(--grey-text); font-size: 14px; margin: 5px 0 0 0;" id="txt-user-phone"></p>
                     </div>
                 </div>
 
-                <!-- ማውጫ ዝርዝሮች -->
-                <div class="menu-item" onclick="showSubSettings('history')">
+                <div class="menu-item" onclick="showSubSettings('history')" style="cursor: pointer;">
                     <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
                         <i class="fa-solid fa-clock-rotate-left"></i> <span id="menu-history">History</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
                 </div>
 
-                <div class="menu-item" onclick="showSubSettings('settings')">
+                <div class="menu-item" onclick="showSubSettings('settings')" style="cursor: pointer;">
                     <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
                         <i class="fa-solid fa-gear"></i> <span id="menu-settings">Settings</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
                 </div>
 
-                <div class="menu-item" onclick="showSubSettings('info')">
+                <div class="menu-item" onclick="showSubSettings('info')" style="cursor: pointer;">
                     <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
                         <i class="fa-solid fa-circle-info"></i> <span id="menu-info">Information</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
                 </div>
 
-                <div class="input-group lang-dropdown">
+                <div class="input-group" style="width: 100%; max-width: 340px; margin-top: 15px;">
                     <label id="lbl-lang-option">Language / ቋንቋ</label>
-                    <select class="form-control" onchange="changeLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="am" selected>አማርኛ (Amharic)</option>
+                    <select id="lang-selector-dropdown" class="form-control" onchange="changeLanguage(this.value)">
+                        <option value="en" selected>English</option>
+                        <option value="am">አማርኛ (Amharic)</option>
                     </select>
                 </div>
 
@@ -371,46 +340,65 @@
             </div>
         </div>
 
-        <!-- 6. SUB-SETTINGS PAGE (HISTORY, SETTINGS, INFO) -->
         <div id="sub-settings-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button>
                 <h3 id="sub-page-title">History</h3>
                 <div style="width: 34px;"></div>
             </div>
-            <div class="content-padding" id="sub-page-content">
-                <!-- ዳይናሚክ ይዘት እዚህ ይገባል -->
+            <div class="content-padding" id="sub-page-content"></div>
+        </div>
+
+        <div id="history-detail-page" class="page hidden">
+            <div class="sub-header">
+                <button class="icon-btn" onclick="showSubSettings('history')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3 id="lbl-detail-header">Order Details</h3>
+                <div style="width: 34px;"></div>
+            </div>
+            <div class="content-padding" style="align-items: flex-start; padding: 20px;">
+                <div style="width: 100%; background: var(--card-light); padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <h4 style="margin: 0 0 10px 0; color: var(--primary);" id="det-order-id">Order #001</h4>
+                    <p style="margin: 5px 0;"><b id="lbl-det-type">Project Type:</b> <span id="det-type"></span></p>
+                    <p style="margin: 5px 0;"><b id="lbl-det-date">Date:</b> <span id="det-date"></span></p>
+                    <p style="margin: 5px 0;"><b id="lbl-det-status">Status:</b> <span id="det-status" class="status-badge"></span></p>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                    <p style="margin: 5px 0;"><b id="lbl-det-guidelines">Requirements / Guidelines:</b></p>
+                    <div id="det-desc" style="background: var(--bg-light); padding: 10px; border-radius: 8px; font-size: 14px; margin-top: 5px; min-height: 60px; word-break: break-word;"></div>
+                    <p style="margin: 10px 0 0 0; font-size: 12px; color: var(--grey-text);"><b id="lbl-det-file">File:</b> <span id="det-file">None</span></p>
+                </div>
             </div>
         </div>
 
-        <!-- 7. SUCCESS PAGE -->
         <div id="success-page" class="page hidden" style="justify-content: center; align-items: center; text-align: center;">
             <i class="fa-solid fa-circle-check" style="font-size: 65px; color: green; margin-bottom: 15px;"></i>
             <h2 id="lbl-success-msg" style="margin: 0 15px; font-size: 20px;">Your order has been sent successfully! 🎉</h2>
+            
+            <div style="background: var(--card-light); padding: 12px 20px; border-radius: 10px; margin: 15px; text-align: left; width: 85%; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <div style="font-size: 13px; margin-bottom: 4px;"><b id="lbl-succ-summary-type">Ordered:</b> <span id="txt-success-summary-type" style="color:var(--primary); font-weight:bold;"></span></div>
+                <div style="font-size: 12px; color: var(--text-light); word-break: break-word;"><b id="lbl-succ-summary-desc">Notes:</b> <span id="txt-success-summary-desc"></span></div>
+            </div>
+
             <p id="lbl-success-sub" style="color: var(--grey-text); font-size: 13px; margin: 8px 15px 25px 15px;">We will contact you on your phone soon.</p>
-            <button class="btn-primary" style="max-width: 150px;" onclick="showPage('main-page')">OK</button>
+            <button class="btn-primary" style="max-width: 150px; margin-top: 0;" onclick="showPage('main-page')">OK</button>
         </div>
     </div>
 
     <script>
-        // የአፑ ዳታዎች ማከማቻ ስቴት
+        // የአፑ ስቴት ማከማቻ (መጀመሪያ በእንግሊዘኛ ይነሳል)
         let userState = {
             loggedIn: false,
             name: '',
             phone: '+251',
-            lang: 'am', // መጀመሪያ አማርኛ እንዲሆን
+            lang: 'en', 
             darkMode: false
         };
 
-        // የሂስትሪ ናሙናዎች
-        let pastOrders = [
-            { id: "001", type: "Modern Cafe", date: "2026-05-28", status: "In Progress" },
-            { id: "002", type: "Modern Building", date: "2026-05-15", status: "Completed" }
-        ];
-
+        // የሂስትሪ ዳታ መጀመሪያ ላይ ባዶ ነው (ሎግኢን ካደረጉ በኋላ ነው የሚመዘገበው)
+        let pastOrders = [];
         let currentServiceCategory = "3D Design";
+        let currentSelectedFileName = "None";
 
-        // የቋንቋዎች መዝገበ ቃላት
+        // የትርጉም መዝገበ-ቃላት
         const strings = {
             en: {
                 app_subtitle: "Designer",
@@ -444,7 +432,7 @@
                 "menu-settings": "Settings",
                 "menu-info": "Information",
                 "lbl-lang-option": "Language / ቋንቋ",
-                "btn-logout": "Log Out (ውጣ)",
+                "btn-logout": "Log Out",
                 "lbl-success-msg": "Your order has been sent successfully! 🎉",
                 "lbl-success-sub": "We will contact you on your phone soon.",
                 "validation_error": "Please write the design description!",
@@ -454,14 +442,22 @@
                 "version_lbl": "FuNet Designer App v1.0.5",
                 "feedback_lbl": "Write your questions or info here:",
                 "send_btn": "Send Feedback",
-                "no_history": "No orders history found."
+                "no_history": "No orders history found.",
+                "lbl-detail-header": "Order Details",
+                "lbl-det-type": "Project Type:",
+                "lbl-det-date": "Date:",
+                "lbl-det-status": "Status:",
+                "lbl-det-guidelines": "Requirements / Guidelines:",
+                "lbl-det-file": "File:",
+                "lbl-succ-summary-type": "Ordered:",
+                "lbl-succ-summary-desc": "Notes:"
             },
             am: {
                 app_subtitle: "ዲዛይነር",
                 "lbl-3d-title": "3D ዲዛይን",
                 "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
                 "lbl-ren-title": "እድሳት (Renovation)",
-                "lbl-ren-desc": "ዘமናዊ እቃዎችና ግብዓቶች",
+                "lbl-ren-desc": "ዘመናዊ እቃዎችና ግብዓቶች",
                 "lbl-prompt-msg": "የህልምዎን ዲዛይን ወደ እውነት ለመቀየር ዝግጁ ነዎት?",
                 "lbl-login-btn": "ለመказать መጀመሪያ ይግቡ",
                 "lbl-login-header": "መግቢያ (Login)",
@@ -498,11 +494,19 @@
                 "version_lbl": "ፉኔት ዲዛይነር መተግበሪያ v1.0.5",
                 "feedback_lbl": "የሚፈልጉትን መረጃ ወይም ጥያቄ እዚህ ይጻፉ፦",
                 "send_btn": "መረጃውን ላክ",
-                "no_history": "ምንም የተመዘገበ ታሪክ የለም።"
+                "no_history": "ምንም የተመዘገበ ታሪክ የለም።",
+                "lbl-detail-header": "የትዕዛዝ ዝርዝር",
+                "lbl-det-type": "የፕሮጀክት አይነት:",
+                "lbl-det-date": "ቀን:",
+                "lbl-det-status": "ሁኔታ:",
+                "lbl-det-guidelines": "ተጨማሪ ዝርዝር መመሪያዎች:",
+                "lbl-det-file": "ፋይል:",
+                "lbl-succ-summary-type": "የታዘዘው:",
+                "lbl-succ-summary-desc": "ማስታወሻ:"
             }
         };
 
-        // Splash screen አኒሜሽን ሽግግር
+        // Splash screen መዘግየት አኒሜሽን
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
@@ -513,35 +517,27 @@
             }, 500);
         }, 1500);
 
-        // የገጾች መሸጋገሪያ ተግባር
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
         }
 
-        // የቁጥር ብቻ ኪቦርድ መቆጣጠሪያ ማጣሪያ
+        // የስልክ ቁጥር ቁጥጥር ማጣሪያ
         function validatePhoneNumber(input) {
-            if (!input.value.startsWith('+251')) {
-                input.value = '+251';
-            }
-            // ከ +251 ውጭ ያሉትን ቁጥሮች ብቻ እንዲቀበል ማድረግ (ፊደላትን ያስወግዳል)
-            let suffix = input.value.substring(4);
-            suffix = suffix.replace(/[^0-9]/g, '');
+            if (!input.value.startsWith('+251')) { input.value = '+251'; }
+            let suffix = input.value.substring(4).replace(/[^0-9]/g, '');
             input.value = '+251' + suffix;
         }
 
-        // የሎግኢን ማረጋገጫ
+        // Login ማረጋገጫ
         function handleLoginSubmit() {
             const name = document.getElementById('input-name').value.trim();
             const phone = document.getElementById('input-phone').value.trim();
-            const lang = userState.lang;
-
             if (name && phone.length > 8) {
                 userState.loggedIn = true;
                 userState.name = name;
                 userState.phone = phone;
 
-                // ፕሮፋይል ማደስ
                 document.getElementById('unregistered-box').classList.add('hidden');
                 document.getElementById('registered-box').classList.remove('hidden');
                 document.getElementById('txt-user-name').innerText = name;
@@ -551,7 +547,7 @@
 
                 showPage('main-page');
             } else {
-                alert(strings[lang]["login_error"]);
+                alert(strings[userState.lang]["login_error"]);
             }
         }
 
@@ -559,6 +555,7 @@
             userState.loggedIn = false;
             userState.name = '';
             userState.phone = '+251';
+            pastOrders = []; // ሲወጣ ታሪክ ይጠፋል
             document.getElementById('input-name').value = '';
             document.getElementById('input-phone').value = '+251';
             
@@ -570,7 +567,6 @@
             showPage('main-page');
         }
 
-        // የትዕዛዝ መስኮት መክፈቻ (Modern Building / Modern Cafe ቀድመው የሚመረጡበት)
         function openOrderForm(category) {
             currentServiceCategory = category;
             if (!userState.loggedIn) {
@@ -584,71 +580,61 @@
             const dropdown = document.getElementById('dropdown-project-type');
             dropdown.innerHTML = '';
 
-            let options = [];
-            if (category === '3D Design') {
-                options = [
-                    "Modern Building / ዘመናዊ ሕንፃ",
-                    "Modern Residential House / ዘመናዊ መኖሪያ ቤት",
-                    "G+1 / G+2 Luxury Villa / ዘመናዊ ቪላ ህንፃ",
-                    "Apartment Building / የአፓርትመንት ዲዛይን"
-                ];
-            } else {
-                options = [
-                    "Modern Cafe / ዘመናዊ ካፌ",
-                    "Cloth Boutique / የልብስ ሱቅ ቤት",
-                    "Luxury Office / የቢሮ እድሳት",
-                    "Restaurant / የምግብ ቤት ውስጥ ዲዛይን"
-                ];
-            }
+            let options = category === '3D Design' ? 
+                ["Modern Building / ዘመናዊ ሕንፃ", "Modern Residential House / ዘመናዊ መኖሪያ ቤት", "G+1 / G+2 Luxury Villa / ዘመናዊ ቪላ ህንፃ", "Apartment Building / የአፓርትመንት ዲዛይን"] : 
+                ["Modern Cafe / ዘመናዊ ካፌ", "Cloth Boutique / የልብስ ሱቅ ቤት", "Luxury Office / የቢሮ እድሳት", "Restaurant / የምግብ ቤት ውስጥ ዲዛይን"];
 
             options.forEach(opt => {
                 let el = document.createElement('option');
-                el.value = opt;
-                el.textContent = opt;
+                el.value = opt; el.textContent = opt;
                 dropdown.appendChild(el);
             });
 
             document.getElementById('input-desc').value = '';
+            currentSelectedFileName = "None";
             document.getElementById('txt-file-status').innerText = strings[userState.lang]['no_photo'];
             document.getElementById('txt-file-status').style.color = 'var(--grey-text)';
 
             showPage('order-page');
         }
 
-        // የፋይል መምረጫ
-        function triggerFilePicker() {
-            document.getElementById('hidden-file-input').click();
-        }
+        function triggerFilePicker() { document.getElementById('hidden-file-input').click(); }
 
         function handleFileSelected(input) {
             if (input.files && input.files.length > 0) {
-                const fileName = input.files[0].name;
-                document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + fileName;
+                currentSelectedFileName = input.files[0].name;
+                document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + currentSelectedFileName;
                 document.getElementById('txt-file-status').style.color = 'green';
             }
         }
 
-        // ትዕዛዝ ማጠናቀቂያ
+        // ትዕዛዝ ማጠናቀቂያና ማጠቃለያ ማሳያ
         function handleOrderSubmit() {
             const desc = document.getElementById('input-desc').value.trim();
-            const lang = userState.lang;
             if (!desc) {
-                alert(strings[lang]['validation_error']);
+                alert(strings[userState.lang]['validation_error']);
                 return;
             }
 
-            const projType = document.getElementById('dropdown-project-type').value.split(' / ')[0];
-            pastOrders.unshift({
+            const projType = document.getElementById('dropdown-project-type').value;
+            const newOrder = {
                 id: "00" + (pastOrders.length + 1),
                 type: projType,
+                desc: desc,
+                file: currentSelectedFileName,
                 date: new Date().toISOString().split('T')[0],
                 status: "In Progress"
-            });
+            };
+            pastOrders.unshift(newOrder);
+
+            // በቀይ በታጠረው ቦታ ላይ ማጠቃለያውን መጻፍ
+            document.getElementById('txt-success-summary-type').innerText = projType;
+            document.getElementById('txt-success-summary-desc').innerText = desc;
 
             showPage('success-page');
         }
 
-        // ንዑስ ገጾችን መሙያ (History, Settings, Info)
+        // ንዑስ ገጾች ቅንብር (History, Settings, Info)
         function showSubSettings(type) {
             const lang = userState.lang;
             const container = document.getElementById('sub-page-content');
@@ -656,21 +642,22 @@
             
             if (type === 'history') {
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-history'];
-                if (pastOrders.length === 0) {
-                    container.innerHTML = `<p style="color:var(--grey-text);">${strings[lang]['no_history']}</p>`;
+                if (!userState.loggedIn || pastOrders.length === 0) {
+                    container.innerHTML = `<p style="color:var(--grey-text); text-align:center; width:100%; margin-top:20px;">${strings[lang]['no_history']}</p>`;
                 } else {
                     pastOrders.forEach(order => {
                         let card = document.createElement('div');
                         card.className = 'history-card';
                         let bgBadge = order.status === 'Completed' ? 'green' : 'orange';
+                        
                         card.innerHTML = `
-                            <div>
-                                <strong style="color:var(--text-light); font-size:14px;">Order #${order.id} - ${order.type}</strong>
+                            <div onclick="viewOrderDetails('${order.id}')" style="flex-grow:1;">
+                                <strong style="color:var(--text-light); font-size:14px;">Order #${order.id} - ${order.type.split(' / ')[0]}</strong>
                                 <div style="color:var(--grey-text); font-size:11px; margin-top:3px;">Date: ${order.date}</div>
                             </div>
                             <div style="display:flex; align-items:center; gap:8px;">
-                                <span class="status-badge" style="background-color:${bgBadge};">${order.status}</span>
-                                <i class="fa-solid fa-xmark" style="color:#FC3424; cursor:pointer; padding:5px; font-size:16px;" onclick="deleteHistoryItem('${order.id}')"></i>
+                                <span class="status-badge" style="background-color:${bgBadge};" onclick="viewOrderDetails('${order.id}')">${order.status}</span>
+                                <i class="fa-solid fa-xmark" style="color:#FC3424; cursor:pointer; padding:8px; font-size:16px;" onclick="deleteHistoryItem('${order.id}', event)"></i>
                             </div>
                         `;
                         container.appendChild(card);
@@ -680,47 +667,51 @@
             else if (type === 'settings') {
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-settings'];
                 container.innerHTML = `
-                    <div class="menu-item" style="cursor:default;">
-                        <span style="color:var(--text-light); font-size:14px;">${strings[lang]['allow_push']}</span>
-                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                    </div>
-                    <div class="menu-item" style="cursor:default;">
-                        <span style="color:var(--text-light); font-size:14px;">${strings[lang]['dark_mode_txt']}</span>
-                        <label class="switch"><input type="checkbox" id="dark-toggle" ${userState.darkMode ? 'checked' : ''} onchange="toggleDarkThemeMode(this.checked)"><span class="slider"></span></label>
-                    </div>
+                    <div class="menu-item"><span>${strings[lang]['allow_push']}</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <div class="menu-item"><span>${strings[lang]['dark_mode_txt']}</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleDarkThemeMode(this.checked)"><span class="slider"></span></label></div>
                 `;
             } 
             else if (type === 'info') {
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
                 container.innerHTML = `
-                    <p style="font-weight:bold; color:var(--text-light); margin-bottom:15px;">${strings[lang]['version_lbl']}</p>
-                    <div class="input-group">
-                        <label>${strings[lang]['feedback_lbl']}</label>
-                        <textarea class="form-control" rows="3" style="resize:none;"></textarea>
-                    </div>
-                    <button class="btn-primary" style="margin-top:5px;" onclick="alert('Feedback sent!'); showPage('profile-page');">${strings[lang]['send_btn']}</button>
+                    <p style="font-weight:bold; color:var(--text-light);">${strings[lang]['version_lbl']}</p>
+                    <div class="input-group"><label>${strings[lang]['feedback_lbl']}</label><textarea class="form-control" rows="3" style="resize:none;"></textarea></div>
+                    <button class="btn-primary" onclick="alert('Feedback sent!'); showPage('profile-page');">${strings[lang]['send_btn']}</button>
                 `;
             }
             showPage('sub-settings-page');
         }
 
-        // የሂስትሪ ማጥፊያ (X) ተግባር
-        function deleteHistoryItem(id) {
+        // የሂስትሪ ዝርዝር እይታ መስኮት
+        function viewOrderDetails(id) {
+            const order = pastOrders.find(o => o.id === id);
+            if (!order) return;
+
+            document.getElementById('det-order-id').innerText = `Order #${order.id}`;
+            document.getElementById('det-type').innerText = order.type;
+            document.getElementById('det-date').innerText = order.date;
+            document.getElementById('det-desc').innerText = order.desc;
+            document.getElementById('det-file').innerText = order.file;
+            
+            const badge = document.getElementById('det-status');
+            badge.innerText = order.status;
+            badge.style.backgroundColor = order.status === 'Completed' ? 'green' : 'orange';
+
+            showPage('history-detail-page');
+        }
+
+        function deleteHistoryItem(id, event) {
+            event.stopPropagation();
             pastOrders = pastOrders.filter(o => o.id !== id);
             showSubSettings('history');
         }
 
-        // ሙሉ ገጽታን ወደ Dark Mode መቀየሪያ
         function toggleDarkThemeMode(isDark) {
             userState.darkMode = isDark;
-            if (isDark) {
-                document.body.classList.add('dark-mode-active');
-            } else {
-                document.body.classList.remove('dark-mode-active');
-            }
+            if (isDark) { document.body.classList.add('dark-mode-active'); } 
+            else { document.body.classList.remove('dark-mode-active'); }
         }
 
-        // ቋንቋ መቀየሪያና UI ማደሻ
         function changeLanguage(val) {
             userState.lang = val;
             updateLanguageUI();
@@ -730,14 +721,15 @@
             const lang = userState.lang;
             document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
             
-            // የትርጉም መታወቂያዎችን ማደስ
             const ids = [
                 "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc", "lbl-prompt-msg",
                 "lbl-login-btn", "lbl-login-header", "lbl-welcome-msg", "lbl-login-sub", "lbl-name-field",
                 "lbl-phone-field", "lbl-btn-continue", "lbl-order-title", "lbl-selected-cat", "lbl-project-type",
                 "lbl-upload-btn", "lbl-camera-btn", "lbl-desc-title", "lbl-finish-order", "lbl-profile-title",
                 "lbl-unreg-title", "lbl-unreg-sub", "lbl-login-short", "menu-history", "menu-settings",
-                "menu-info", "lbl-lang-option", "btn-logout", "lbl-success-msg", "lbl-success-sub"
+                "menu-info", "lbl-lang-option", "btn-logout", "lbl-success-msg", "lbl-success-sub",
+                "lbl-detail-header", "lbl-det-type", "lbl-det-date", "lbl-det-status", "lbl-det-guidelines", "lbl-det-file",
+                "lbl-succ-summary-type", "lbl-succ-summary-desc"
             ];
 
             ids.forEach(id => {
