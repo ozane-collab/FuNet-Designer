@@ -18,778 +18,264 @@
             --light-green: rgba(47, 165, 56, 0.08);
             --border-green: rgba(47, 165, 56, 0.2);
         }
-
-        * {
-            box-sizing: border-box;
-            user-select: none;
-        }
-
-        body {
-            margin: 0; padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #222;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.3s;
-        }
-
-        .phone-container {
-            width: 100%; max-width: 390px;
-            height: 100vh; max-height: 740px;
-            background-color: var(--bg-light); color: var(--text-light);
-            display: flex; flex-direction: column;
-            position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        @media (min-width: 400px) {
-            .phone-container { border-radius: 30px; border: 8px solid #333; }
-        }
-
-        /* SPLASH SCREENS */
-        .splash-one {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--primary); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 1100;
-            transition: opacity 0.6s ease-in-out, filter 0.6s ease-in-out;
-        }
-        .splash-one h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; }
-        .splash-one p { color: white; font-size: 24px; margin: 5px 0 0 0; font-style: italic; font-weight: 300; }
-
-        .splash-two {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #FFFFFF; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 1050;
-            opacity: 0; transition: opacity 0.6s ease-in-out, filter 0.6s ease-in-out; visibility: hidden;
-        }
-        .splash-two h1 { color: var(--primary); font-size: 56px; margin: 0; font-weight: bold; }
-        .splash-two p { color: #000000; font-size: 24px; margin: 5px 0 0 0; font-style: italic; }
-
-        /* PAGE MANAGEMENT */
-        .page {
-            width: 100%; height: 100%; display: flex; flex-direction: column;
-            position: absolute; top: 0; left: 0; background-color: var(--bg-light);
-            padding: 0; overflow-y: auto; overflow-x: hidden; transition: background-color 0.3s;
-        }
+        * { box-sizing: border-box; user-select: none; }
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: #222; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 390px; height: 100vh; max-height: 740px; background-color: var(--bg-light); color: var(--text-light); display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        @media (min-width: 400px) { .phone-container { border-radius: 30px; border: 8px solid #333; } }
+        .splash-one { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--primary); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1100; transition: opacity 0.4s, filter 0.4s; }
+        .page { width: 100%; height: 100%; display: flex; flex-direction: column; position: absolute; top: 0; left: 0; background-color: var(--bg-light); overflow-y: auto; }
         .hidden { display: none !important; }
-
-        /* HEADERS */
-        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: var(--card-light); flex-shrink: 0; }
-        .app-header .logo-area h2 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
-        .app-header .logo-area p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; }
-        
-        .sub-header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: var(--card-light); border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; }
-        .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; }
-        .icon-btn { background: none; border: none; color: var(--text-light); font-size: 22px; cursor: pointer; padding: 5px; }
-
-        /* MAIN CONTENT AREA */
-        .main-scrollable-content { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; }
-
-        /* SERVICES LIST */
-        .services-container { display: flex; justify-content: center; gap: 15px; padding: 15px; flex-shrink: 0; }
-        .service-card {
-            background-color: var(--card-light); border-radius: 20px; width: 165px; height: 135px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s;
-        }
-        .service-card:active { transform: scale(0.95); }
+        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: var(--card-light); }
+        .app-header h2 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
+        .sub-header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: var(--card-light); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .services-container { display: flex; justify-content: center; gap: 15px; padding: 15px; }
+        .service-card { background-color: var(--card-light); border-radius: 20px; width: 165px; height: 135px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; }
         .service-card i { font-size: 36px; color: var(--primary); margin-bottom: 8px; }
-        .service-card h4 { margin: 0; font-size: 14px; font-weight: bold; }
-        .service-card p { margin: 4px 0 0 0; font-size: 10px; color: var(--grey-text); }
-
-        /* SEARCH BAR */
-        .yango-search-bar {
-            background-color: var(--card-light); margin: 10px 15px; padding: 14px 15px;
-            border-radius: 14px; display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; border: 1px dashed rgba(252, 52, 36, 0.2); flex-shrink: 0;
-        }
-        .yango-search-bar .left-content { display: flex; align-items: center; gap: 12px; }
-        .yango-search-bar .left-content i { color: var(--primary); font-size: 18px; }
-        .yango-search-bar span { font-size: 14px; font-weight: 600; }
-
-        /* RECENT ORDERS LIST */
-        .recent-orders-box { padding: 5px 15px; display: flex; flex-direction: column; width: 100%; margin-bottom: 5px; flex-shrink: 0; }
+        .yango-search-bar { background-color: var(--card-light); margin: 10px 15px; padding: 14px 15px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; border: 1px dashed rgba(252, 52, 36, 0.2); cursor: pointer; }
+        .recent-orders-box { padding: 5px 15px; display: flex; flex-direction: column; }
         .recent-section-title { font-size: 13px; font-weight: bold; color: var(--grey-text); margin-bottom: 6px; }
         .recent-item { display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; }
         .recent-item .icon-circle { width: 36px; height: 36px; background-color: rgba(252, 52, 36, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); }
-        .recent-item .details { flex-grow: 1; }
-        .recent-item .details h5 { margin: 0; font-size: 14px; font-weight: 600; }
-        .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
-        
-        .time-date-container { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; min-width: 75px; text-align: right; }
-        .time-date-container .time-lbl { font-size: 12px; font-weight: 600; color: var(--text-light); }
-        .time-date-container .date-lbl { font-size: 10px; color: var(--grey-text); font-weight: 500; }
-
-        /* ADVERTISEMENT BANNER SLIDESHOW */
-        .design-showcase-banner {
-            margin: 5px 15px 15px 15px; border-radius: 16px; overflow: hidden; position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06); height: 125px; min-height: 125px;
-            background-size: cover; background-position: center; flex-shrink: 0;
-            transition: background-image 0.8s ease-in-out;
-        }
-        .banner-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3)); display: flex; flex-direction: column; justify-content: center; padding: 20px; color: white; }
-        .banner-overlay h4 { margin: 0; font-size: 18px; font-weight: bold; }
-        .banner-overlay p { margin: 5px 0 0 0; font-size: 11px; color: #ddd; max-width: 240px; }
-
-        /* TOAST */
-        .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: slideInDown 0.4s ease-out; }
-
-        /* FORM ELEMENTS */
-        .content-padding { padding: 15px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
-        .login-form-scroll-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-y: auto; }
-        .input-group { width: 100%; max-width: 340px; margin-bottom: 15px; display: flex; flex-direction: column; }
-        .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
+        .design-showcase-banner { margin: 5px 15px; border-radius: 16px; overflow: hidden; height: 125px; background-size: cover; background-position: center; position: relative; }
+        .banner-overlay { position: absolute; width:100%; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3)); display: flex; flex-direction: column; justify-content: center; padding: 20px; color: white; }
+        .content-padding { padding: 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .input-group { width: 100%; margin-bottom: 15px; display: flex; flex-direction: column; }
         .form-control { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 15px; background-color: var(--card-light); color: var(--text-light); outline: none; }
-
-        /* BUTTONS */
-        .btn-primary { background-color: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; max-width: 340px; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-shrink: 0; }
-        .btn-primary:active { transform: scale(0.98); }
-        .file-buttons { display: flex; gap: 10px; width: 100%; max-width: 340px; margin: 8px 0; }
-        .btn-file { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: white; }
-
-        .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
-        .menu-item { width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-
-        /* CLEAN CARD STYLE ORDER INFO UI */
-        .info-card-container { width: 100%; max-width: 350px; background-color: var(--card-light); border-radius: 16px; padding: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(0,0,0,0.02); }
-        .info-section-title { font-size: 14px; font-weight: bold; color: var(--text-light); margin-bottom: 4px; }
-        .info-text-box { background-color: #F2F2F2; padding: 12px; border-radius: 10px; font-size: 14px; color: #333; line-height: 1.4; word-break: break-word; }
-        .designer-response-box { background-color: var(--light-green); border: 1px dashed var(--border-green); padding: 14px; border-radius: 10px; font-size: 14px; color: #1b5e20; line-height: 1.4; font-style: italic; }
-        .info-image-preview { width: 100%; border-radius: 10px; cursor: pointer; margin-top: 4px; max-height: 180px; object-fit: cover; }
-
-        /* FULLSCREEN IMAGE MODAL */
-        .fullscreen-modal { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .fullscreen-modal.active { opacity: 1; pointer-events: auto; }
-        .fullscreen-modal img { max-width: 95%; max-height: 85%; border-radius: 10px; }
-        .close-modal-btn { position: absolute; top: 20px; right: 20px; color: white; font-size: 28px; cursor: pointer; background: none; border: none; }
-
-        /* TOGGLE SWITCH */
+        .btn-primary { background-color: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .file-buttons { display: flex; gap: 10px; width: 100%; margin: 8px 0; }
+        .btn-file { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .info-card-container { width: 100%; background-color: var(--card-light); border-radius: 16px; padding: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 14px; }
+        .info-text-box { background-color: #F2F2F2; padding: 12px; border-radius: 10px; font-size: 14px; color: #333; }
+        .designer-response-box { background-color: var(--light-green); border: 1px dashed var(--border-green); padding: 14px; border-radius: 10px; font-size: 14px; color: #1b5e20; font-style: italic; }
+        .menu-item { width: 100%; background-color: var(--card-light); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
-
-        body.dark-mode-active {
-            --bg-light: var(--bg-dark); --card-light: var(--card-dark); --text-light: var(--text-dark);
-            --light-green: rgba(47, 165, 56, 0.15); --border-green: rgba(47, 165, 56, 0.4);
-        }
+        body.dark-mode-active { --bg-light: var(--bg-dark); --card-light: var(--card-dark); --text-light: var(--text-dark); }
+        .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; }
     </style>
 </head>
 <body>
 
     <div class="phone-container">
-        
-        <div id="image-viewer" class="fullscreen-modal" onclick="closeFullscreenImage()">
-            <button class="close-modal-btn">&times;</button>
-            <img id="fullscreen-target-img" src="" alt="View">
-        </div>
-        
+        <!-- SPLASH SCREEN -->
         <div id="splash-1" class="splash-one">
-            <h1>FuNet</h1>
-            <p>Designer</p>
-        </div>
-        <div id="splash-2" class="splash-two">
-            <h1>FuNet</h1>
-            <p style="color: #FC3424;">Designer</p>
+            <h1 style="color: white; font-size: 56px; margin: 0;">FuNet</h1>
+            <p style="color: white; font-size: 24px; margin: 5px 0 0 0; font-style: italic;">Designer</p>
         </div>
 
+        <!-- MAIN HOME PAGE -->
         <div id="main-page" class="page hidden">
             <div class="app-header">
-                <div class="logo-area">
-                    <h2>FuNet</h2>
-                    <p id="app-subtitle">Designer</p>
-                </div>
-                <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-bars"></i></button>
+                <div><h2>FuNet</h2><p style="margin:0; font-size:14px; font-style:italic;" id="app-subtitle">Designer</p></div>
+                <button class="icon-btn" style="background:none; border:none; font-size:22px;" onclick="showPage('profile-page')"><i class="fa-solid fa-bars"></i></button>
             </div>
-
-            <div class="main-scrollable-content">
-                <div id="login-success-banner" class="login-success-toast hidden">
-                    <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
-                    <div>
-                        <span style="font-weight: bold; display: block;" id="txt-welcome-back">Welcome back!</span>
-                        <span style="font-size: 11px; opacity: 0.9;" id="txt-login-status-msg">Logged in successfully.</span>
-                    </div>
-                </div>
-
-                <div class="services-container">
-                    <div class="service-card" onclick="openOrderForm('3D Design')">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <h4 id="lbl-3d-title">3D Design</h4>
-                        <p id="lbl-3d-desc">Architectural Plans</p>
-                    </div>
-                    <div class="service-card" onclick="openOrderForm('Renovation')">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                        <h4 id="lbl-ren-title">Renovation</h4>
-                        <p id="lbl-ren-desc">Modern Materials</p>
-                    </div>
-                </div>
-
-                <div class="yango-search-bar" onclick="quickStartOrder()">
-                    <div class="left-content">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span id="lbl-yango-search">Start Your Next Design Project...</span>
-                    </div>
-                    <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary); font-size: 18px;"></i>
-                </div>
-
-                <div class="recent-orders-box">
-                    <div class="recent-section-title" id="lbl-recent-title">Recent Requests</div>
-                    <div id="recent-orders-list"></div>
-                </div>
-
-                <div id="slideshow-banner" class="design-showcase-banner">
-                    <div class="banner-overlay">
-                        <h4 id="lbl-banner-title">Premium Spaces</h4>
-                        <p id="lbl-banner-desc">Transforming ideas into modern realistic luxury architectures.</p>
-                    </div>
-                </div>
+            <div id="login-success-banner" class="login-success-toast hidden">
+                <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
+                <div><span style="font-weight: bold; display: block;" id="txt-welcome-back">Welcome!</span><span style="font-size: 11px;" id="txt-login-status-msg">Logged in successfully.</span></div>
             </div>
-
-            <div class="content-padding" style="margin-top: auto; padding-bottom: 20px; flex-shrink: 0;" id="login-prompt-box">
-                <button class="btn-primary" onclick="showPage('login-page')">
-                    <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order 🔑</span>
-                </button>
+            <div class="services-container">
+                <div class="service-card" onclick="openOrderForm('3D Design')"><i class="fa-solid fa-layer-group"></i><h4 id="lbl-3d-title">3D Design</h4></div>
+                <div class="service-card" onclick="openOrderForm('Renovation')"><i class="fa-solid fa-screwdriver-wrench"></i><h4 id="lbl-ren-title">Renovation</h4></div>
             </div>
+            <div class="yango-search-bar" onclick="quickStartOrder()"><div style="display:flex; align-items:center; gap:12px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary);"></i><span id="lbl-yango-search">Start Project...</span></div></div>
+            <div class="recent-orders-box"><div class="recent-section-title" id="lbl-recent-title">Recent Requests</div><div id="recent-orders-list"></div></div>
+            <div id="slideshow-banner" class="design-showcase-banner"><div class="banner-overlay"><h4 id="lbl-banner-title">Premium Spaces</h4><p id="lbl-banner-desc">Transforming ideas into architectures.</p></div></div>
+            <div class="content-padding" id="login-prompt-box" style="margin-top:auto;"><button class="btn-primary" onclick="showPage('login-page')">Login to Order 🔑</button></div>
         </div>
 
+        <!-- LOGIN PAGE -->
         <div id="login-page" class="page hidden">
-            <div class="sub-header">
-                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 id="lbl-login-header">Login</h3>
-                <div style="width: 34px;"></div>
-            </div>
-            <div class="login-form-scroll-container">
-                <h2 style="margin: 10px 0 25px 0; font-weight: bold; text-align: center; font-size: 20px;" id="lbl-login-sub">Please login to start your order</h2>
-                <div class="input-group">
-                    <label id="lbl-name-field">Full Name</label>
-                    <input type="text" id="input-name" class="form-control" placeholder="Enter full name">
-                </div>
-                <div class="input-group">
-                    <label id="lbl-phone-field">Phone Number</label>
-                    <input type="tel" id="input-phone" class="form-control" value="+251" oninput="validatePhoneNumber(this)">
-                </div>
-                <button class="btn-primary" style="margin-top: 15px; width: 100%;" onclick="handleLoginSubmit()">
-                    <span id="lbl-btn-continue">Login & Continue 🚀</span>
-                </button>
+            <div class="sub-header"><button style="background:none; border:none; font-size:20px;" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button><h3>Login</h3><div></div></div>
+            <div class="content-padding">
+                <div class="input-group"><label id="lbl-name-field">Full Name</label><input type="text" id="input-name" class="form-control"></div>
+                <div class="input-group"><label id="lbl-phone-field">Phone Number</label><input type="tel" id="input-phone" class="form-control" value="+251"></div>
+                <button class="btn-primary" onclick="handleLoginSubmit()">Login & Continue 🚀</button>
             </div>
         </div>
 
+        <!-- ORDER FORM PAGE -->
         <div id="order-page" class="page hidden">
-            <div class="sub-header">
-                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 id="lbl-order-title">New Order Form</h3>
-                <div style="width: 34px;"></div>
-            </div>
+            <div class="sub-header"><button style="background:none; border:none; font-size:20px;" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button><h3 id="lbl-order-title">Order Form</h3><div></div></div>
             <div class="content-padding">
-                <div style="width: 100%; text-align: left; margin-bottom: 12px;">
-                    <span id="lbl-selected-cat">Selected Category:</span>
-                    <strong id="txt-selected-service" style="color: var(--primary); font-size: 15px; margin-left: 5px;">3D Design</strong>
-                </div>
-
-                <div class="input-group">
-                    <label id="lbl-project-type">Select Specific Project Type</label>
-                    <select id="dropdown-project-type" class="form-control" style="cursor: pointer;"></select>
-                </div>
-
+                <div style="width:100%; margin-bottom:10px;"><span id="lbl-selected-cat">Category:</span> <strong id="txt-selected-service" style="color:var(--primary);"></strong></div>
+                <div class="input-group"><label id="lbl-project-type">Project Type</label><select id="dropdown-project-type" class="form-control"></select></div>
                 <div class="file-buttons">
-                    <button class="btn-file" style="background-color: #333;" onclick="triggerFilePicker()"><i class="fa-solid fa-file-image"></i> <span id="lbl-upload-btn">Upload File 📁</span></button>
-                    <button class="btn-file" style="background-color: var(--primary);" onclick="triggerFilePicker()"><i class="fa-solid fa-camera"></i> <span id="lbl-camera-btn">Take Camera 📷</span></button>
+                    <button class="btn-file" style="background-color:#333;" onclick="triggerFilePicker()"><i class="fa-solid fa-image"></i> <span id="lbl-upload-btn">Upload</span></button>
+                    <button class="btn-file" style="background-color:var(--primary);" onclick="triggerFilePicker()"><i class="fa-solid fa-camera"></i> <span id="lbl-camera-btn">Camera</span></button>
                 </div>
-                <input type="file" id="hidden-file-input" style="display: none;" onchange="handleFileSelected(this)">
-                <div id="txt-file-status" style="font-size: 11px; color: var(--grey-text); margin-bottom: 12px;">No photo selected (Optional)</div>
-
-                <div class="input-group">
-                    <label id="lbl-desc-title">Additional Project Guidelines:</label>
-                    <textarea id="input-desc" class="form-control" rows="5" style="resize: none;" placeholder=""></textarea>
-                </div>
-
-                <button class="btn-primary" onclick="handleOrderSubmit()">
-                    <span id="lbl-finish-order">Finish Order 🚀</span>
-                </button>
+                <input type="file" id="hidden-file-input" style="display:none;" onchange="handleFileSelected(this)">
+                <div id="txt-file-status" style="font-size:11px; color:var(--grey-text); margin-bottom:10px;">No photo selected</div>
+                <div class="input-group"><label id="lbl-desc-title">Guidelines:</label><textarea id="input-desc" class="form-control" rows="4"></textarea></div>
+                <button class="btn-primary" onclick="handleOrderSubmit()"><span id="lbl-finish-order">Finish Order 🚀</span></button>
             </div>
         </div>
 
+        <!-- ORDER DETAILS PAGE -->
         <div id="order-details-page" class="page hidden">
-            <div class="sub-header">
-                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 id="lbl-detail-header">Order Info</h3>
-                <div style="width: 34px;"></div>
-            </div>
-            <div class="content-padding" style="padding-top: 20px;">
-                <div class="info-card-container">
-                    <div>
-                        <strong id="det-order-title" style="font-size: 17px; color: var(--primary); display: block;">Project Title</strong>
-                        <span id="det-order-id" style="font-size: 12px; color: var(--grey-text); display: block; margin-top: 2px;"><i class="fa-solid fa-calendar-day"></i> Just now (FN-000)</span>
-                    </div>
-                    <div>
-                        <div class="info-section-title" id="lbl-det-req-title">Your Requirements:</div>
-                        <div id="det-order-desc" class="info-text-box">User guidelines text...</div>
-                    </div>
-                    <div id="det-img-section" class="hidden">
-                        <div class="info-section-title" id="lbl-det-img-title">Attached Image:</div>
-                        <div id="det-file-name" style="font-size: 12px; color: var(--grey-text); margin-bottom: 5px; word-break: break-all;">image_name.jpg</div>
-                        <img id="det-order-img" class="info-image-preview" src="" alt="Project Photo" onclick="openFullscreenImage(this.src)">
-                    </div>
-                    <div style="border-top: 1px dashed var(--primary); margin: 5px 0;"></div>
-                    <div>
-                        <div class="info-section-title" style="color: #2e7d32;" id="lbl-det-resp-title"><i class="fa-solid fa-user-tie"></i> Designer Response:</div>
-                        <div id="det-designer-reply-text" class="designer-response-box">
-                            "Your request is received! Our head designer is working on the interior layout, shelf placements, and the custom wall colors. We will upload the 3D preview model here soon."
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="profile-page" class="page hidden">
-            <div class="sub-header">
-                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 id="lbl-profile-title">My Profile</h3>
-                <div style="width: 34px;"></div>
-            </div>
+            <div class="sub-header"><button style="background:none; border:none; font-size:20px;" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button><h3 id="lbl-detail-header">Order Info</h3><div></div></div>
             <div class="content-padding">
-                <div id="profile-user-card" style="text-align: center; margin-bottom: 25px; width: 100%;">
-                    <div id="unregistered-box">
-                        <i class="fa-solid fa-circle-user" style="font-size: 70px; color: #ccc; margin-bottom: 10px;"></i>
-                        <h4 style="margin: 0;" id="lbl-unreg-title">Unregistered Account</h4>
-                        <p style="color: var(--grey-text); font-size: 12px; margin: 5px 0 15px 0;" id="lbl-unreg-sub">Please login to see your profile.</p>
-                        <button class="btn-primary" style="padding: 10px 20px; font-size: 13px; width: auto; margin: 0 auto;" onclick="showPage('login-page')"><span id="lbl-login-short">Login</span></button>
-                    </div>
-                    <div id="registered-box" class="hidden">
-                        <i class="fa-solid fa-circle-user" style="font-size: 70px; color: var(--primary); margin-bottom: 10px;"></i>
-                        <h3 style="margin: 0;" id="txt-user-name"></h3>
-                        <p style="color: var(--grey-text); font-size: 14px; margin: 5px 0 0 0;" id="txt-user-phone"></p>
+                <div class="info-card-container">
+                    <div><strong id="det-order-title" style="font-size:17px; color:var(--primary);"></strong><span id="det-order-id" style="display:block; font-size:12px; color:var(--grey-text);"></span></div>
+                    <div><div class="info-section-title" id="lbl-det-req-title">Your Requirements:</div><div id="det-order-desc" class="info-text-box"></div></div>
+                    <div style="border-top:1px dashed var(--primary);"></div>
+                    <div>
+                        <div class="info-section-title" style="color:#2e7d32;" id="lbl-det-resp-title"><i class="fa-solid fa-user-tie"></i> Designer Response:</div>
+                        <div id="det-designer-reply-text" class="designer-response-box">Waiting for designer to review...</div>
                     </div>
                 </div>
-
-                <div class="menu-item" onclick="showSubSettings('history')" style="cursor: pointer;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i class="fa-solid fa-clock-rotate-left"></i> <span id="menu-history">History</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
-                </div>
-
-                <div class="menu-item" onclick="showSubSettings('settings')" style="cursor: pointer;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i class="fa-solid fa-gear"></i> <span id="menu-settings">Settings</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
-                </div>
-
-                <div class="menu-item" onclick="showSubSettings('info')" style="cursor: pointer;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i class="fa-solid fa-circle-info"></i> <span id="menu-info">Information</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
-                </div>
-
-                <div class="input-group" style="width: 100%; max-width: 340px; margin-top: 15px;">
-                    <label id="lbl-lang-option">Language / ቋንቋ</label>
-                    <select id="lang-selector-dropdown" class="form-control" onchange="changeLanguage(this.value)">
-                        <option value="en" selected>English</option>
-                        <option value="am">አማርኛ (Amharic)</option>
-                    </select>
-                </div>
-
-                <button id="btn-logout" class="hidden" style="background: none; border: none; color: #FC3424; font-weight: bold; margin-top: 25px; cursor: pointer;" onclick="handleLogout()">Log Out</button>
             </div>
         </div>
 
-        <div id="sub-settings-page" class="page hidden">
-            <div class="sub-header">
-                <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 id="sub-page-title">History</h3>
-                <div style="width: 34px;"></div>
+        <!-- PROFILE PAGE -->
+        <div id="profile-page" class="page hidden">
+            <div class="sub-header"><button style="background:none; border:none; font-size:20px;" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button><h3 id="lbl-profile-title">Profile</h3><div></div></div>
+            <div class="content-padding">
+                <div id="unregistered-box" style="text-align:center;"><h4>Unregistered</h4><button class="btn-primary" onclick="showPage('login-page')">Login</button></div>
+                <div id="registered-box" class="hidden">
+                    <h3 id="txt-user-name"></h3><p id="txt-user-phone" style="color:var(--grey-text);"></p>
+                </div>
+                <div class="menu-item" onclick="showSubSettings('info')"><span>Information</span><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="input-group" style="margin-top:15px;"><label id="lbl-lang-option">Language</label><select class="form-control" onchange="changeLanguage(this.value)"><option value="en">English</option><option value="am">አማርኛ</option></select></div>
             </div>
+        </div>
+
+        <!-- SUB SETTINGS / INFORMATION -->
+        <div id="sub-settings-page" class="page hidden">
+            <div class="sub-header"><button style="background:none; border:none; font-size:20px;" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button><h3 id="sub-page-title">Info</h3><div></div></div>
             <div class="content-padding" id="sub-page-content"></div>
         </div>
 
-        <div id="success-page" class="page hidden" style="justify-content: center; align-items: center; text-align: center;">
-            <i class="fa-solid fa-circle-check" style="font-size: 65px; color: green; margin-bottom: 15px;"></i>
-            <h2 id="lbl-success-msg" style="margin: 0 15px; font-size: 20px;">Your order has been sent successfully! 🎉</h2>
-            <div style="background: var(--card-light); padding: 12px 20px; border-radius: 10px; margin: 15px; text-align: left; width: 85%; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <div style="font-size: 13px; margin-bottom: 4px;"><b id="lbl-succ-summary-type">Ordered:</b> <span id="txt-success-summary-type" style="color:var(--primary); font-weight:bold;"></span></div>
-                <div style="font-size: 12px; color: var(--text-light); word-break: break-word;"><b id="lbl-succ-summary-desc">Notes:</b> <span id="txt-success-summary-desc"></span></div>
-            </div>
-            <p id="lbl-success-sub" style="color: var(--grey-text); font-size: 13px; margin: 8px 15px 25px 15px;">We will contact you on your phone soon.</p>
-            <button class="btn-primary" style="max-width: 150px;" onclick="showPage('main-page')">OK</button>
+        <!-- SUCCESS PAGE -->
+        <div id="success-page" class="page hidden" style="justify-content:center; align-items:center;">
+            <i class="fa-solid fa-circle-check" style="font-size:60px; color:green; margin-bottom:15px;"></i>
+            <h2 id="lbl-success-msg">Sent Successfully! 🎉</h2>
+            <button class="btn-primary" style="max-width:150px;" onclick="showPage('main-page')">OK</button>
         </div>
     </div>
 
     <script>
-        let userState = { loggedIn: false, name: '', phone: '+251', lang: 'en', darkMode: false };
-        let pastOrders = [];
-        let currentServiceCategory = "3D Design";
-        let currentSelectedFileName = "None";
-        let currentSelectedFileUrl = ""; 
-
-        const advertisementImages = [
-            "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80"
-        ];
-        let currentSlideIndex = 0;
-
+        let userState = { loggedIn: false, name: '', phone: '', lang: 'en' };
+        let activeOrderId = null;
         const strings = {
             en: {
-                app_subtitle: "Designer", "lbl-3d-title": "3D Design", "lbl-3d-desc": "Architectural Plans",
-                "lbl-ren-title": "Renovation", "lbl-ren-desc": "Modern Materials", "lbl-login-btn": "Login to Order 🔑",
-                "lbl-login-header": "Login", "lbl-login-sub": "Please login to start your order",
-                "lbl-name-field": "Full Name", "lbl-phone-field": "Phone Number", "lbl-btn-continue": "Login & Continue 🚀",
-                "lbl-order-title": "New Order Form", "lbl-selected-cat": "Selected Category:", "lbl-project-type": "Select Specific Project Type",
-                "lbl-upload-btn": "Upload File 📁", "lbl-camera-btn": "Take Camera 📷", "no_photo": "No photo selected (Optional)",
-                "attached_prefix": "Attached: ", "lbl-desc-title": "Additional Project Guidelines:", "lbl-finish-order": "Finish Order 🚀",
-                "lbl-profile-title": "My Profile", "lbl-unreg-title": "Unregistered Account", "lbl-unreg-sub": "Please login to see your profile.",
-                "lbl-login-short": "Login", "menu-history": "History", "menu-settings": "Settings", "menu-info": "Information",
-                "lbl-lang-option": "Language / ቋንቋ", "lbl-success-msg": "Your order has been sent successfully! 🎉",
-                "lbl-success-sub": "We will contact you on your phone soon.", "validation_error": "Please write the design description!",
-                "login_error": "Please enter name and phone number correctly!", "lbl-yango-search": "Start Your Next Design Project...",
-                "txt-welcome-back": "Welcome back, ", "txt-login-status-msg": "You have logged in successfully! ✨",
-                "lbl-banner-title": "Premium Architecture", "lbl-banner-desc": "Transforming your concept into beautiful realistic design plans.",
-                "lbl-succ-summary-type": "Ordered:", "lbl-succ-summary-desc": "Notes:", "lbl-recent-title": "Recent Requests", "no_history": "No recent requests found.",
-                "input_desc_placeholder": "Write specific design requirements here...",
-                "lbl-det-req-title": "Your Requirements:", "lbl-det-img-title": "Attached Image:", "lbl-det-resp-title": "Designer Response:",
-                "lbl-info-feedback-title": "Send Us Feedback / Question", "lbl-info-feedback-placeholder": "Write your message or question here...",
-                "lbl-info-send-btn": "Send Message ✉️", "feedback_success": "Thank you! Your message has been sent successfully. 👍",
-                "feedback_empty_error": "Please write a message before sending!"
+                app_subtitle: "Designer", "lbl-3d-title": "3D Design", "lbl-ren-title": "Renovation", "lbl-recent-title": "Recent Requests", "lbl-yango-search": "Start Your Next Design Project...",
+                "input_desc_placeholder": "Write specific design requirements here...", "lbl-info-feedback-title": "Send Us Feedback", "lbl-info-feedback-placeholder": "Write here...", "lbl-info-send-btn": "Send Message ✉️"
             },
             am: {
-                app_subtitle: "ዲዛይነር", "lbl-3d-title": "3D ዲዛይን", "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
-                "lbl-ren-title": "እድሳት (Renovation)", "lbl-ren-desc": "ዘመናዊ እቃዎችና ግብዓቶች", "lbl-login-btn": "ለመግዛት መጀመሪያ ይግቡ 🔑",
-                "lbl-login-header": "መግቢያ (Login)", "lbl-login-sub": "ትዕዛዝ ለመጀመር መጀመሪያ ይግቡ",
-                "lbl-name-field": "ሙሉ ስም", "lbl-phone-field": "የስልክ ቁጥር", "lbl-btn-continue": "ግባና ቀጥል 🚀",
-                "lbl-order-title": "አዲስ ትዕዛዝ መሙያ", "lbl-selected-cat": "የተመረጠው ዘርፍ:", "lbl-project-type": "የፕሮጀክቱን አይነት ይምረጡ",
-                "lbl-upload-btn": "ፎቶ ምረጥ 📁", "lbl-camera-btn": "ካሜራ ክፈት 📷", "no_photo": "ምንም ፎቶ አልተመረጠም (አማራጭ)",
-                "attached_prefix": "የተያያዘ ፋይል: ", "lbl-desc-title": "ተጨማሪ ዝርዝር መረጃዎች:", "lbl-finish-order": "ትዕዛዙን ጨርስ 🚀",
-                "lbl-profile-title": "የእኔ ፕሮፋይል", "lbl-unreg-title": "ያልተመዘገበ አካውንት", "lbl-unreg-sub": "መረጃዎን ለማየት መጀመሪያ ሎግኢን ያድርጉ።",
-                "lbl-login-short": "ግባ", "menu-history": "የጥያቄዎች ታሪክ", "menu-settings": "ቅንብሮች (Settings)", "menu-info": "ስለ እኛ መረጃ",
-                "lbl-lang-option": "ቋንቋ መቀየሪያ (Language)", "lbl-success-msg": "ትዕዛዝዎ በተካሄደ ሁኔታ ተልኳል! 🎉",
-                "lbl-success-sub": "በቅርብ ቀን በስልክዎ እናገኝዎታለን።", "validation_error": "እባክዎ የዲዛይኑን ማብራሪያ ይጻፉ!",
-                "login_error": "እባክዎ ስም እና ስልክ ቁጥር በትክክል ያስገቡ!", "lbl-yango-search": "ቀጣይ የዲዛይን ፕሮጀክትዎን እዚህ ይጀምሩ...",
-                "txt-welcome-back": "እንኳን በደህና መጡ፣ ", "txt-login-status-msg": "በተሳካ ሁኔታ ሎግኢን አድርገዋል! ✨",
-                "lbl-banner-title": "ዘመናዊ አርክቴክቸር", "lbl-banner-desc": "የአዕምሮዎን የንድፍ ሃሳብ ወደ እውነተኛ ውብ እይታ እንቀይረዋለን።",
-                "lbl-succ-summary-type": "የታዘዘው:", "lbl-succ-summary-desc": "ማስታወሻ:", "lbl-recent-title": "የቅርብ ጊዜ ጥያቄዎች", "no_history": "ምንም የተቀመጠ የቅርብ ታሪክ የለም።",
-                "input_desc_placeholder": "የሚፈልጉትን የተለየ የንድፍ ዝርዝር መግለጫ እዚህ ያስፍሩ... (ለምሳሌ የግድግዳ ቀለም፣ የእቃዎች አቀማመጥ)",
-                "lbl-det-req-title": "የእርስዎ ፍላጎቶች (Requirements):", "lbl-det-img-title": "የተያያዘ ፎቶ:", "lbl-det-resp-title": "የዲዛይነሩ ምላሽ:",
-                "lbl-info-feedback-title": "አስተያየት ወይም ጥያቄ ይላኩልን", "lbl-info-feedback-placeholder": "የሚልኩትን መልእክት ወይም ጥያቄ እዚህ ይጻፉ...",
-                "lbl-info-send-btn": "መልእክት ላክ ✉️", "feedback_success": "እናመሰግናለን! መልእክትዎ በተሳካ ሁኔታ ተልኳል። 👍",
-                "feedback_empty_error": "እባክዎ መልእክት ሳይጽፉ አይላኩ!"
+                app_subtitle: "ዲዛይነር", "lbl-3d-title": "3D ዲዛይን", "lbl-ren-title": "እድሳት (Renovation)", "lbl-recent-title": "የቅርብ ጊዜ ጥያቄዎች", "lbl-yango-search": "ቀጣይ የዲዛይን ፕሮጀክትዎን እዚህ ይጀምሩ...",
+                "input_desc_placeholder": "የሚፈልጉትን የተለየ የንድፍ ዝርዝር መግለጫ እዚህ ያስፍሩ...", "lbl-info-feedback-title": "አስተያየት ወይም ጥያቄ ይላኩልን", "lbl-info-feedback-placeholder": "እዚህ ይጻፉ...", "lbl-info-send-btn": "መልእክት ላክ ✉️"
             }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            updateBannerSlideshow();
-            setInterval(updateBannerSlideshow, 3000);
-
-            const s1 = document.getElementById('splash-1');
-            const s2 = document.getElementById('splash-2');
-            setTimeout(() => {
-                s1.style.filter = 'blur(10px)'; s1.style.opacity = '0';
-                s2.style.visibility = 'visible'; s2.style.opacity = '1';
-                setTimeout(() => {
-                    s2.style.filter = 'blur(10px)'; s2.style.opacity = '0';
-                    setTimeout(() => {
-                        s1.classList.add('hidden'); s2.classList.add('hidden');
-                        showPage('main-page'); 
-                        updateLanguageUI();
-                    }, 600);
-                }, 2000);
-            }, 2000);
+            setTimeout(() => { document.getElementById('splash-1').classList.add('hidden'); showPage('main-page'); }, 1500);
+            setInterval(checkAdminResponses, 1000); // በየሴኮንዱ ከአስተዳዳሪው የመጣ ምላሽ መኖሩን ይፈትሻል
         });
-
-        function updateBannerSlideshow() {
-            const banner = document.getElementById('slideshow-banner');
-            if (banner) {
-                banner.style.backgroundImage = `url('${advertisementImages[currentSlideIndex]}')`;
-                currentSlideIndex = (currentSlideIndex + 1) % advertisementImages.length;
-            }
-        }
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
-            
-            const promptBox = document.getElementById('login-prompt-box');
-            if (userState.loggedIn) { promptBox.classList.add('hidden'); } 
-            else { promptBox.classList.remove('hidden'); }
-        }
-
-        function validatePhoneNumber(input) {
-            if (!input.value.startsWith('+251')) { input.value = '+251'; }
-            let digits = input.value.substring(4).replace(/[^0-9]/g, '');
-            if (digits.length > 9) { digits = digits.substring(0, 9); }
-            input.value = '+251' + digits;
         }
 
         function handleLoginSubmit() {
             const name = document.getElementById('input-name').value.trim();
             const phone = document.getElementById('input-phone').value.trim();
-            if (name && phone.length === 13) {
+            if (name && phone) {
                 userState.loggedIn = true; userState.name = name; userState.phone = phone;
-
                 document.getElementById('unregistered-box').classList.add('hidden');
                 document.getElementById('registered-box').classList.remove('hidden');
                 document.getElementById('txt-user-name').innerText = name;
                 document.getElementById('txt-user-phone').innerText = phone;
-                document.getElementById('btn-logout').classList.remove('hidden');
                 document.getElementById('login-prompt-box').classList.add('hidden');
-
-                const banner = document.getElementById('login-success-banner');
-                document.getElementById('txt-welcome-back').innerText = strings[userState.lang]["txt-welcome-back"] + name + "! 👋";
-                banner.classList.remove('hidden');
-
-                renderRecentOrdersUI();
                 showPage('main-page');
-
-                setTimeout(() => {
-                    banner.style.opacity = '0';
-                    setTimeout(() => { banner.classList.add('hidden'); banner.style.opacity = '1'; }, 500);
-                }, 3500);
-            } else {
-                alert(strings[userState.lang]["login_error"]);
+                renderOrdersUI();
             }
         }
 
         function openOrderForm(category) {
-            currentServiceCategory = category;
             if (!userState.loggedIn) { showPage('login-page'); return; }
-
-            document.getElementById('txt-selected-service').innerText = 
-                category === '3D Design' ? strings[userState.lang]['lbl-3d-title'] : strings[userState.lang]['lbl-ren-title'];
-
+            document.getElementById('txt-selected-service').innerText = category;
             const dropdown = document.getElementById('dropdown-project-type');
-            dropdown.innerHTML = '';
-
-            let options = category === '3D Design' ? 
-                ["Modern Building / ዘመናዊ ሕንፃ", "Modern Residential House / መኖሪያ ቤት", "G+1 Luxury Villa / ቪላ"] : 
-                ["Cloth Boutique / የልብስ ሱቅ ቤት", "Modern Cafe / ዘመናዊ ካፌ", "Luxury Office / የቢሮ እድሳት"];
-
-            options.forEach(opt => {
-                let el = document.createElement('option'); el.value = opt; el.textContent = opt; dropdown.appendChild(el);
-            });
-
-            document.getElementById('input-desc').value = '';
+            dropdown.innerHTML = category === '3D Design' ? '<option>Modern House</option><option>Luxury Villa</option>' : '<option>Cloth Boutique</option><option>Modern Cafe</option>';
             document.getElementById('input-desc').placeholder = strings[userState.lang]['input_desc_placeholder'];
-            currentSelectedFileName = "None";
-            currentSelectedFileUrl = "";
-            document.getElementById('txt-file-status').innerText = strings[userState.lang]['no_photo'];
             showPage('order-page');
         }
 
         function triggerFilePicker() { document.getElementById('hidden-file-input').click(); }
-        function handleFileSelected(input) {
-            if (input.files && input.files.length > 0) {
-                const file = input.files[0];
-                currentSelectedFileName = file.name;
-                document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + currentSelectedFileName;
-                currentSelectedFileUrl = URL.createObjectURL(file);
-            }
-        }
+        function handleFileSelected(input) { if(input.files[0]) document.getElementById('txt-file-status').innerText = "Attached: " + input.files[0].name; }
 
         function handleOrderSubmit() {
             const desc = document.getElementById('input-desc').value.trim();
-            if (!desc) { alert(strings[userState.lang]['validation_error']); return; }
-
-            const projType = document.getElementById('dropdown-project-type').value;
-            const today = new Date();
-            const timeString = today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const dateString = today.toLocaleDateString([], {month: 'short', day: 'numeric'});
-
-            const orderData = {
-                id: "FN-" + Math.floor(100 + Math.random() * 900),
-                type: projType,
-                desc: desc,
-                fileName: currentSelectedFileName,
-                fileUrl: currentSelectedFileUrl,
-                time: timeString,
-                date: "Today, " + dateString
-            };
-            pastOrders.unshift(orderData);
-
-            document.getElementById('txt-success-summary-type').innerText = projType;
-            document.getElementById('txt-success-summary-desc').innerText = desc;
-
-            renderRecentOrdersUI();
+            if(!desc) return;
+            const id = "FN-" + Math.floor(100 + Math.random() * 900);
+            const order = { id, user: userState.name, phone: userState.phone, type: document.getElementById('dropdown-project-type').value, desc: desc, reply: null, price: null };
+            
+            localStorage.setItem('funet_order_' + id, JSON.stringify(order)); // መረጃውን ሴቭ ያደርጋል
+            activeOrderId = id;
+            
             showPage('success-page');
+            renderOrdersUI();
         }
 
-        function renderRecentOrdersUI() {
-            const container = document.getElementById('recent-orders-list');
-            container.innerHTML = '';
-
-            if (pastOrders.length === 0) {
-                container.innerHTML = `<p style="font-size:12px; color:var(--grey-text); margin:5px 0;">${strings[userState.lang]['no_history']}</p>`;
-                return;
-            }
-
-            pastOrders.forEach((order, index) => {
-                let item = document.createElement('div');
-                item.className = 'recent-item';
-                item.onclick = () => viewSpecificOrderDetails(index);
-                item.innerHTML = `
-                    <div class="icon-circle"><i class="fa-solid fa-compass-drafting"></i></div>
-                    <div class="details">
-                        <h5>${order.type.split(' / ')[0]}</h5>
-                        <p>${order.desc}</p>
-                    </div>
-                    <div class="time-date-container">
-                        <div class="time-lbl">${order.time}</div>
-                        <div class="date-lbl">${order.date.split(',')[0]}</div>
-                    </div>
-                `;
-                container.appendChild(item);
+        function renderOrdersUI() {
+            const list = document.getElementById('recent-orders-list');
+            list.innerHTML = '';
+            Object.keys(localStorage).forEach(key => {
+                if(key.startsWith('funet_order_')) {
+                    const order = JSON.parse(localStorage.getItem(key));
+                    if(order.user === userState.name) {
+                        let item = document.createElement('div');
+                        item.className = 'recent-item';
+                        item.onclick = () => { activeOrderId = order.id; viewOrderDetails(order); };
+                        item.innerHTML = `<div class="icon-circle"><i class="fa-solid fa-compass-drafting"></i></div><div><h5>${order.type}</h5><p>${order.desc}</p></div>`;
+                        list.appendChild(item);
+                    }
+                }
             });
         }
 
-        function viewSpecificOrderDetails(index) {
-            const order = pastOrders[index];
-            if (!order) return;
-
+        function viewOrderDetails(order) {
             document.getElementById('det-order-title').innerText = order.type;
-            document.getElementById('det-order-id').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${order.time} - ${order.date} (ID: #${order.id})`;
+            document.getElementById('det-order-id').innerText = "ID: #" + order.id;
             document.getElementById('det-order-desc').innerText = order.desc;
-
-            const imgSection = document.getElementById('det-img-section');
-            if (order.fileUrl) {
-                document.getElementById('det-file-name').innerText = order.fileName;
-                document.getElementById('det-order-img').src = order.fileUrl;
-                imgSection.classList.remove('hidden');
+            
+            const replyBox = document.getElementById('det-designer-reply-text');
+            if(order.reply) {
+                replyBox.innerHTML = `<b>Price: ${order.price} ETB</b><br>"${order.reply}"`;
+                replyBox.style.color = "#1b5e20";
             } else {
-                imgSection.classList.add('hidden');
+                replyBox.innerText = "Waiting for designer to review and send price...";
+                replyBox.style.color = "#333";
             }
-
             showPage('order-details-page');
         }
 
-        function openFullscreenImage(src) {
-            if (!src) return;
-            const modal = document.getElementById('image-viewer');
-            document.getElementById('fullscreen-target-img').src = src;
-            modal.classList.add('active');
-        }
-        function closeFullscreenImage() {
-            document.getElementById('image-viewer').classList.remove('active');
-        }
-
-        function quickStartOrder() {
-            if (!userState.loggedIn) { showPage('login-page'); } 
-            else { openOrderForm('3D Design'); }
-        }
-
-        function showSubSettings(type) {
-            const lang = userState.lang;
-            const container = document.getElementById('sub-page-content');
-            container.innerHTML = '';
-
-            if (type === 'history') {
-                document.getElementById('sub-page-title').innerText = strings[lang]['menu-history'];
-                if (pastOrders.length === 0) {
-                    container.innerHTML = `<p style="color:var(--grey-text); text-align:center; margin-top:20px;">${strings[lang]['no_history']}</p>`;
-                } else {
-                    pastOrders.forEach((order, idx) => {
-                        let div = document.createElement('div');
-                        div.className = 'menu-item';
-                        div.style.cursor = 'pointer';
-                        div.onclick = () => viewSpecificOrderDetails(idx);
-                        div.innerHTML = `
-                            <div>
-                                <strong>Order #${order.id}</strong>
-                                <div style="font-size:12px; color:var(--grey-text);">${order.type.split(' / ')[0]}</div>
-                            </div>
-                            <span class="status-badge" style="background:orange;">Active</span>
-                        `;
-                        container.appendChild(div);
-                    });
+        function checkAdminResponses() {
+            if(activeOrderId) {
+                const order = JSON.parse(localStorage.getItem('funet_order_' + activeOrderId));
+                if(order && order.reply) {
+                    const replyBox = document.getElementById('det-designer-reply-text');
+                    if(replyBox) {
+                        replyBox.innerHTML = `<b>Price: ${order.price} ETB</b><br>"${order.reply}"`;
+                    }
                 }
-            } 
-            else if (type === 'settings') {
-                document.getElementById('sub-page-title').innerText = strings[lang]['menu-settings'];
-                container.innerHTML = `
-                    <div class="menu-item"><span>Allow Push Notifications</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-                    <div class="menu-item"><span>Dark Mode Theme</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleThemeMode(this.checked)"><span class="slider"></span></label></div>
-                `;
-            } 
-            // የተሻሻለው የ Information ገጽ (App Version, Developer Box እና የመጻፊያ ሳጥን ከነ ቁልፉ)
-            else if (type === 'info') {
-                document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
-                container.innerHTML = `
-                    <div class="info-card-container" style="width: 100%; max-width: 340px; margin-bottom: 20px;">
-                        <div>
-                            <div style="font-size: 14px; margin-bottom: 6px;"><b>App Version:</b> <span style="color:var(--primary); font-weight:bold;">FuNet Designer Premium v1.2.5</span></div>
-                            <div style="font-size: 14px;"><b>Developer:</b> <span style="font-weight:bold;">FuNet Tech Group</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group" style="width: 100%; max-width: 340px;">
-                        <label id="lbl-info-feedback-title" style="font-size: 14px; font-weight: bold; margin-bottom: 6px;">${strings[lang]['lbl-info-feedback-title']}</label>
-                        <textarea id="info-feedback-input" class="form-control" rows="4" style="resize: none;" placeholder="${strings[lang]['lbl-info-feedback-placeholder']}"></textarea>
-                    </div>
-                    
-                    <button class="btn-primary" style="width: 100%; max-width: 340px; margin-top: 5px;" onclick="submitInfoFeedback()">
-                        <span id="lbl-info-send-btn">${strings[lang]['lbl-info-send-btn']}</span>
-                    </button>
-                `;
             }
+        }
+
+        function quickStartOrder() { openOrderForm('3D Design'); }
+        function changeLanguage(v) { userState.lang = v; }
+        function showSubSettings(t) {
+            document.getElementById('sub-page-title').innerText = "Information";
+            document.getElementById('sub-page-content').innerHTML = `
+                <div class="info-card-container"><b>App Version:</b> v1.2.5<br><b>Developer:</b> FuNet Tech Group</div>
+                <div class="input-group" style="margin-top:15px;"><label>${strings[userState.lang]['lbl-info-feedback-title']}</label><textarea class="form-control" rows="3"></textarea></div>
+                <button class="btn-primary">${strings[userState.lang]['lbl-info-send-btn']}</button>
+            `;
             showPage('sub-settings-page');
-        }
-
-        // የፊድባክ መላኪያ ፋንክሽን
-        function submitInfoFeedback() {
-            const txtInput = document.getElementById('info-feedback-input');
-            if (txtInput && txtInput.value.trim() !== "") {
-                alert(strings[userState.lang]['feedback_success']);
-                txtInput.value = "";
-            } else {
-                alert(strings[userState.lang]['feedback_empty_error']);
-            }
-        }
-
-        function toggleThemeMode(isDark) {
-            userState.darkMode = isDark;
-            if (isDark) document.body.classList.add('dark-mode-active');
-            else document.body.classList.remove('dark-mode-active');
-        }
-
-        function handleLogout() {
-            userState.loggedIn = false; userState.name = ''; pastOrders = [];
-            document.getElementById('recent-orders-list').innerHTML = '';
-            document.getElementById('unregistered-box').classList.remove('hidden');
-            document.getElementById('registered-box').classList.add('hidden');
-            document.getElementById('btn-logout').classList.add('hidden');
-            showPage('main-page');
-        }
-
-        function changeLanguage(val) { userState.lang = val; updateLanguageUI(); }
-
-        function updateLanguageUI() {
-            const lang = userState.lang;
-            document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
-            
-            if (document.getElementById('input-desc')) {
-                document.getElementById('input-desc').placeholder = strings[lang]['input_desc_placeholder'];
-            }
-
-            const ids = [
-                "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc", "lbl-login-btn", "lbl-login-header", 
-                "lbl-login-sub", "lbl-name-field", "lbl-phone-field", "lbl-btn-continue", "lbl-order-title", 
-                "lbl-selected-cat", "lbl-project-type", "lbl-upload-btn", "lbl-camera-btn", "lbl-desc-title", "lbl-finish-order", 
-                "lbl-profile-title", "lbl-unreg-title", "lbl-unreg-sub", "lbl-login-short", "lbl-lang-option", "lbl-success-msg", 
-                "lbl-success-sub", "lbl-yango-search", "txt-login-status-msg", "lbl-banner-title", "lbl-banner-desc", 
-                "lbl-succ-summary-type", "lbl-succ-summary-desc", "lbl-recent-title", "lbl-det-req-title", "lbl-det-img-title",
-                "lbl-info-feedback-title", "lbl-info-send-btn"
-            ];
-            ids.forEach(id => { const el = document.getElementById(id); if (el) el.innerText = strings[lang][id]; });
-            
-            // የፊድባክ Placeholder ማስተካከያ
-            const fbInput = document.getElementById('info-feedback-input');
-            if (fbInput) fbInput.placeholder = strings[lang]['lbl-info-feedback-placeholder'];
-
-            renderRecentOrdersUI();
         }
     </script>
 </body>
