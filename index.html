@@ -84,7 +84,7 @@
         .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; }
         .icon-btn { background: none; border: none; color: var(--text-light); font-size: 22px; cursor: pointer; padding: 5px; }
 
-        /* MAIN CONTENT AREA SCRIPTS */
+        /* MAIN CONTENT AREA */
         .main-scrollable-content {
             flex-grow: 1;
             overflow-y: auto;
@@ -123,7 +123,6 @@
         .recent-item .details h5 { margin: 0; font-size: 14px; font-weight: 600; }
         .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
         
-        /* የቀንና የሰዓት አቀማመጥ ማስተካከያ ሳጥን */
         .time-date-container { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; min-width: 75px; text-align: right; }
         .time-date-container .time-lbl { font-size: 12px; font-weight: 600; color: var(--text-light); }
         .time-date-container .date-lbl { font-size: 10px; color: var(--grey-text); font-weight: 500; }
@@ -140,12 +139,11 @@
         .banner-overlay p { margin: 5px 0 0 0; font-size: 11px; color: #ddd; max-width: 240px; }
 
         /* TOAST */
-        .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: slideInDown 0.4s ease-out; }
+        .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
         /* FORM ELEMENTS */
         .content-padding { padding: 15px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
         
-        /* ለሞባይል መጠን ኪቦርድ ሲመጣ እንዳይበላሽ የተደረገ ማስተካከያ (Responsive Mobile Size Login Container) */
         .login-form-scroll-container {
             width: 100%;
             display: flex;
@@ -167,6 +165,21 @@
 
         .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
         .menu-item { width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+
+        /* 1ኛ ማስተካከያ - በ Information ገጽ ላይ የነበረውን የፅሁፍ ሳጥን ልክ እንደ መፃፊያ ሳጥን (Card Style) ውብ ያደረገ ዲዛይን */
+        .info-card-style-box {
+            width: 100%;
+            max-width: 340px;
+            background-color: var(--card-light);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
 
         /* CLEAN CARD STYLE ORDER INFO UI */
         .info-card-container { width: 100%; max-width: 350px; background-color: var(--card-light); border-radius: 16px; padding: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(0,0,0,0.02); }
@@ -225,7 +238,6 @@
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-bars"></i></button>
             </div>
 
-            <!-- ዋናው ተንቀሳቃሽ ይዘት ማሳያ -->
             <div class="main-scrollable-content">
                 <!-- Login Success Toast -->
                 <div id="login-success-banner" class="login-success-toast hidden">
@@ -259,13 +271,13 @@
                     <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary); font-size: 18px;"></i>
                 </div>
 
-                <!-- የቅርብ ጊዜ ትዕዛዞች እውነተኛ ዝርዝር -->
+                <!-- የቅርብ ጊዜ ትዕዛዞች ዝርዝር -->
                 <div class="recent-orders-box">
                     <div class="recent-section-title" id="lbl-recent-title">Recent Requests</div>
                     <div id="recent-orders-list"></div>
                 </div>
 
-                <!-- 5ቱ ፎቶዎች በየሰኮንዱ የሚቀያየሩበት ባነር -->
+                <!-- ባነር ስላይድሾው -->
                 <div id="slideshow-banner" class="design-showcase-banner">
                     <div class="banner-overlay">
                         <h4 id="lbl-banner-title">Premium Spaces</h4>
@@ -274,7 +286,7 @@
                 </div>
             </div>
 
-            <!-- ለማዘዝ መጀመሪያ ይግቡ ቁልፍ (ሁልጊዜም ይታያል ፤ በቋንቋው መሰረት ይቀየራል) -->
+            <!-- ለማዘዝ መጀመሪያ ይግቡ ቁልፍ -->
             <div class="content-padding" style="margin-top: auto; padding-bottom: 20px; flex-shrink: 0;" id="login-prompt-box">
                 <button class="btn-primary" onclick="showPage('login-page')">
                     <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order 🔑</span>
@@ -282,7 +294,7 @@
             </div>
         </div>
 
-        <!-- ሎግኢን ገጽ (LOGIN PAGE - የሞባይል ስክሪን ሳይዝ ተስማሚ) -->
+        <!-- ሎግኢን ገጽ -->
         <div id="login-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -290,7 +302,6 @@
                 <div style="width: 34px;"></div>
             </div>
             
-            <!-- ለሞባይል ቁመት ተስማሚ እንዲሆን በScroll ሳጥን የተጠቀለለ ይዘት -->
             <div class="login-form-scroll-container">
                 <h2 style="margin: 10px 0 25px 0; font-weight: bold; text-align: center; font-size: 20px;" id="lbl-login-sub">Please login to start your order</h2>
                 
@@ -309,7 +320,7 @@
             </div>
         </div>
 
-        <!-- ትዕዛዝ ፎርም ገጽ (ORDER FORM PAGE) -->
+        <!-- ትዕዛዝ ፎርም ገጽ -->
         <div id="order-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -345,7 +356,7 @@
             </div>
         </div>
 
-        <!-- የትዕዛዝ ማሳያ ንፁህ የካርድ ስታይል ገጽ -->
+        <!-- የትዕዛዝ ማሳያ ካርድ ገጽ -->
         <div id="order-details-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -495,6 +506,7 @@
                 "txt-welcome-back": "Welcome back, ", "txt-login-status-msg": "You have logged in successfully! ✨",
                 "lbl-banner-title": "Premium Architecture", "lbl-banner-desc": "Transforming your concept into beautiful realistic design plans.",
                 "lbl-succ-summary-type": "Ordered:", "lbl-succ-summary-desc": "Notes:", "lbl-recent-title": "Recent Requests", "no_history": "No recent requests found.",
+                /* 2ኛ ማስተካከያ - ቋንቋው ወደ እንግሊዘኛ ሲቀየር ፍንጭ ፅሁፉ (Placeholder) በራሱ እንዲተረጎም ተደርጓል */
                 "input_desc_placeholder": "Write specific design requirements here... (e.g., wall colors, item placements)",
                 "lbl-det-req-title": "Your Requirements:", "lbl-det-img-title": "Attached Image:", "lbl-det-resp-title": "Designer Response:"
             },
@@ -551,7 +563,6 @@
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
             
-            // የ"ለማዘዝ መጀመሪያ ይግቡ" ቁልፍ ሁልጊዜም እንዲታይ ተደርጓል (ከተመዘገበ በኋላ ግን ይጠፋል)
             const promptBox = document.getElementById('login-prompt-box');
             if (userState.loggedIn) {
                 promptBox.classList.add('hidden');
@@ -649,7 +660,7 @@
                 fileName: currentSelectedFileName,
                 fileUrl: currentSelectedFileUrl,
                 time: timeString,
-                date: "Today, " + dateString // ለዛሬ የተደረገ የቅርብ ጊዜ መለያ
+                date: "Today, " + dateString
             };
             pastOrders.unshift(orderData);
 
@@ -660,7 +671,6 @@
             showPage('success-page');
         }
 
-        // ከሰዓቱ በታች ቀኑን በንፅህና የሚያሳይ አቀማመጥ ማስተካከያ
         function renderRecentOrdersUI() {
             const container = document.getElementById('recent-orders-list');
             container.innerHTML = '';
@@ -757,12 +767,18 @@
                     <div class="menu-item"><span>Dark Mode Theme</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleThemeMode(this.checked)"><span class="slider"></span></label></div>
                 `;
             } 
+            /* 1ኛ ማስተካከያ - በ Information ገጽ ውስጥ የነበሩት ፅሁፎች ልክ እንደ መፃፊያ ሳጥን (Card Style Container) ውብ ሆነው እንዲቀመጡ ተደርጓል */
             else if (type === 'info') {
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
                 container.innerHTML = `
-                    <div style="width:100%;">
-                        <p><b>App Version:</b> FuNet Designer Premium v1.2.5</p>
-                        <p><b>Developer:</b> FuNet Tech Group</p>
+                    <div class="info-card-style-box">
+                        <div style="font-size: 15px; color: var(--text-light);">
+                            <strong style="color: var(--primary);">App Version:</strong> FuNet Designer Premium v1.2.5
+                        </div>
+                        <div style="border-top: 1px solid rgba(0,0,0,0.06); margin: 2px 0;"></div>
+                        <div style="font-size: 15px; color: var(--text-light);">
+                            <strong style="color: var(--primary);">Developer:</strong> FuNet Tech Group
+                        </div>
                     </div>
                 `;
             }
