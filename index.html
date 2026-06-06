@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuNet Designer</title>
+    <!-- FontAwesome ለሚያማምሩ አይኮኖች -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -34,7 +35,7 @@
             transition: background-color 0.3s;
         }
 
-        /* የስልክ ቅርጽ መያዣ (Responsive Mobile Screen) */
+        /* የስልክ ቅርጽ መያዣ (Mobile View) */
         .phone-container {
             width: 100%;
             max-width: 390px;
@@ -57,8 +58,8 @@
             }
         }
 
-        /* Splash Screen */
-        .splash {
+        /* 1ኛው SPLASH SCREEN (ቀይ መደብ በነጭ ጽሑፍ) */
+        .splash-one {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--primary);
@@ -66,11 +67,28 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease, visibility 0.5s;
+            z-index: 1100;
+            transition: opacity 0.6s ease-in-out;
         }
-        .splash h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; }
-        .splash p { color: white; font-size: 26px; margin: 5px 0 0 0; font-style: italic; font-weight: 300; }
+        .splash-one h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; }
+        .splash-one p { color: white; font-size: 24px; margin: 5px 0 0 0; font-style: italic; font-weight: 300; }
+
+        /* 2ኛው SPLASH SCREEN (ነጭ መደብ በቀይ ጽሑፍ) */
+        .splash-two {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            visibility: hidden;
+        }
+        .splash-two h1 { color: var(--primary); font-size: 56px; margin: 0; font-weight: bold; }
+        .splash-two p { color: #000000; font-size: 24px; margin: 5px 0 0 0; font-style: italic; font-weight: 400; }
 
         /* የገጾች መዋቅር */
         .page {
@@ -89,20 +107,19 @@
 
         .hidden { display: none !important; }
 
-        /* የላይኛው ማውጫ (Headers) */
+        /* ማውጫ (Header) */
         .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 15px;
+            padding: 15px;
             background-color: var(--card-light);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
         .app-header .logo-area h2 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
-        .app-header .logo-area p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; color: var(--text-light); }
-        
+        .app-header .logo-area p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; }
+
         .icon-btn {
-            background: none; border: none; color: var(--text-light); font-size: 24px; cursor: pointer; padding: 5px;
+            background: none; border: none; color: var(--text-light); font-size: 22px; cursor: pointer; padding: 5px;
         }
 
         .sub-header {
@@ -113,44 +130,118 @@
             background-color: var(--card-light);
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; color: var(--text-light); }
+        .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; }
 
-        /* የአገልግሎት መምረጫ ካርዶች */
+        /* አገልግሎት ካርዶች */
         .services-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            padding: 25px 15px;
+            padding: 15px;
         }
         .service-card {
             background-color: var(--card-light);
             border-radius: 20px;
-            width: 160px;
-            height: 140px;
+            width: 165px;
+            height: 135px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             transition: transform 0.2s;
         }
         .service-card:active { transform: scale(0.95); }
-        .service-card i { font-size: 38px; color: var(--primary); margin-bottom: 10px; }
-        .service-card h4 { margin: 0; font-size: 14px; font-weight: bold; color: var(--text-light); }
-        .service-card p { margin: 5px 0 0 0; font-size: 10px; color: var(--grey-text); }
+        .service-card i { font-size: 36px; color: var(--primary); margin-bottom: 8px; }
+        .service-card h4 { margin: 0; font-size: 14px; font-weight: bold; }
+        .service-card p { margin: 4px 0 0 0; font-size: 10px; color: var(--grey-text); }
 
-        /* ፎርሞች እና ኢንፑቶች */
+        /* YANGO STYLE: የመፈለጊያ / ማዘዣ አሞሌ (Where to style) */
+        .yango-search-bar {
+            background-color: var(--card-light);
+            margin: 10px 15px;
+            padding: 14px 15px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            cursor: pointer;
+            border: 1px dashed rgba(252, 52, 36, 0.2);
+        }
+        .yango-search-bar .left-content { display: flex; align-items: center; gap: 12px; }
+        .yango-search-bar .left-content i { color: var(--primary); font-size: 18px; }
+        .yango-search-bar span { font-size: 14px; font-weight: 600; color: var(--text-light); }
+
+        /* YANGO STYLE: የቅርብ ትዕዛዞች ዝርዝር መያዣ */
+        .recent-orders-box {
+            padding: 5px 15px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+        .recent-item .icon-circle {
+            width: 36px; height: 36px; background-color: rgba(0,0,0,0.04); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--grey-text);
+        }
+        .recent-item .details { flex-grow: 1; }
+        .recent-item .details h5 { margin: 0; font-size: 14px; font-weight: 600; }
+        .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); }
+        .recent-item .time-lbl { font-size: 11px; color: var(--grey-text); }
+
+        /* YANGO STYLE: የማስታወቂያ ዲዛይን ባነር */
+        .design-showcase-banner {
+            margin: 15px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            height: 140px;
+            background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .banner-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+            display: flex; flex-direction: column; justify-content: center; padding: 20px; color: white;
+        }
+        .banner-overlay h4 { margin: 0; font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        .banner-overlay p { margin: 5px 0 0 0; font-size: 11px; color: #ddd; max-width: 180px; }
+
+        /* ፕሪሚየም ሎግኢን የስኬት መልዕክት (Login Success Badge) */
+        .login-success-toast {
+            background: linear-gradient(135deg, #1d976c, #2fa538);
+            color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px;
+            display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: slideInDown 0.4s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ኢንፑቶች እና ፎርሞች */
         .content-padding { padding: 20px 15px; display: flex; flex-direction: column; align-items: center; }
         .input-group { width: 100%; max-width: 330px; margin-bottom: 15px; display: flex; flex-direction: column; }
-        .input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: var(--text-light); }
+        .input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; }
         .form-control {
             width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 15px;
             background-color: var(--card-light); color: var(--text-light); outline: none;
         }
 
-        /* ቁልፎች (Buttons) */
+        /* ቁልፎች */
         .btn-primary {
             background-color: var(--primary); color: white; border: none; padding: 15px;
             border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer;
@@ -162,16 +253,12 @@
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: white;
         }
 
-        /* ዝርዝር ማሳያዎች */
-        .menu-item, .history-card {
-            width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px;
-            border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .history-card { cursor: pointer; }
         .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
+        .menu-item {
+            width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px;
+            border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
 
-        /* ማብሪያ Switch */
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px; }
@@ -179,23 +266,30 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* Dark Mode ልዩ ዘይቤ */
         body.dark-mode-active {
             --bg-light: var(--bg-dark);
             --card-light: var(--card-dark);
             --text-light: var(--text-dark);
         }
-        body.dark-mode-active .form-control { border-color: #444; }
     </style>
 </head>
 <body>
 
     <div class="phone-container">
-        <div id="splash-screen" class="splash">
+        
+        <!-- 1ኛው SPLASH SCREEN (ቀይ ገጽ በነጭ ጽሑፍ - 2.5 ሰከንድ) -->
+        <div id="splash-1" class="splash-one">
             <h1>FuNet</h1>
             <p>Designer</p>
         </div>
 
+        <!-- 2ኛው SPLASH SCREEN (ነጭ ገጽ በቀይ ጽሑፍ - 2.5 ሰከንድ) -->
+        <div id="splash-2" class="splash-two">
+            <h1>FuNet</h1>
+            <p style="color: #FC3424;">Designer</p>
+        </div>
+
+        <!-- ዋናው ገጽ (MAIN PAGE) -->
         <div id="main-page" class="page hidden">
             <div class="app-header">
                 <div class="logo-area">
@@ -205,6 +299,16 @@
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-bars"></i></button>
             </div>
 
+            <!-- ሎግኢን ሲደረግ ብቻ ከላይ በክብር የሚመጣው ማሳያ ካርድ -->
+            <div id="login-success-banner" class="login-success-toast hidden">
+                <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
+                <div>
+                    <span style="font-weight: bold; display: block;" id="txt-welcome-back">Welcome back!</span>
+                    <span style="font-size: 11px; opacity: 0.9;" id="txt-login-status-msg">You are successfully authenticated.</span>
+                </div>
+            </div>
+
+            <!-- የአገልግሎት ካርዶች -->
             <div class="services-container">
                 <div class="service-card" onclick="openOrderForm('3D Design')">
                     <i class="fa-solid fa-layer-group"></i>
@@ -218,14 +322,39 @@
                 </div>
             </div>
 
-            <div class="content-padding" style="margin-top: auto; padding-bottom: 30px;" id="login-prompt-box">
-                <p style="color: var(--grey-text); font-size: 13px; text-align: center; max-width: 280px;" id="lbl-prompt-msg">Ready to bring your dream design to life?</p>
+            <!-- YANGO STYLE 1: የዲዛይን ትዕዛዝ ማስጀመሪያ ባር (Where to?) -->
+            <div class="yango-search-bar" onclick="quickStartOrder()">
+                <div class="left-content">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span id="lbl-yango-search">Start Your Next Design Project...</span>
+                </div>
+                <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary); font-size: 18px;"></i>
+            </div>
+
+            <!-- YANGO STYLE 2: የቅርብ ትዕዛዞች ታሪክ ዝርዝር (Recent Requests) -->
+            <div class="recent-orders-box">
+                <div id="recent-orders-list">
+                    <!-- እዚህ ውስጥ የቅርብ ትዕዛዞች በጃቫስክሪፕት ይገባሉ -->
+                </div>
+            </div>
+
+            <!-- YANGO STYLE 3: ውብ የዲዛይን ስራ መግለጫ ፎቶ ባነር -->
+            <div class="design-showcase-banner">
+                <div class="banner-overlay">
+                    <h4 id="lbl-banner-title">Premium Spaces</h4>
+                    <p id="lbl-banner-desc">Transforming ideas into modern realistic luxury architectures.</p>
+                </div>
+            </div>
+
+            <!-- ከታች ያለው የሎግኢን ማሳሰቢያ ቁልፍ (ጽሑፉ የተስተካከለ) -->
+            <div class="content-padding" style="margin-top: auto; padding-bottom: 25px;" id="login-prompt-box">
                 <button class="btn-primary" onclick="showPage('login-page')">
-                    <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order</span>
+                    <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">ለማዘዝ መጀመሪያ ይግቡ</span>
                 </button>
             </div>
         </div>
 
+        <!-- ሎግኢን ገጽ (LOGIN PAGE) -->
         <div id="login-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -251,6 +380,7 @@
             </div>
         </div>
 
+        <!-- ትዕዛዝ ፎርም ገጽ (ORDER FORM PAGE) -->
         <div id="order-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -286,6 +416,7 @@
             </div>
         </div>
 
+        <!-- ፕሮፋይል ገጽ (PROFILE & SETTINGS PAGE) -->
         <div id="profile-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -308,21 +439,21 @@
                 </div>
 
                 <div class="menu-item" onclick="showSubSettings('history')" style="cursor: pointer;">
-                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
                         <i class="fa-solid fa-clock-rotate-left"></i> <span id="menu-history">History</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
                 </div>
 
                 <div class="menu-item" onclick="showSubSettings('settings')" style="cursor: pointer;">
-                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
                         <i class="fa-solid fa-gear"></i> <span id="menu-settings">Settings</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
                 </div>
 
                 <div class="menu-item" onclick="showSubSettings('info')" style="cursor: pointer;">
-                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
                         <i class="fa-solid fa-circle-info"></i> <span id="menu-info">Information</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
@@ -340,6 +471,7 @@
             </div>
         </div>
 
+        <!-- ንዑስ ቅንብሮች (SUB-SETTINGS PAGE) -->
         <div id="sub-settings-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -349,26 +481,7 @@
             <div class="content-padding" id="sub-page-content"></div>
         </div>
 
-        <div id="history-detail-page" class="page hidden">
-            <div class="sub-header">
-                <button class="icon-btn" onclick="showSubSettings('history')"><i class="fa-solid fa-arrow-left"></i></button>
-                <h3 id="lbl-detail-header">Order Details</h3>
-                <div style="width: 34px;"></div>
-            </div>
-            <div class="content-padding" style="align-items: flex-start; padding: 20px;">
-                <div style="width: 100%; background: var(--card-light); padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
-                    <h4 style="margin: 0 0 10px 0; color: var(--primary);" id="det-order-id">Order #001</h4>
-                    <p style="margin: 5px 0;"><b id="lbl-det-type">Project Type:</b> <span id="det-type"></span></p>
-                    <p style="margin: 5px 0;"><b id="lbl-det-date">Date:</b> <span id="det-date"></span></p>
-                    <p style="margin: 5px 0;"><b id="lbl-det-status">Status:</b> <span id="det-status" class="status-badge"></span></p>
-                    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
-                    <p style="margin: 5px 0;"><b id="lbl-det-guidelines">Requirements / Guidelines:</b></p>
-                    <div id="det-desc" style="background: var(--bg-light); padding: 10px; border-radius: 8px; font-size: 14px; margin-top: 5px; min-height: 60px; word-break: break-word;"></div>
-                    <p style="margin: 10px 0 0 0; font-size: 12px; color: var(--grey-text);"><b id="lbl-det-file">File:</b> <span id="det-file">None</span></p>
-                </div>
-            </div>
-        </div>
-
+        <!-- የስኬት ገጽ (SUCCESS PAGE) -->
         <div id="success-page" class="page hidden" style="justify-content: center; align-items: center; text-align: center;">
             <i class="fa-solid fa-circle-check" style="font-size: 65px; color: green; margin-bottom: 15px;"></i>
             <h2 id="lbl-success-msg" style="margin: 0 15px; font-size: 20px;">Your order has been sent successfully! 🎉</h2>
@@ -379,12 +492,11 @@
             </div>
 
             <p id="lbl-success-sub" style="color: var(--grey-text); font-size: 13px; margin: 8px 15px 25px 15px;">We will contact you on your phone soon.</p>
-            <button class="btn-primary" style="max-width: 150px; margin-top: 0;" onclick="showPage('main-page')">OK</button>
+            <button class="btn-primary" style="max-width: 150px;" onclick="showPage('main-page')">OK</button>
         </div>
     </div>
 
     <script>
-        // የአፑ ስቴት ማከማቻ (መጀመሪያ በእንግሊዘኛ ይነሳል)
         let userState = {
             loggedIn: false,
             name: '',
@@ -393,12 +505,10 @@
             darkMode: false
         };
 
-        // የሂስትሪ ዳታ መጀመሪያ ላይ ባዶ ነው (ሎግኢን ካደረጉ በኋላ ነው የሚመዘገበው)
         let pastOrders = [];
         let currentServiceCategory = "3D Design";
         let currentSelectedFileName = "None";
 
-        // የትርጉም መዝገበ-ቃላት
         const strings = {
             en: {
                 app_subtitle: "Designer",
@@ -406,8 +516,7 @@
                 "lbl-3d-desc": "Architectural Plans",
                 "lbl-ren-title": "Renovation",
                 "lbl-ren-desc": "Modern Materials",
-                "lbl-prompt-msg": "Ready to bring your dream design to life?",
-                "lbl-login-btn": "Login to Order",
+                "lbl-login-btn": "ለማዘዝ መጀመሪያ ይግቡ",
                 "lbl-login-header": "Login",
                 "lbl-welcome-msg": "Welcome to FuNet",
                 "lbl-login-sub": "Please login to start your order",
@@ -437,18 +546,11 @@
                 "lbl-success-sub": "We will contact you on your phone soon.",
                 "validation_error": "Please write the design description!",
                 "login_error": "Please enter name and phone number correctly!",
-                "allow_push": "Allow Push Notifications",
-                "dark_mode_txt": "Dark Theme Mode",
-                "version_lbl": "FuNet Designer App v1.0.5",
-                "feedback_lbl": "Write your questions or info here:",
-                "send_btn": "Send Feedback",
-                "no_history": "No orders history found.",
-                "lbl-detail-header": "Order Details",
-                "lbl-det-type": "Project Type:",
-                "lbl-det-date": "Date:",
-                "lbl-det-status": "Status:",
-                "lbl-det-guidelines": "Requirements / Guidelines:",
-                "lbl-det-file": "File:",
+                "lbl-yango-search": "Start Your Next Design Project...",
+                "txt-welcome-back": "Welcome back, ",
+                "txt-login-status-msg": "You have logged in successfully! ✨",
+                "lbl-banner-title": "Premium Architecture",
+                "lbl-banner-desc": "Transforming your concept into beautiful realistic design plans.",
                 "lbl-succ-summary-type": "Ordered:",
                 "lbl-succ-summary-desc": "Notes:"
             },
@@ -458,8 +560,7 @@
                 "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
                 "lbl-ren-title": "እድሳት (Renovation)",
                 "lbl-ren-desc": "ዘመናዊ እቃዎችና ግብዓቶች",
-                "lbl-prompt-msg": "የህልምዎን ዲዛይን ወደ እውነት ለመቀየር ዝግጁ ነዎት?",
-                "lbl-login-btn": "ለመказать መጀመሪያ ይግቡ",
+                "lbl-login-btn": "ለማዘዝ መጀመሪያ ይግቡ",
                 "lbl-login-header": "መግቢያ (Login)",
                 "lbl-welcome-msg": "እንኳን ወደ FuNet መጡ",
                 "lbl-login-sub": "ትዕዛዝ ለመጀመር መጀመሪያ ይግቡ",
@@ -489,47 +590,56 @@
                 "lbl-success-sub": "በቅርብ ቀን በስልክዎ እናገኝዎታለን።",
                 "validation_error": "እባክዎ የዲዛይኑን ማብራሪያ ይጻፉ!",
                 "login_error": "እባክዎ ስም እና ስልክ ቁጥር በትክክል ያስገቡ!",
-                "allow_push": "ማስታወቂያዎች ይፈቀዱ (Push)",
-                "dark_mode_txt": "ጥቁር ገጽታ (Dark Mode)",
-                "version_lbl": "ፉኔት ዲዛይነር መተግበሪያ v1.0.5",
-                "feedback_lbl": "የሚፈልጉትን መረጃ ወይም ጥያቄ እዚህ ይጻፉ፦",
-                "send_btn": "መረጃውን ላክ",
-                "no_history": "ምንም የተመዘገበ ታሪክ የለም።",
-                "lbl-detail-header": "የትዕዛዝ ዝርዝር",
-                "lbl-det-type": "የፕሮጀክት አይነት:",
-                "lbl-det-date": "ቀን:",
-                "lbl-det-status": "ሁኔታ:",
-                "lbl-det-guidelines": "ተጨማሪ ዝርዝር መመሪያዎች:",
-                "lbl-det-file": "ፋይል:",
+                "lbl-yango-search": "ቀጣይ የዲዛይን ፕሮጀክትዎን እዚህ ይጀምሩ...",
+                "txt-welcome-back": "እንኳን በደህና መጡ፣ ",
+                "txt-login-status-msg": "በተሳካ ሁኔታ ሎግኢን አድርገዋል! ✨",
+                "lbl-banner-title": "ዘመናዊ አርክቴክቸር",
+                "lbl-banner-desc": "የአዕምሮዎን የንድፍ ሃሳብ ወደ እውነተኛ ውብ እይታ እንቀይረዋለን።",
                 "lbl-succ-summary-type": "የታዘዘው:",
                 "lbl-succ-summary-desc": "ማስታወሻ:"
             }
         };
 
-        // Splash screen መዘግየት አኒሜሽን
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
+        // ባለ 2 ደረጃ የስፕላሽ ስክሪን አኒሜሽን (Two-Stage Splash Screen Code)
+        window.addEventListener('DOMContentLoaded', () => {
+            const splash1 = document.getElementById('splash-1');
+            const splash2 = document.getElementById('splash-2');
+
+            // 1ኛው ስፕላሽ ለ 2.5 ሰከንድ (2500ms) ይቆያል
             setTimeout(() => {
-                splash.style.visibility = 'hidden';
-                document.getElementById('main-page').classList.remove('hidden');
-                updateLanguageUI();
-            }, 500);
-        }, 1500);
+                splash1.style.opacity = '0';
+                
+                // 2ኛው ስፕላሽ እንዲጀምር ማድረግ
+                splash2.style.visibility = 'visible';
+                splash2.style.opacity = '1';
+
+                // 2ኛው ስፕላሽ ለሌላ 2.5 ሰከንድ (2500ms) ይቆያል
+                setTimeout(() => {
+                    splash2.style.opacity = '0';
+                    setTimeout(() => {
+                        splash1.classList.add('hidden');
+                        splash2.classList.add('hidden');
+                        // ከስፕላሽ በኋላ በቀጥታ ወደ LOGIN ገጽ መሄድ
+                        showPage('login-page');
+                        updateLanguageUI();
+                    }, 600);
+                }, 2500);
+
+            }, 2500);
+        });
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
         }
 
-        // የስልክ ቁጥር ቁጥጥር ማጣሪያ
         function validatePhoneNumber(input) {
             if (!input.value.startsWith('+251')) { input.value = '+251'; }
             let suffix = input.value.substring(4).replace(/[^0-9]/g, '');
             input.value = '+251' + suffix;
         }
 
-        // Login ማረጋገጫ
+        // Login ሲደረግ የሚመጣ ማራኪ ዲዛይን
         function handleLoginSubmit() {
             const name = document.getElementById('input-name').value.trim();
             const phone = document.getElementById('input-phone').value.trim();
@@ -538,6 +648,7 @@
                 userState.name = name;
                 userState.phone = phone;
 
+                // ፕሮፋይል ማስተካከል
                 document.getElementById('unregistered-box').classList.add('hidden');
                 document.getElementById('registered-box').classList.remove('hidden');
                 document.getElementById('txt-user-name').innerText = name;
@@ -545,34 +656,73 @@
                 document.getElementById('btn-logout').classList.remove('hidden');
                 document.getElementById('login-prompt-box').classList.add('hidden');
 
+                // ውብ Welcome Banner እንዲታይ ማድረግ
+                const successBanner = document.getElementById('login-success-banner');
+                document.getElementById('txt-welcome-back').innerText = strings[userState.lang]["txt-welcome-back"] + name + "! 👋";
+                successBanner.classList.remove('hidden');
+
+                // Mock የቅርብ ታሪኮችን በYango ስታይል መሙላት
+                renderRecentOrders();
+
                 showPage('main-page');
+
+                // ከ3 ሰከንድ በኋላ የስኬት ባነሩ ይጠፋል
+                setTimeout(() => {
+                    successBanner.style.opacity = '0';
+                    setTimeout(() => { successBanner.classList.add('hidden'); successBanner.style.opacity = '1'; }, 500);
+                }, 3500);
+
             } else {
                 alert(strings[userState.lang]["login_error"]);
             }
         }
 
+        // Yango Style: የቅርብ ጊዜ ትዕዛዞችን በዋናው ገጽ ላይ የመደርደር ተግባር
+        function renderRecentOrders() {
+            const listContainer = document.getElementById('recent-orders-list');
+            listContainer.innerHTML = '';
+
+            // ነባሪ የሙከራ ዳታዎች
+            const mockHistory = [
+                { id: '001', type: 'Modern Building Design', place: 'Bole, Addis Ababa', time: '2 days ago' },
+                { id: '002', type: 'Luxury Cafe Interior', place: 'CMC, Addis Ababa', time: '5 days ago' }
+            ];
+
+            mockHistory.forEach(item => {
+                let div = document.createElement('div');
+                div.className = 'recent-item';
+                div.onclick = () => { if(userState.loggedIn) openOrderForm('3D Design'); };
+                div.innerHTML = `
+                    <div class="icon-circle"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div class="details">
+                        <h5>${item.type}</h5>
+                        <p>${item.place}</p>
+                    </div>
+                    <div class="time-lbl">${item.time}</div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        function quickStartOrder() {
+            if (!userState.loggedIn) { showPage('login-page'); } 
+            else { openOrderForm('3D Design'); }
+        }
+
         function handleLogout() {
             userState.loggedIn = false;
             userState.name = '';
-            userState.phone = '+251';
-            pastOrders = []; // ሲወጣ ታሪክ ይጠፋል
-            document.getElementById('input-name').value = '';
-            document.getElementById('input-phone').value = '+251';
-            
+            document.getElementById('recent-orders-list').innerHTML = '';
             document.getElementById('unregistered-box').classList.remove('hidden');
             document.getElementById('registered-box').classList.add('hidden');
             document.getElementById('btn-logout').classList.add('hidden');
             document.getElementById('login-prompt-box').classList.remove('hidden');
-            
             showPage('main-page');
         }
 
         function openOrderForm(category) {
             currentServiceCategory = category;
-            if (!userState.loggedIn) {
-                showPage('login-page');
-                return;
-            }
+            if (!userState.loggedIn) { showPage('login-page'); return; }
 
             document.getElementById('txt-selected-service').innerText = 
                 category === '3D Design' ? strings[userState.lang]['lbl-3d-title'] : strings[userState.lang]['lbl-ren-title'];
@@ -581,8 +731,8 @@
             dropdown.innerHTML = '';
 
             let options = category === '3D Design' ? 
-                ["Modern Building / ዘመናዊ ሕንፃ", "Modern Residential House / ዘመናዊ መኖሪያ ቤት", "G+1 / G+2 Luxury Villa / ዘመናዊ ቪላ ህንፃ", "Apartment Building / የአፓርትመንት ዲዛይን"] : 
-                ["Modern Cafe / ዘመናዊ ካፌ", "Cloth Boutique / የልብስ ሱቅ ቤት", "Luxury Office / የቢሮ እድሳት", "Restaurant / የምግብ ቤት ውስጥ ዲዛይን"];
+                ["Modern Building / ዘመናዊ ሕንፃ", "Modern Residential House / ዘመናዊ መኖሪያ ቤት", "G+1 Luxury Villa / ቪላ ህንፃ"] : 
+                ["Modern Cafe / ዘመናዊ ካፌ", "Cloth Boutique / የልብስ ሱቅ ቤት", "Luxury Office / የቢሮ እድሳት"];
 
             options.forEach(opt => {
                 let el = document.createElement('option');
@@ -593,123 +743,26 @@
             document.getElementById('input-desc').value = '';
             currentSelectedFileName = "None";
             document.getElementById('txt-file-status').innerText = strings[userState.lang]['no_photo'];
-            document.getElementById('txt-file-status').style.color = 'var(--grey-text)';
-
             showPage('order-page');
         }
 
         function triggerFilePicker() { document.getElementById('hidden-file-input').click(); }
-
         function handleFileSelected(input) {
             if (input.files && input.files.length > 0) {
                 currentSelectedFileName = input.files[0].name;
                 document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + currentSelectedFileName;
-                document.getElementById('txt-file-status').style.color = 'green';
             }
         }
 
-        // ትዕዛዝ ማጠናቀቂያና ማጠቃለያ ማሳያ
         function handleOrderSubmit() {
             const desc = document.getElementById('input-desc').value.trim();
-            if (!desc) {
-                alert(strings[userState.lang]['validation_error']);
-                return;
-            }
+            if (!desc) { alert(strings[userState.lang]['validation_error']); return; }
 
             const projType = document.getElementById('dropdown-project-type').value;
-            const newOrder = {
-                id: "00" + (pastOrders.length + 1),
-                type: projType,
-                desc: desc,
-                file: currentSelectedFileName,
-                date: new Date().toISOString().split('T')[0],
-                status: "In Progress"
-            };
-            pastOrders.unshift(newOrder);
-
-            // በቀይ በታጠረው ቦታ ላይ ማጠቃለያውን መጻፍ
             document.getElementById('txt-success-summary-type').innerText = projType;
             document.getElementById('txt-success-summary-desc').innerText = desc;
 
             showPage('success-page');
-        }
-
-        // ንዑስ ገጾች ቅንብር (History, Settings, Info)
-        function showSubSettings(type) {
-            const lang = userState.lang;
-            const container = document.getElementById('sub-page-content');
-            container.innerHTML = '';
-            
-            if (type === 'history') {
-                document.getElementById('sub-page-title').innerText = strings[lang]['menu-history'];
-                if (!userState.loggedIn || pastOrders.length === 0) {
-                    container.innerHTML = `<p style="color:var(--grey-text); text-align:center; width:100%; margin-top:20px;">${strings[lang]['no_history']}</p>`;
-                } else {
-                    pastOrders.forEach(order => {
-                        let card = document.createElement('div');
-                        card.className = 'history-card';
-                        let bgBadge = order.status === 'Completed' ? 'green' : 'orange';
-                        
-                        card.innerHTML = `
-                            <div onclick="viewOrderDetails('${order.id}')" style="flex-grow:1;">
-                                <strong style="color:var(--text-light); font-size:14px;">Order #${order.id} - ${order.type.split(' / ')[0]}</strong>
-                                <div style="color:var(--grey-text); font-size:11px; margin-top:3px;">Date: ${order.date}</div>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <span class="status-badge" style="background-color:${bgBadge};" onclick="viewOrderDetails('${order.id}')">${order.status}</span>
-                                <i class="fa-solid fa-xmark" style="color:#FC3424; cursor:pointer; padding:8px; font-size:16px;" onclick="deleteHistoryItem('${order.id}', event)"></i>
-                            </div>
-                        `;
-                        container.appendChild(card);
-                    });
-                }
-            } 
-            else if (type === 'settings') {
-                document.getElementById('sub-page-title').innerText = strings[lang]['menu-settings'];
-                container.innerHTML = `
-                    <div class="menu-item"><span>${strings[lang]['allow_push']}</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
-                    <div class="menu-item"><span>${strings[lang]['dark_mode_txt']}</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleDarkThemeMode(this.checked)"><span class="slider"></span></label></div>
-                `;
-            } 
-            else if (type === 'info') {
-                document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
-                container.innerHTML = `
-                    <p style="font-weight:bold; color:var(--text-light);">${strings[lang]['version_lbl']}</p>
-                    <div class="input-group"><label>${strings[lang]['feedback_lbl']}</label><textarea class="form-control" rows="3" style="resize:none;"></textarea></div>
-                    <button class="btn-primary" onclick="alert('Feedback sent!'); showPage('profile-page');">${strings[lang]['send_btn']}</button>
-                `;
-            }
-            showPage('sub-settings-page');
-        }
-
-        // የሂስትሪ ዝርዝር እይታ መስኮት
-        function viewOrderDetails(id) {
-            const order = pastOrders.find(o => o.id === id);
-            if (!order) return;
-
-            document.getElementById('det-order-id').innerText = `Order #${order.id}`;
-            document.getElementById('det-type').innerText = order.type;
-            document.getElementById('det-date').innerText = order.date;
-            document.getElementById('det-desc').innerText = order.desc;
-            document.getElementById('det-file').innerText = order.file;
-            
-            const badge = document.getElementById('det-status');
-            badge.innerText = order.status;
-            badge.style.backgroundColor = order.status === 'Completed' ? 'green' : 'orange';
-
-            showPage('history-detail-page');
-        }
-
-        function deleteHistoryItem(id, event) {
-            event.stopPropagation();
-            pastOrders = pastOrders.filter(o => o.id !== id);
-            showSubSettings('history');
-        }
-
-        function toggleDarkThemeMode(isDark) {
-            userState.darkMode = isDark;
-            if (isDark) { document.body.classList.add('dark-mode-active'); } 
-            else { document.body.classList.remove('dark-mode-active'); }
         }
 
         function changeLanguage(val) {
@@ -722,22 +775,22 @@
             document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
             
             const ids = [
-                "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc", "lbl-prompt-msg",
+                "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc",
                 "lbl-login-btn", "lbl-login-header", "lbl-welcome-msg", "lbl-login-sub", "lbl-name-field",
                 "lbl-phone-field", "lbl-btn-continue", "lbl-order-title", "lbl-selected-cat", "lbl-project-type",
                 "lbl-upload-btn", "lbl-camera-btn", "lbl-desc-title", "lbl-finish-order", "lbl-profile-title",
-                "lbl-unreg-title", "lbl-unreg-sub", "lbl-login-short", "menu-history", "menu-settings",
-                "menu-info", "lbl-lang-option", "btn-logout", "lbl-success-msg", "lbl-success-sub",
-                "lbl-detail-header", "lbl-det-type", "lbl-det-date", "lbl-det-status", "lbl-det-guidelines", "lbl-det-file",
-                "lbl-succ-summary-type", "lbl-succ-summary-desc"
+                "lbl-unreg-title", "lbl-unreg-sub", "lbl-login-short", "lbl-lang-option", "lbl-success-msg", "lbl-success-sub",
+                "lbl-yango-search", "txt-login-status-msg", "lbl-banner-title", "lbl-banner-desc", "lbl-succ-summary-type", "lbl-succ-summary-desc"
             ];
 
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerText = strings[lang][id];
             });
+        }
 
-            document.getElementById('input-desc').placeholder = strings[lang]['input-desc-placeholder'];
+        function showSubSettings(type) {
+            alert("Sub settings for " + type);
         }
     </script>
 </body>
