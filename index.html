@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuNet Designer</title>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -123,6 +122,7 @@
         .recent-item .details h5 { margin: 0; font-size: 14px; font-weight: 600; }
         .recent-item .details p { margin: 2px 0 0 0; font-size: 11px; color: var(--grey-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
         
+        /* TIME & DATE DISPLAY BOX */
         .time-date-container { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; min-width: 75px; text-align: right; }
         .time-date-container .time-lbl { font-size: 12px; font-weight: 600; color: var(--text-light); }
         .time-date-container .date-lbl { font-size: 10px; color: var(--grey-text); font-weight: 500; }
@@ -139,11 +139,12 @@
         .banner-overlay p { margin: 5px 0 0 0; font-size: 11px; color: #ddd; max-width: 240px; }
 
         /* TOAST */
-        .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .login-success-toast { background: linear-gradient(135deg, #1d976c, #2fa538); color: white; padding: 12px 20px; margin: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: slideInDown 0.4s ease-out; }
 
         /* FORM ELEMENTS */
         .content-padding { padding: 15px 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
         
+        /* RESPONSIVE MOBILE SIZE LOGIN CONTAINER */
         .login-form-scroll-container {
             width: 100%;
             display: flex;
@@ -166,27 +167,18 @@
         .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
         .menu-item { width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
 
-        /* 1ኛ ማስተካከያ - በ Information ገጽ ላይ የነበረውን የፅሁፍ ሳጥን ልክ እንደ መፃፊያ ሳጥን (Card Style) ውብ ያደረገ ዲዛይን */
-        .info-card-style-box {
-            width: 100%;
-            max-width: 340px;
-            background-color: var(--card-light);
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            text-align: left;
-        }
-
         /* CLEAN CARD STYLE ORDER INFO UI */
         .info-card-container { width: 100%; max-width: 350px; background-color: var(--card-light); border-radius: 16px; padding: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(0,0,0,0.02); }
         .info-section-title { font-size: 14px; font-weight: bold; color: var(--text-light); margin-bottom: 4px; }
         .info-text-box { background-color: #F2F2F2; padding: 12px; border-radius: 10px; font-size: 14px; color: #333; line-height: 1.4; word-break: break-word; }
         .designer-response-box { background-color: var(--light-green); border: 1px dashed var(--border-green); padding: 14px; border-radius: 10px; font-size: 14px; color: #1b5e20; line-height: 1.4; font-style: italic; }
         .info-image-preview { width: 100%; border-radius: 10px; cursor: pointer; margin-top: 4px; max-height: 180px; object-fit: cover; }
+
+        /* INFORMATION PAGE BRAND APPRECIATION CARDS */
+        .info-brand-card { width: 100%; max-width: 340px; background-color: var(--card-light); padding: 20px; border-radius: 14px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.03); }
+        .info-brand-card i { font-size: 40px; color: var(--primary); margin-bottom: 12px; }
+        .info-brand-card h4 { margin: 0 0 8px 0; font-size: 16px; font-weight: bold; }
+        .info-brand-card p { margin: 0; font-size: 13px; color: var(--grey-text); line-height: 1.5; }
 
         /* FULLSCREEN IMAGE MODAL */
         .fullscreen-modal { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
@@ -212,13 +204,11 @@
 
     <div class="phone-container">
         
-        <!-- FULLSCREEN IMAGE VIEWER MODAL -->
         <div id="image-viewer" class="fullscreen-modal" onclick="closeFullscreenImage()">
             <button class="close-modal-btn">&times;</button>
             <img id="fullscreen-target-img" src="" alt="View">
         </div>
         
-        <!-- SPLASH SCREENS -->
         <div id="splash-1" class="splash-one">
             <h1>FuNet</h1>
             <p>Designer</p>
@@ -228,7 +218,6 @@
             <p style="color: #FC3424;">Designer</p>
         </div>
 
-        <!-- ዋናው ገጽ (MAIN/HOME PAGE) -->
         <div id="main-page" class="page hidden">
             <div class="app-header">
                 <div class="logo-area">
@@ -239,7 +228,6 @@
             </div>
 
             <div class="main-scrollable-content">
-                <!-- Login Success Toast -->
                 <div id="login-success-banner" class="login-success-toast hidden">
                     <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
                     <div>
@@ -248,7 +236,6 @@
                     </div>
                 </div>
 
-                <!-- የአገልግሎት ምርጫዎች -->
                 <div class="services-container">
                     <div class="service-card" onclick="openOrderForm('3D Design')">
                         <i class="fa-solid fa-layer-group"></i>
@@ -262,7 +249,6 @@
                     </div>
                 </div>
 
-                <!-- YANGO STYLE SEARCH BAR -->
                 <div class="yango-search-bar" onclick="quickStartOrder()">
                     <div class="left-content">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -271,13 +257,11 @@
                     <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary); font-size: 18px;"></i>
                 </div>
 
-                <!-- የቅርብ ጊዜ ትዕዛዞች ዝርዝር -->
                 <div class="recent-orders-box">
                     <div class="recent-section-title" id="lbl-recent-title">Recent Requests</div>
                     <div id="recent-orders-list"></div>
                 </div>
 
-                <!-- ባነር ስላይድሾው -->
                 <div id="slideshow-banner" class="design-showcase-banner">
                     <div class="banner-overlay">
                         <h4 id="lbl-banner-title">Premium Spaces</h4>
@@ -286,7 +270,6 @@
                 </div>
             </div>
 
-            <!-- ለማዘዝ መጀመሪያ ይግቡ ቁልፍ -->
             <div class="content-padding" style="margin-top: auto; padding-bottom: 20px; flex-shrink: 0;" id="login-prompt-box">
                 <button class="btn-primary" onclick="showPage('login-page')">
                     <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order 🔑</span>
@@ -294,7 +277,6 @@
             </div>
         </div>
 
-        <!-- ሎግኢን ገጽ -->
         <div id="login-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -320,7 +302,6 @@
             </div>
         </div>
 
-        <!-- ትዕዛዝ ፎርም ገጽ -->
         <div id="order-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -356,7 +337,6 @@
             </div>
         </div>
 
-        <!-- የትዕዛዝ ማሳያ ካርድ ገጽ -->
         <div id="order-details-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -393,7 +373,6 @@
             </div>
         </div>
 
-        <!-- ፕሮፋይል ገጽ -->
         <div id="profile-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -448,7 +427,6 @@
             </div>
         </div>
 
-        <!-- ንዕሱ ቅንብሮች ገጽ -->
         <div id="sub-settings-page" class="page hidden">
             <div class="sub-header">
                 <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button>
@@ -458,7 +436,6 @@
             <div class="content-padding" id="sub-page-content"></div>
         </div>
 
-        <!-- የስኬት ማሳያ ገጽ -->
         <div id="success-page" class="page hidden" style="justify-content: center; align-items: center; text-align: center;">
             <i class="fa-solid fa-circle-check" style="font-size: 65px; color: green; margin-bottom: 15px;"></i>
             <h2 id="lbl-success-msg" style="margin: 0 15px; font-size: 20px;">Your order has been sent successfully! 🎉</h2>
@@ -506,9 +483,10 @@
                 "txt-welcome-back": "Welcome back, ", "txt-login-status-msg": "You have logged in successfully! ✨",
                 "lbl-banner-title": "Premium Architecture", "lbl-banner-desc": "Transforming your concept into beautiful realistic design plans.",
                 "lbl-succ-summary-type": "Ordered:", "lbl-succ-summary-desc": "Notes:", "lbl-recent-title": "Recent Requests", "no_history": "No recent requests found.",
-                /* 2ኛ ማስተካከያ - ቋንቋው ወደ እንግሊዘኛ ሲቀየር ፍንጭ ፅሁፉ (Placeholder) በራሱ እንዲተረጎም ተደርጓል */
                 "input_desc_placeholder": "Write specific design requirements here... (e.g., wall colors, item placements)",
-                "lbl-det-req-title": "Your Requirements:", "lbl-det-img-title": "Attached Image:", "lbl-det-resp-title": "Designer Response:"
+                "lbl-det-req-title": "Your Requirements:", "lbl-det-img-title": "Attached Image:", "lbl-det-resp-title": "Designer Response:",
+                "info_title_1": "Who We Are", "info_desc_1": "FuNet Premium Tech & Design Hub delivers world-class, top-tier interior and architectural rendering layout experiences across the nation.",
+                "info_title_2": "Our Goal", "info_desc_2": "Bringing fully engineered 3D solutions, modern standard decorations, and premium visualizations into one simple mobile application interface."
             },
             am: {
                 app_subtitle: "ዲዛይነር", "lbl-3d-title": "3D ዲዛይን", "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
@@ -527,7 +505,9 @@
                 "lbl-banner-title": "ዘመናዊ አርክቴክቸር", "lbl-banner-desc": "የአዕምሮዎን የንድፍ ሃሳብ ወደ እውነተኛ ውብ እይታ እንቀይረዋለን።",
                 "lbl-succ-summary-type": "የታዘዘው:", "lbl-succ-summary-desc": "ማስታወሻ:", "lbl-recent-title": "የቅርብ ጊዜ ጥያቄዎች", "no_history": "ምንም የተቀመጠ የቅርብ ታሪክ የለም።",
                 "input_desc_placeholder": "የሚፈልጉትን የተለየ የንድፍ ዝርዝር መግለጫ እዚህ ያስፍሩ...",
-                "lbl-det-req-title": "የእርስዎ ፍላጎቶች (Requirements):", "lbl-det-img-title": "የተያያዘ ፎቶ:", "lbl-det-resp-title": "የዲዛይነሩ ምላሽ:"
+                "lbl-det-req-title": "የእርስዎ ፍላጎቶች (Requirements):", "lbl-det-img-title": "የተያያዘ ፎቶ:", "lbl-det-resp-title": "የዲዛይነሩ ምላሽ:",
+                "info_title_1": "እኛ ማን ነን?", "info_desc_1": "የFuNet ፕሪሚየም የንድፍ እና የቴክኖሎጂ ማዕከል በመላው ሀገሪቱ ደረጃቸውን የጠበቁ ዘመናዊ የቤት ውስጥ እና የህንፃ ስራዎችን ጥራት ባለው እይታ የሚያቀርብ ድርጅት ነው።",
+                "info_title_2": "ዓላማችን", "info_desc_2": "ምህንድስና የታከለባቸውን የ3D ፕላን መፍትሄዎችን እና ዘመናዊ ማሳያዎችን በአንድ ቀላል የሞባይል መተግበሪያ በይነገጽ ማቅረብ ነው።"
             }
         };
 
@@ -767,18 +747,22 @@
                     <div class="menu-item"><span>Dark Mode Theme</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleThemeMode(this.checked)"><span class="slider"></span></label></div>
                 `;
             } 
-            /* 1ኛ ማስተካከያ - በ Information ገጽ ውስጥ የነበሩት ፅሁፎች ልክ እንደ መፃፊያ ሳጥን (Card Style Container) ውብ ሆነው እንዲቀመጡ ተደርጓል */
             else if (type === 'info') {
+                // መጻፊያ ሳጥኑ ሙሉ በሙሉ ተወግዶ በንጹህ የመረጃ ካርዶች ተተክቷል
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
                 container.innerHTML = `
-                    <div class="info-card-style-box">
-                        <div style="font-size: 15px; color: var(--text-light);">
-                            <strong style="color: var(--primary);">App Version:</strong> FuNet Designer Premium v1.2.5
-                        </div>
-                        <div style="border-top: 1px solid rgba(0,0,0,0.06); margin: 2px 0;"></div>
-                        <div style="font-size: 15px; color: var(--text-light);">
-                            <strong style="color: var(--primary);">Developer:</strong> FuNet Tech Group
-                        </div>
+                    <div class="info-brand-card">
+                        <i class="fa-solid fa-building-shield"></i>
+                        <h4>${strings[lang]['info_title_1']}</h4>
+                        <p>${strings[lang]['info_desc_1']}</p>
+                    </div>
+                    <div class="info-brand-card">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <h4>${strings[lang]['info_title_2']}</h4>
+                        <p>${strings[lang]['info_desc_2']}</p>
+                    </div>
+                    <div style="font-size: 11px; color: var(--grey-text); text-align: center; margin-top: 10px; width: 100%;">
+                        FuNet Premium Designer • Version 1.2.5
                     </div>
                 `;
             }
