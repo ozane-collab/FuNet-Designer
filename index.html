@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuNet Designer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- አስተማማኝ የ Firebase ሊንኮች ለ GitHub Pages የሚሆኑ -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
     <style>
         :root {
             --primary: #FC3424;
@@ -425,17 +420,7 @@
     </div>
 
     <script>
-        // --- FIREBASE CONFIGURATION ---
-        const firebaseConfig = {
-            databaseURL: "https://funet-design-default-rtdb.firebaseio.com/" 
-        };
-        
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const database = firebase.database();
-
-        let userState = { loggedIn: false, name: 'Guest User', phone: '+251', lang: 'en', darkMode: false };
+        let userState = { loggedIn: false, name: '', phone: '+251', lang: 'en', darkMode: false };
         let pastOrders = [];
         let currentServiceCategory = "3D Design";
         let currentSelectedFileName = "None";
@@ -531,7 +516,7 @@
             
             const promptBox = document.getElementById('login-prompt-box');
             if (userState.loggedIn) { promptBox.classList.add('hidden'); } 
-            else { promptBox.remove('hidden'); }
+            else { promptBox.classList.remove('hidden'); }
         }
 
         function validatePhoneNumber(input) {
@@ -558,8 +543,6 @@
                 document.getElementById('txt-welcome-back').innerText = strings[userState.lang]["txt-welcome-back"] + name + "! 👋";
                 banner.classList.remove('hidden');
 
-                listenForDesignerResponses(phone);
-
                 renderRecentOrdersUI();
                 showPage('main-page');
 
@@ -570,20 +553,6 @@
             } else {
                 alert(strings[userState.lang]["login_error"]);
             }
-        }
-
-        function listenForDesignerResponses(userPhone) {
-            database.ref('orders').orderByChild('userPhone').equalTo(userPhone)
-            .on('value', (snapshot) => {
-                if(snapshot.exists()) {
-                    let updatedOrders = [];
-                    snapshot.forEach((childSnapshot) => {
-                        updatedOrders.push(childSnapshot.value);
-                    });
-                    pastOrders = updatedOrders;
-                    renderRecentOrdersUI();
-                }
-            });
         }
 
         function openOrderForm(category) {
@@ -618,12 +587,7 @@
                 const file = input.files[0];
                 currentSelectedFileName = file.name;
                 document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + currentSelectedFileName;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentSelectedFileUrl = e.target.result; 
-                };
-                reader.readAsDataURL(file);
+                currentSelectedFileUrl = URL.createObjectURL(file);
             }
         }
 
@@ -636,30 +600,22 @@
             const timeString = today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const dateString = today.toLocaleDateString([], {month: 'short', day: 'numeric'});
 
-            const orderId = "FN-" + Math.floor(100 + Math.random() * 900);
             const orderData = {
-                id: orderId,
-                userName: userState.name || "Guest",
-                userPhone: userState.phone || "+251000000",
+                id: "FN-" + Math.floor(100 + Math.random() * 900),
                 type: projType,
                 desc: desc,
                 fileName: currentSelectedFileName,
-                fileUrl: currentSelectedFileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80", 
+                fileUrl: currentSelectedFileUrl,
                 time: timeString,
-                date: "Today, " + dateString,
-                designerReply: "Your request is received! Our head designer is working on it. We will upload the response here soon."
+                date: "Today, " + dateString
             };
+            pastOrders.unshift(orderData);
 
-            // በቀጥታ ወደ ፋየርቤዝ የመላክ ሂደት
-            database.ref('orders/' + orderId).set(orderData)
-            .then(() => {
-                document.getElementById('txt-success-summary-type').innerText = projType;
-                document.getElementById('txt-success-summary-desc').innerText = desc;
-                showPage('success-page');
-            })
-            .catch((error) => {
-                alert("Error sending order: " + error.message);
-            });
+            document.getElementById('txt-success-summary-type').innerText = projType;
+            document.getElementById('txt-success-summary-desc').innerText = desc;
+
+            renderRecentOrdersUI();
+            showPage('success-page');
         }
 
         function renderRecentOrdersUI() {
@@ -697,11 +653,10 @@
             document.getElementById('det-order-title').innerText = order.type;
             document.getElementById('det-order-id').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${order.time} - ${order.date} (ID: #${order.id})`;
             document.getElementById('det-order-desc').innerText = order.desc;
-            document.getElementById('det-designer-reply-text').innerText = order.designerReply;
 
             const imgSection = document.getElementById('det-img-section');
-            if (order.fileUrl && order.fileUrl !== "None") {
-                document.getElementById('det-file-name').innerText = order.fileName || "project_image.jpg";
+            if (order.fileUrl) {
+                document.getElementById('det-file-name').innerText = order.fileName;
                 document.getElementById('det-order-img').src = order.fileUrl;
                 imgSection.classList.remove('hidden');
             } else {
@@ -759,6 +714,7 @@
                     <div class="menu-item"><span>Dark Mode Theme</span><label class="switch"><input type="checkbox" ${userState.darkMode ? 'checked' : ''} onchange="toggleThemeMode(this.checked)"><span class="slider"></span></label></div>
                 `;
             } 
+            // የተሻሻለው የ Information ገጽ (App Version, Developer Box እና የመጻፊያ ሳጥን ከነ ቁልፉ)
             else if (type === 'info') {
                 document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
                 container.innerHTML = `
@@ -782,6 +738,7 @@
             showPage('sub-settings-page');
         }
 
+        // የፊድባክ መላኪያ ፋንክሽን
         function submitInfoFeedback() {
             const txtInput = document.getElementById('info-feedback-input');
             if (txtInput && txtInput.value.trim() !== "") {
@@ -799,7 +756,7 @@
         }
 
         function handleLogout() {
-            userState.loggedIn = false; userState.name = 'Guest User'; pastOrders = [];
+            userState.loggedIn = false; userState.name = ''; pastOrders = [];
             document.getElementById('recent-orders-list').innerHTML = '';
             document.getElementById('unregistered-box').classList.remove('hidden');
             document.getElementById('registered-box').classList.add('hidden');
@@ -828,6 +785,7 @@
             ];
             ids.forEach(id => { const el = document.getElementById(id); if (el) el.innerText = strings[lang][id]; });
             
+            // የፊድባክ Placeholder ማስተካከያ
             const fbInput = document.getElementById('info-feedback-input');
             if (fbInput) fbInput.placeholder = strings[lang]['lbl-info-feedback-placeholder'];
 
