@@ -1,0 +1,599 @@
+import flet as ft
+import time
+
+def main(page: ft.Page):
+    page.title = "FuNet Designer"
+    page.window_width = 390
+    page.window_height = 740
+    page.theme_mode = ft.ThemeMode.LIGHT
+    page.padding = 0
+
+    # የአፑ አጠቃላይ ስቴት
+    user_state = {
+        "logged_in": False,
+        "name": "", 
+        "phone": "+251", 
+        "lang": "en",
+        "dark_mode": False
+    }
+    
+    # የሂስትሪ ዳታ (ሊጠፉ የሚችሉ ናሙናዎች)
+    past_orders = [
+        {"id": "001", "type": "Modern Cafe", "date": "2026-05-28", "status": "In Progress"},
+        {"id": "002", "type": "Modern Building", "date": "2026-05-15", "status": "Completed"}
+    ]
+    
+    current_service = "3D Design"
+    uploaded_file_path = None
+
+    # የቋንቋ መዝገበ-ቃላት
+    strings = {
+        "en": {
+            "app_subtitle": "Designer",
+            "3d_title": "3D Design",
+            "3d_desc": "Architectural Plans",
+            "ren_title": "Renovation",
+            "ren_desc": "Modern Materials",
+            "main_prompt": "Ready to bring your dream design to life?",
+            "login_btn": "Login to Order",
+            "welcome": "Welcome to FuNet",
+            "login_subtitle": "Please login to start your order",
+            "name_label": "Full Name",
+            "phone_label": "Phone Number",
+            "login_submit": "Login & Continue 🚀",
+            "login_error": "Please enter name and phone number correctly!",
+            "unreg_title": "Unregistered Account",
+            "unreg_subtitle": "Please login to see your profile.",
+            "profile_title": "My Profile",
+            "logout": "Log Out",
+            "lang_option": "Language / ቋንቋ",
+            "order_title": "New Order Form",
+            "selected_svc": "Selected Category: ",
+            "sub_svc_lbl": "Select Specific Project Type",
+            "upload_btn": "Upload File 📁",
+            "camera_btn": "Take Camera 📷",
+            "no_file": "No photo selected (Optional)",
+            "file_prefix": "Attached: ",
+            "desc_label": "Write specific design requirements here...",
+            "desc_title": "Additional Project Guidelines:",
+            "order_submit": "Finish Order 🚀",
+            "validation_error": "Please write the design description!",
+            "success_msg": "Your order has been sent successfully! 🎉",
+            "success_sub": "We will contact you on your phone soon.",
+            "menu_history": "History",
+            "menu_settings": "Settings",
+            "menu_info": "Information",
+            "back_btn": "Back",
+            "send_btn": "Send Feedback",
+            "info_desc": "Write your questions or info here:"
+        },
+        "am": {
+            "app_subtitle": "ዲዛይነር",
+            "3d_title": "3D ዲዛይን",
+            "3d_desc": "የሕንፃ እና የቤት ፕላኖች",
+            "ren_title": "እድሳት (Renovation)",
+            "ren_desc": "ዘመናዊ እቃዎችና ግብዓቶች",
+            "main_prompt": "የህልምዎን ዲዛይን ወደ እውነት ለመቀየር ዝግጁ ነዎት?",
+            "login_btn": "ለመказать መጀመሪያ ይግቡ",
+            "welcome": "እንኳን ወደ FuNet መጡ",
+            "login_subtitle": "ትዕዛዝ ለመጀመር መጀመሪያ ይግቡ",
+            "name_label": "ሙሉ ስም",
+            "phone_label": "የስልክ ቁጥር",
+            "login_submit": "ግባና ቀጥል 🚀",
+            "login_error": "እባክዎ ስም እና ስልክ ቁጥር በትክክል ያስገቡ!",
+            "unreg_title": "ያልተመዘገበ አካውንት",
+            "unreg_subtitle": "መረጃዎን ለማየት መጀመሪያ ሎግኢን ያድርጉ።",
+            "profile_title": "የእኔ ፕሮፋይል",
+            "logout": "ውጣ (Log Out)",
+            "lang_option": "ቋንቋ መቀየሪያ (Language)",
+            "order_title": "አዲስ ትዕዛዝ መሙያ",
+            "selected_svc": "የተመረጠው ዘርፍ: ",
+            "sub_svc_lbl": "የፕሮጀክቱን አይነት ይምረጡ",
+            "upload_btn": "ፎቶ ምረጥ 📁",
+            "camera_btn": "ካሜራ ክፈት 📷",
+            "no_file": "ምንም ፎቶ አልተመረጠም (አማራጭ)",
+            "file_prefix": "የተያያዘ ፋይል: ",
+            "desc_label": "ስለ ዲዛይኑ ዝርዝር ማብራሪያ እዚህ ይጻፉ...",
+            "desc_title": "ተጨማሪ ዝርዝር መረጃዎች:",
+            "order_submit": "ትዕዛዙን ጨርስ 🚀",
+            "validation_error": "እባክዎ የዲዛይኑን ማብራሪያ ይጻፉ!",
+            "success_msg": "ትዕዛዝዎ በተካሄደ ሁኔታ ተልኳል! 🎉",
+            "success_sub": "በቅርብ ቀን በስልክዎ እናገኝዎታለን።",
+            "menu_history": "የጥያቄዎች ታሪክ (History)",
+            "menu_settings": "ቅንብሮች (Settings)",
+            "menu_info": "ስለ እኛ መረጃ (Information)",
+            "back_btn": "ተመለስ",
+            "send_btn": "መረጃውን ላክ",
+            "info_desc": "የሚፈልጉትን መረጃ ወይም ጥያቄ እዚህ ይጻፉ፦"
+        }
+    }
+
+    main_layout = ft.Column(expand=True, scroll=ft.ScrollMode.ADAPTIVE)
+    page.add(main_layout)
+
+    selected_file_text = ft.Text("", size=12, weight="bold")
+    detail_input = ft.TextField(multiline=True, min_lines=3, max_lines=5)
+
+    def pick_files_result(e: ft.FilePickerResultEvent):
+        nonlocal uploaded_file_path
+        lang = user_state["lang"]
+        if e.files:
+            uploaded_file_path = e.files[0].name
+            selected_file_text.value = strings[lang]["file_prefix"] + str(uploaded_file_path)
+            selected_file_text.color = "green700"
+        else:
+            uploaded_file_path = None
+            selected_file_text.value = strings[lang]["no_file"]
+            selected_file_text.color = "grey600"
+        page.update()
+
+    file_picker = ft.FilePicker(on_result=pick_files_result)
+    page.overlay.append(file_picker)
+
+    # ራሽያኛ ወይም የአፑን ከለር ለማንበብ የሚረዳ ተግባር
+    def get_bg_color(light_bg, dark_bg):
+        return dark_bg if user_state["dark_mode"] else light_bg
+
+    def get_text_color():
+        return "white" if user_state["dark_mode"] else "black"
+
+    # =========================================================
+    # 1. SPLASH SCREEN (Smooth Fade አኒሜሽን መሃል ላይ)
+    # =========================================================
+    def run_splash_screen():
+        page.bgcolor = "#FC3424"
+        
+        splash_title = ft.Text("FuNet", size=56, weight=ft.FontWeight.BOLD, color="white", opacity=1.0, animate_opacity=900)
+        splash_subtitle = ft.Text("Designer", size=26, weight=ft.FontWeight.BOLD, color="white", italic=True, opacity=1.0, animate_opacity=900)
+        
+        splash_box = ft.Column(
+            [splash_title, splash_subtitle], 
+            alignment=ft.MainAxisAlignment.CENTER, 
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+        )
+        
+        splash_container = ft.Container(
+            content=splash_box, 
+            alignment=ft.alignment.center, 
+            expand=True,
+            height=page.window_height - 60
+        )
+        
+        main_layout.controls.append(splash_container)
+        page.update()
+        time.sleep(1.0)
+        
+        # ደብዘዝ የማድረግ ሽግግር
+        splash_title.opacity = 0.1
+        splash_subtitle.opacity = 0.1
+        page.update()
+        time.sleep(0.4)
+        
+        page.bgcolor = "#F6F6F6"
+        splash_title.color = "#FC3424"
+        splash_subtitle.color = "black"
+        splash_title.opacity = 1.0
+        splash_subtitle.opacity = 1.0
+        page.update()
+        time.sleep(0.8)
+        
+        main_layout.controls.clear()
+        show_main_page()
+
+    # =========================================================
+    # 2. MAIN PAGE (የመጀመሪያ ገጽ - ጽሑፉ ትልቅ የተደረገበት)
+    # =========================================================
+    def show_main_page():
+        main_layout.controls.clear()
+        lang = user_state["lang"]
+        page.bgcolor = get_bg_color("#F6F6F6", "#121212")
+
+        top_header = ft.Container(
+            content=ft.Row([
+                ft.Column([
+                    ft.Text("FuNet", size=32, weight=ft.FontWeight.BOLD, color="#FC3424"), # የጽሑፍ መጠን ከፍ ብሏል
+                    ft.Text(strings[lang]["app_subtitle"], size=14, weight=ft.FontWeight.BOLD, color=get_text_color(), italic=True),
+                ]),
+                ft.IconButton(icon="menu", icon_color=get_text_color(), icon_size=28, on_click=lambda _: show_profile_page())
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            padding=15, bgcolor=get_bg_color("white", "#1E1E1E"),
+        )
+
+        def on_card_click(service_key):
+            nonlocal current_service
+            current_service = service_key
+            if not user_state["logged_in"]:
+                show_login_page()
+            else:
+                show_order_page(service_key)
+
+        def create_service_card(title, icon_name, desc, service_key):
+            return ft.Container(
+                content=ft.Column([
+                    ft.Container(content=ft.Icon(name=icon_name, color="#FC3424", size=38), alignment=ft.alignment.center),
+                    ft.Column([
+                        ft.Text(title, weight=ft.FontWeight.BOLD, size=14, color=get_text_color()),
+                        ft.Text(desc, size=10, color="grey500"),
+                    ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=2)
+                ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+                width=160, height=140, bgcolor=get_bg_color("white", "#1E1E1E"), border_radius=20, padding=10,
+                on_click=lambda _: on_card_click(service_key),
+                shadow=ft.BoxShadow(blur_radius=10, color="#05000000")
+            )
+
+        services_row = ft.Row([
+            create_service_card(strings[lang]["3d_title"], "view_in_ar", strings[lang]["3d_desc"], "3D Design"),
+            create_service_card(strings[lang]["ren_title"], "home_repair_service", strings[lang]["ren_desc"], "Renovation"),
+        ], alignment=ft.MainAxisAlignment.CENTER, spacing=15)
+
+        bottom_prompt_area = ft.Container()
+        if not user_state["logged_in"]:
+            bottom_prompt_area = ft.Container(
+                content=ft.Column([
+                    ft.Text(strings[lang]["main_prompt"], size=13, color="grey500", text_align="center"),
+                    ft.Container(height=5),
+                    ft.ElevatedButton(
+                        content=ft.Row([
+                            ft.Icon(name="lock_open", color="white", size=18),
+                            ft.Text(strings[lang]["login_btn"], color="white", size=15, weight=ft.FontWeight.BOLD)
+                        ], alignment=ft.MainAxisAlignment.CENTER),
+                        on_click=lambda _: show_login_page(),
+                        style=ft.ButtonStyle(bgcolor="#FC3424", shape=ft.RoundedRectangleBorder(radius=12)),
+                        width=320, height=50
+                    )
+                ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+                bgcolor=get_bg_color("white", "#1E1E1E"), padding=20, border_radius=20
+            )
+
+        main_content = ft.Column([
+            ft.Container(height=10),
+            services_row,
+            ft.Container(height=30),
+            bottom_prompt_area
+        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=True)
+
+        main_layout.controls.append(top_header)
+        main_layout.controls.append(ft.Container(content=main_content, padding=15))
+        page.update()
+
+    # =========================================================
+    # 3. LOGIN PAGE
+    # =========================================================
+    def show_login_page():
+        main_layout.controls.clear()
+        lang = user_state["lang"]
+        page.bgcolor = get_bg_color("#F6F6F6", "#121212")
+        
+        name_input = ft.TextField(label=strings[lang]["name_label"], width=320, value="", label_style=ft.TextStyle(color=get_text_color()))
+        phone_input = ft.TextField(label=strings[lang]["phone_label"], width=320, value="+251", label_style=ft.TextStyle(color=get_text_color()))
+        def login_submit(e):
+            if name_input.value.strip() and len(phone_input.value.strip()) > 8:
+                user_state["logged_in"] = True
+                user_state["name"] = name_input.value
+                user_state["phone"] = phone_input.value
+                show_main_page()
+            else:
+                page.snack_bar = ft.SnackBar(ft.Text(strings[lang]["login_error"]), bgcolor="red")
+                page.snack_bar.open = True
+                page.update()
+
+        login_content = ft.Container(
+            content=ft.Column([
+                ft.Row([ft.IconButton("arrow_back", on_click=lambda _: show_main_page(), icon_color=get_text_color())], alignment=ft.MainAxisAlignment.START),
+                ft.Text(strings[lang]["welcome"], size=26, weight=ft.FontWeight.BOLD, color=get_text_color()),
+                ft.Text(strings[lang]["login_subtitle"], size=13, color="grey500"),
+                ft.Container(height=20),
+                name_input,
+                ft.Container(height=10),
+                phone_input,
+                ft.Container(height=20),
+                ft.ElevatedButton(
+                    strings[lang]["login_submit"], on_click=login_submit,
+                    style=ft.ButtonStyle(bgcolor="#FC3424", color="white", shape=ft.RoundedRectangleBorder(radius=12)),
+                    width=320, height=50
+                )
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+            padding=20
+        )
+        main_layout.controls.append(login_content)
+        page.update()
+
+    # =========================================================
+    # 4. SUB PAGES (HISTORY ከጥፋት ቁልፍ ጋር, SETTINGS ከሙሉ Dark Mode ጋር)
+    # =========================================================
+    def show_sub_page(title_key):
+        main_layout.controls.clear()
+        lang = user_state["lang"]
+        page.bgcolor = get_bg_color("#F6F6F6", "#121212")
+        
+        content_box = ft.Column(spacing=15, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        
+        # ሀ. History ገጽ ከማጥፊያ (X) ቁልፍ ጋር
+        if title_key == "menu_history":
+            def delete_order(order_id):
+                nonlocal past_orders
+                past_orders = [o for o in past_orders if o["id"] != order_id]
+                show_sub_page("menu_history") # ገጹን እንደገና ያድሳል
+                
+            if not past_orders:
+                content_box.controls.append(ft.Text("No orders history found.", color="grey500", size=14))
+                
+            for order in past_orders:
+                content_box.controls.append(
+                    ft.Container(
+                        content=ft.Row([
+                            ft.Column([
+                                ft.Text(f"Order #{order['id']} - {order['type']}", weight="bold", color=get_text_color()),
+                                ft.Text(f"Date: {order['date']}", size=11, color="grey500")
+                            ]),
+                            ft.Row([
+                                ft.Container(
+                                    content=ft.Text(order['status'], size=11, color="white", weight="bold"),
+                                    bgcolor="green" if order['status'] == "Completed" else "orange",
+                                    padding=5, border_radius=5
+                                ),
+                                ft.IconButton(
+                                    icon="close", icon_color="red700", icon_size=18,
+                                    on_click=lambda _, o_id=order["id"]: delete_order(o_id)
+                                )
+                            ], spacing=5)
+                        ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                        bgcolor=get_bg_color("white", "#1E1E1E"), padding=12, border_radius=10, width=340
+                   )
+                )
+        
+        # ለ. Settings ገጽ ከሙሉ Dark Mode ሽግግር ጋር
+        elif title_key == "menu_settings":
+            def toggle_dark_theme(e):
+                user_state["dark_mode"] = e.control.value
+                page.theme_mode = ft.ThemeMode.DARK if user_state["dark_mode"] else ft.ThemeMode.LIGHT
+                show_sub_page("menu_settings")
+                
+            content_box.controls.extend([
+                ft.Container(
+                    content=ft.Row([
+                        ft.Text("Allow Push Notifications", size=15, color=get_text_color()),
+                        ft.Switch(value=True, active_color="#FC3424")
+                    ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    bgcolor=get_bg_color("white", "#1E1E1E"), padding=15, border_radius=10, width=340
+                ),
+                ft.Container(
+                    content=ft.Row([
+                        ft.Text("Dark Theme Mode", size=15, color=get_text_color()),
+                        ft.Switch(value=user_state["dark_mode"], active_color="#FC3424", on_change=toggle_dark_theme)
+                    ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    bgcolor=get_bg_color("white", "#1E1E1E"), padding=15, border_radius=10, width=340
+                )
+            ])
+            
+        # ሐ. Information ገጽ
+        elif title_key == "menu_info":
+            info_text_field = ft.TextField(label=strings[lang]["info_desc"], multiline=True, min_lines=3, width=340, label_style=ft.TextStyle(color=get_text_color()))
+            def send_info_action(e):
+                page.snack_bar = ft.SnackBar(ft.Text("Sent Successfully!"), bgcolor="green")
+                page.snack_bar.open = True
+                show_profile_page()
+                
+            content_box.controls.extend([
+                ft.Text("FuNet Designer App v1.0.5", size=15, weight="bold", color=get_text_color()),
+                info_text_field,
+                ft.ElevatedButton(strings[lang]["send_btn"], on_click=send_info_action, style=ft.ButtonStyle(bgcolor="#FC3424", color="white"), width=200)
+            ])
+
+        sub_layout = ft.Container(
+            content=ft.Column([
+                ft.Row([
+                    ft.IconButton("arrow_back", on_click=lambda _: show_profile_page(), icon_color=get_text_color()),
+                    ft.Text(strings[lang][title_key], size=18, weight=ft.FontWeight.BOLD, color=get_text_color()),
+                    ft.Container(width=40)
+                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                ft.Container(height=10),
+                content_box
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+            padding=15
+        )
+        main_layout.controls.append(sub_layout)
+        page.update()
+
+    # =========================================================
+    # 5. PROFILE PAGE (ባዶ ቦታዎች በጥንቃቄ የተጠቀለሉበት Scroll ገጽ)
+    # =========================================================
+    def show_profile_page():
+        main_layout.controls.clear()
+        lang = user_state["lang"]
+        page.bgcolor = get_bg_color("#F6F6F6", "#121212")
+        
+        def change_language(e):
+            user_state["lang"] = "am" if e.control.value == "አማርኛ (Amharic)" else "en"
+            show_profile_page()
+
+        lang_dropdown = ft.Dropdown(
+            label=strings[lang]["lang_option"],
+            options=[ft.dropdown.Option("English"), ft.dropdown.Option("አማርኛ (Amharic)")],
+            value="አማርኛ (Amharic)" if lang == "am" else "English",
+            width=340, on_change=change_language, label_style=ft.TextStyle(color=get_text_color())
+        )
+        
+        def create_menu_item(icon_name, title_key):
+            return ft.Container(
+                content=ft.Row([
+                    ft.Row([ft.Icon(icon_name, color=get_text_color(), size=22), ft.Text(strings[lang][title_key], size=15, color=get_text_color())], spacing=15),
+                    ft.Icon("chevron_right", color="grey400")
+                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                padding=15, bgcolor=get_bg_color("white", "#1E1E1E"), border_radius=10, width=340,
+                on_click=lambda _: show_sub_page(title_key),
+                shadow=ft.BoxShadow(blur_radius=4, color="#02000000")
+            )
+
+        if not user_state["logged_in"]:
+            profile_details = ft.Column([
+                ft.Icon(name="account_circle_outlined", size=70, color="grey400"),
+                ft.Text(strings[lang]["unreg_title"], size=16, weight=ft.FontWeight.BOLD, color=get_text_color()),
+                ft.Text(strings[lang]["unreg_subtitle"], size=12, color="grey500"),
+                ft.Container(height=10),
+                ft.ElevatedButton(strings[lang]["login_btn"], on_click=lambda _: show_login_page(), style=ft.ButtonStyle(bgcolor="#FC3424", color="white")),
+                ft.Container(height=20),
+                lang_dropdown
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        else:
+            profile_details = ft.Column([
+                ft.Icon(name="account_circle", size=70, color="#FC3424"),
+                ft.Text(user_state["name"], size=18, weight=ft.FontWeight.BOLD, color=get_text_color()),
+                ft.Text(user_state["phone"], size=14, color="grey500"),
+                ft.Container(height=10),
+                
+                create_menu_item("history", "menu_history"),
+                create_menu_item("settings", "menu_settings"),
+                create_menu_item("info", "menu_info"),
+                
+                ft.Container(height=10),
+                lang_dropdown,
+                ft.TextButton(strings[lang]["logout"], on_click=lambda _: logout_user(), style=ft.ButtonStyle(color="red"))
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=8)
+
+        def logout_user():
+            user_state["logged_in"] = False
+            user_state["name"] = ""
+            user_state["phone"] = "+251"
+            show_main_page()
+
+        profile_layout = ft.Container(
+            content=ft.Column([
+                ft.Row([
+                    ft.IconButton("arrow_back", on_click=lambda _: show_main_page(), icon_color=get_text_color()),
+                    ft.Text(strings[lang]["profile_title"], size=18, weight=ft.FontWeight.BOLD, color=get_text_color()),
+                    ft.Container(width=40)
+                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                profile_details
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+            padding=15
+        )
+        main_layout.controls.append(profile_layout)
+        page.update()
+
+    # =========================================================
+    # 6. ORDER PAGE (ዘመናዊ ሕንፃ እና ዘመናዊ ካፌ መጀመሪያ ሆነው የሚመጡበት)
+    # =========================================================
+    def show_order_page(service_name):
+        nonlocal uploaded_file_path
+        main_layout.controls.clear()
+        lang = user_state["lang"]
+        page.bgcolor = get_bg_color("#F6F6F6", "#121212")
+        
+        uploaded_file_path = None 
+        display_svc = strings[lang]["3d_title"] if service_name == "3D Design" else strings[lang]["ren_title"]
+
+        # 3D Design ሲሆን "Modern Building / ዘመናዊ ሕንፃ" መጀመሪያ እንዲሆን ተደርጓል
+        if service_name == "3D Design":
+            dropdown_options = [
+                ft.dropdown.Option("Modern Building / ዘመናዊ ሕንፃ"),
+                ft.dropdown.Option("Modern Residential House / ዘመናዊ መኖሪያ ቤት"),
+                ft.dropdown.Option("G+1 / G+2 Luxury Villa / ዘመናዊ ቪላ ህንፃ"),
+                ft.dropdown.Option("Apartment Building / የአፓርትመንት ዲዛይን"),
+                ft.dropdown.Option("Real Estate Landscape / የሪል እስቴት ፕላን")
+            ]
+        # Renovation ሲሆን "Modern Cafe / ዘመናዊ ካፌ" መጀመሪያ እንዲሆን ተደርጓል
+        else:
+            dropdown_options = [
+                ft.dropdown.Option("Modern Cafe / ዘመናዊ ካፌ"),
+                ft.dropdown.Option("Cloth Boutique / የልብስ ሱቅ ቤት"),
+                ft.dropdown.Option("Luxury Office / የቢሮ እድሳት"),
+                ft.dropdown.Option("Restaurant / የምግብ ቤት ውስጥ ዲዛይን"),
+                ft.dropdown.Option("Living Room Makeover / የሳሎን ክፍል እድሳት")
+            ]
+
+        sub_service_dropdown = ft.Dropdown(
+            label=strings[lang]["sub_svc_lbl"],
+            width=320,
+            options=dropdown_options,
+            value=dropdown_options[0].key,
+            label_style=ft.TextStyle(color=get_text_color())
+        )
+
+        selected_file_text.value = strings[lang]["no_file"]
+        selected_file_text.color = "grey500"
+        detail_input.value = ""
+        detail_input.label = strings[lang]["desc_label"]
+        detail_input.label_style = ft.TextStyle(color=get_text_color())
+        
+        def handle_order_submit(e):
+            if not detail_input.value.strip():
+                page.snack_bar = ft.SnackBar(ft.Text(strings[lang]["validation_error"]), bgcolor="red")
+                page.snack_bar.open = True
+                page.update()
+            else:
+                past_orders.append({
+                    "id": f"00{len(past_orders)+1}",
+                    "type": sub_service_dropdown.value.split(" / ")[0],
+                    "date": "2026-05-30",
+                    "status": "In Progress"
+                })
+                
+                main_layout.controls.clear()
+                main_layout.controls.append(
+                    ft.Container(
+                        content=ft.Column([
+                            ft.Icon(name="check_circle", color="green", size=60),
+                            ft.Container(height=10),
+                            ft.Text(strings[lang]["success_msg"], size=18, weight=ft.FontWeight.BOLD, text_align="center", color=get_text_color()),
+                            ft.Text(strings[lang]["success_sub"], size=13, color="grey500", text_align="center"),
+                            ft.Container(height=15),
+                            ft.ElevatedButton("OK", on_click=lambda _: show_main_page(), width=140, style=ft.ButtonStyle(bgcolor="#FC3424", color="white"))
+                        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, alignment="center"),
+                        alignment=ft.alignment.center, expand=True
+                    )
+                )
+                page.update()
+
+        order_header = ft.Container(
+            content=ft.Row([
+                ft.IconButton("arrow_back", on_click=lambda _: show_main_page(), icon_color=get_text_color()),
+                ft.Text(strings[lang]["order_title"], size=18, weight=ft.FontWeight.BOLD, color=get_text_color()),
+                ft.Container(width=40)
+            ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            padding=10, bgcolor=get_bg_color("white", "#1E1E1E")
+        )
+        
+        order_content = ft.Container(
+            content=ft.Column([
+                ft.Text(strings[lang]["selected_svc"] + str(display_svc), size=15, weight=ft.FontWeight.BOLD, color="#FC3424"),
+                ft.Container(height=5),
+                sub_service_dropdown,
+                ft.Container(height=10),
+                
+                ft.Row([
+                    ft.ElevatedButton(
+                        strings[lang]["upload_btn"], icon="upload_file",
+                        on_click=lambda _: file_picker.pick_files(allow_multiple=False, file_type=ft.FilePickerFileType.IMAGE),
+                        style=ft.ButtonStyle(bgcolor=get_bg_color("black", "#333333"), color="white", shape=ft.RoundedRectangleBorder(radius=8)),
+                        width=155, height=45
+                    ),
+                    ft.ElevatedButton(
+                        strings[lang]["camera_btn"], icon="photo_camera",
+                        on_click=lambda _: file_picker.pick_files(allow_multiple=False, file_type=ft.FilePickerFileType.IMAGE),
+                        style=ft.ButtonStyle(bgcolor="#FC3424", color="white", shape=ft.RoundedRectangleBorder(radius=8)),
+                        width=155, height=45
+                    )
+                ], alignment="center", spacing=10),
+                
+                ft.Container(alignment=ft.alignment.center, content=selected_file_text, padding=5),
+                ft.Text(strings[lang]["desc_title"], size=13, color=get_text_color(), weight=ft.FontWeight.BOLD),
+                detail_input,
+                ft.Container(height=15),
+                ft.ElevatedButton(
+                    strings[lang]["order_submit"],
+                    on_click=handle_order_submit,
+                    style=ft.ButtonStyle(bgcolor="#FC3424", color="white", shape=ft.RoundedRectangleBorder(radius=12)),
+                    width=320, height=50
+                )
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+            padding=15
+        )
+        
+        main_layout.controls.append(order_header)
+        main_layout.controls.append(order_content)
+        page.update()
+
+    run_splash_screen()
+
+ft.app(target=main)
