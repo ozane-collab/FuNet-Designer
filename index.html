@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FuNet Designer</title>
+    <!-- FontAwesome ለአይኮኖች -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #FC3424;
@@ -13,34 +15,51 @@
             --bg-dark: #121212;
             --card-dark: #1E1E1E;
             --text-dark: #FFFFFF;
+            --grey-text: #888888;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
         }
 
         body {
             margin: 0;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-light);
+            background-color: #222;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s;
         }
 
+        /* በትክክል የስልክ ስክሪን ቅርጽ እንዲይዝ ማድረግ (Responsive Mobile Container) */
         .phone-container {
             width: 100%;
             max-width: 390px;
             height: 100vh;
             max-height: 740px;
             background-color: var(--bg-light);
+            color: var(--text-light);
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow-y: auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Splash Screen */
+        @media (min-width: 400px) {
+            .phone-container {
+                border-radius: 30px;
+                border: 8px solid #333;
+            }
+        }
+
+        /* Splash Screen ገጽታ */
         .splash {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -49,31 +68,66 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            transition: opacity 0.4s ease;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
-        .splash h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; }
-        .splash p { color: white; font-size: 26px; margin: 0; font-style: italic; }
+        .splash h1 { color: white; font-size: 56px; margin: 0; font-weight: bold; letter-spacing: 1px; }
+        .splash p { color: white; font-size: 26px; margin: 5px 0 0 0; font-style: italic; font-weight: 300; }
 
-        /* Headers */
-        .header {
+        /* የገጾች መዋቅር */
+        .page {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0; left: 0;
+            background-color: var(--bg-light);
+            padding: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: background-color 0.3s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* የላይኛው ራስጌ (Header) */
+        .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 20px 15px;
+            background-color: var(--card-light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            transition: background-color 0.3s;
+        }
+        .app-header .logo-area h2 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
+        .app-header .logo-area p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; color: var(--text-light); }
+        .icon-btn {
+            background: none; border: none; color: var(--text-light); font-size: 24px; cursor: pointer; padding: 5px;
+        }
+
+        .sub-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 15px;
             background-color: var(--card-light);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: background-color 0.3s;
         }
-        .header h2 { margin: 0; color: var(--primary); font-size: 32px; }
-        .header p { margin: 0; font-size: 14px; font-weight: bold; font-style: italic; }
+        .sub-header h3 { margin: 0; font-size: 18px; font-weight: bold; color: var(--text-light); }
 
-        /* Cards */
-        .services-row {
+        /* ካርዶች (Cards Section) */
+        .services-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            padding: 20px 15px;
+            padding: 25px 15px;
         }
-        .card {
+        .service-card {
             background-color: var(--card-light);
             border-radius: 20px;
             width: 160px;
@@ -84,146 +138,614 @@
             justify-content: center;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: transform 0.2s, background-color 0.3s;
         }
-        .card .icon { font-size: 38px; color: var(--primary); margin-bottom: 8px; }
-        .card h3 { margin: 0; font-size: 14px; }
-        .card p { margin: 4px 0 0 0; font-size: 10px; color: #888; }
+        .service-card:active { transform: scale(0.95); }
+        .service-card i { font-size: 38px; color: var(--primary); margin-bottom: 10px; }
+        .service-card h4 { margin: 0; font-size: 14px; font-weight: bold; color: var(--text-light); }
+        .service-card p { margin: 5px 0 0 0; font-size: 10px; color: var(--grey-text); }
 
-        /* Buttons */
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            max-width: 320px;
-            margin: 10px auto;
-            display: block;
+        /* ፎርሞች እና ኢንፑቶች */
+        .content-padding { padding: 20px 15px; display: flex; flex-direction: column; align-items: center; }
+        .input-group { width: 100%; max-width: 330px; margin-bottom: 15px; display: flex; flex-direction: column; }
+        .input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: var(--text-light); }
+        .form-control {
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 15px;
+            background-color: var(--card-light); color: var(--text-light); outline: none;
+        }
+        .form-control:focus { border-color: var(--primary); }
+
+        /* ቁልፎች (Buttons) */
+        .btn-primary {
+            background-color: var(--primary); color: white; border: none; padding: 15px;
+            border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer;
+            width: 100%; max-width: 330px; margin-top: 10px; box-shadow: 0 4px 10px rgba(252, 52, 36, 0.2);
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-primary:active { opacity: 0.9; }
+
+        .file-buttons { display: flex; gap: 10px; width: 100%; max-width: 330px; margin: 10px 0; }
+        .btn-file {
+            flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 13px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; color: white;
         }
 
-        /* Dark Mode Configurations */
-        body.dark-mode { background-color: var(--bg-dark); color: var(--text-dark); }
-        body.dark-mode .phone-container { background-color: var(--bg-dark); }
-        body.dark-mode .header, body.dark-mode .card { background-color: var(--card-dark); }
-        body.dark-mode .header p { color: var(--text-dark); }
-        body.dark-mode .card h3 { color: var(--text-dark); }
+        /* ዝርዝር ማሳያዎች (Settings & History Items) */
+        .menu-item {
+            width: 100%; max-width: 340px; background-color: var(--card-light); padding: 15px;
+            border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); cursor: pointer;
+        }
+        .history-card {
+            width: 100%; max-width: 340px; background-color: var(--card-light); padding: 12px;
+            border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 11px; color: white; font-weight: bold; }
 
-        .hidden { display: none !important; }
-        .page { padding: 15px; display: flex; flex-direction: column; }
+        /* ማብሪያ Switch ዲዛይን */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .3s; border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: white; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Dark Mode ልዩ ዘይቤ */
+        body.dark-mode-active {
+            --bg-light: var(--bg-dark);
+            --card-light: var(--card-dark);
+            --text-light: var(--text-dark);
+        }
+        body.dark-mode-active .form-control { border-color: #444; }
+
+        /* ቋንቋ መምረጫ */
+        .lang-dropdown { width: 100%; max-width: 340px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <div class="phone-container">
-        <!-- SPLASH SCREEN -->
+        <!-- 1. SPLASH SCREEN -->
         <div id="splash-screen" class="splash">
             <h1>FuNet</h1>
             <p>Designer</p>
         </div>
 
-        <!-- MAIN PAGE -->
+        <!-- 2. MAIN PAGE -->
         <div id="main-page" class="page hidden">
-            <div class="header">
-                <div>
-                    <h2 id="logo-text">FuNet</h2>
-                    <p id="subtitle-text">Designer</p>
+            <div class="app-header">
+                <div class="logo-area">
+                    <h2>FuNet</h2>
+                    <p id="app-subtitle">Designer</p>
                 </div>
-                <button onclick="showPage('profile-page')" style="background:none; border:none; font-size:24px; cursor:pointer;">👤</button>
+                <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-bars"></i></button>
             </div>
 
-            <div class="services-row">
-                <div class="card" onclick="openOrder('3D Design')">
-                    <div class="icon">📐</div>
-                    <h3 class="svc-3d-title">3D Design</h3>
-                    <p class="svc-3d-desc">Architectural Plans</p>
+            <div class="services-container">
+                <div class="service-card" onclick="openOrderForm('3D Design')">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <h4 id="lbl-3d-title">3D Design</h4>
+                    <p id="lbl-3d-desc">Architectural Plans</p>
                 </div>
-                <div class="card" onclick="openOrder('Renovation')">
-                    <div class="icon">🛠️</div>
-                    <h3 class="svc-ren-title">Renovation</h3>
-                    <p class="svc-ren-desc">Modern Materials</p>
+                <div class="service-card" onclick="openOrderForm('Renovation')">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <h4 id="lbl-ren-title">Renovation</h4>
+                    <p id="lbl-ren-desc">Modern Materials</p>
                 </div>
             </div>
 
-            <button class="btn" onclick="showPage('login-page')" id="login-trigger-btn">Login to Order</button>
+            <div class="content-padding" style="margin-top: auto; padding-bottom: 30px;" id="login-prompt-box">
+                <p style="color: var(--grey-text); font-size: 13px; text-align: center; max-width: 280px;" id="lbl-prompt-msg">Ready to bring your dream design to life?</p>
+                <button class="btn-primary" onclick="showPage('login-page')">
+                    <i class="fa-solid fa-lock-open"></i> <span id="lbl-login-btn">Login to Order</span>
+                </button>
+            </div>
         </div>
 
-        <!-- LOGIN PAGE -->
+        <!-- 3. LOGIN PAGE -->
         <div id="login-page" class="page hidden">
-            <button onclick="showPage('main-page')">⬅️ Back</button>
-            <h2>Welcome to FuNet</h2>
-            <input type="text" id="username" placeholder="Full Name" style="padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc;">
-            <input type="text" id="phone" value="+251" style="padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc;">
-            <button class="btn" onclick="doLogin()">Login & Continue 🚀</button>
+            <div class="sub-header">
+                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3 id="lbl-login-header">Login</h3>
+                <div style="width: 34px;"></div>
+            </div>
+            <div class="content-padding">
+                <h2 style="margin-top: 10px;" id="lbl-welcome-msg">Welcome to FuNet</h2>
+                <p style="color: var(--grey-text); font-size: 13px; margin-bottom: 25px;" id="lbl-login-sub">Please login to start your order</p>
+                
+                <div class="input-group">
+                    <label id="lbl-name-field">Full Name</label>
+                    <input type="text" id="input-name" class="form-control" placeholder="Enter full name">
+                </div>
+                <div class="input-group">
+                    <label id="lbl-phone-field">Phone Number</label>
+                    <!-- የተቆለፈ መነሻ +251 ኮድ እና ለቁጥር ብቻ የሚሆን ኪቦርድ -->
+                    <input type="tel" id="input-phone" class="form-control" value="+251" oninput="validatePhoneNumber(this)">
+                </div>
+                
+                <button class="btn-primary" style="margin-top: 15px;" onclick="handleLoginSubmit()">
+                    <span id="lbl-btn-continue">Login & Continue 🚀</span>
+                </button>
+            </div>
         </div>
 
-        <!-- PROFILE PAGE -->
+        <!-- 4. ORDER FORM PAGE -->
+        <div id="order-page" class="page hidden">
+            <div class="sub-header">
+                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3 id="lbl-order-title">New Order Form</h3>
+                <div style="width: 34px;"></div>
+            </div>
+            <div class="content-padding">
+                <div style="width: 100%; text-align: left; margin-bottom: 15px;">
+                    <span id="lbl-selected-cat" style="font-size: 14px; color: var(--grey-text);">Selected Category:</span>
+                    <strong id="txt-selected-service" style="color: var(--primary); font-size: 15px; margin-left: 5px;">3D Design</strong>
+                </div>
+
+                <div class="input-group">
+                    <label id="lbl-project-type">Select Specific Project Type</label>
+                    <select id="dropdown-project-type" class="form-control" style="cursor: pointer;"></select>
+                </div>
+
+                <div class="file-buttons">
+                    <button class="btn-file" style="background-color: #333;" onclick="triggerFilePicker()"><i class="fa-solid fa-file-image"></i> <span id="lbl-upload-btn">Upload File 📁</span></button>
+                    <button class="btn-file" style="background-color: var(--primary);" onclick="triggerFilePicker()"><i class="fa-solid fa-camera"></i> <span id="lbl-camera-btn">Take Camera 📷</span></button>
+                </div>
+                <input type="file" id="hidden-file-input" style="display: none;" onchange="handleFileSelected(this)">
+                <div id="txt-file-status" style="font-size: 11px; color: var(--grey-text); margin-bottom: 15px;">No photo selected (Optional)</div>
+
+                <div class="input-group">
+                    <label id="lbl-desc-title">Additional Project Guidelines:</label>
+                    <textarea id="input-desc" class="form-control" rows="4" style="resize: none;" placeholder="Write specific design requirements here..."></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="handleOrderSubmit()">
+                    <span id="lbl-finish-order">Finish Order 🚀</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 5. PROFILE & SETTINGS PAGE -->
         <div id="profile-page" class="page hidden">
-            <button onclick="showPage('main-page')">⬅️ Back</button>
-            <h2>My Profile</h2>
-            <div id="profile-info">Please login to see your profile.</div>
-            
-            <hr>
-            <h3>Settings</h3>
-            <label>
-                Dark Theme Mode: 
-                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
-            </label>
+            <div class="sub-header">
+                <button class="icon-btn" onclick="showPage('main-page')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3 id="lbl-profile-title">My Profile</h3>
+                <div style="width: 34px;"></div>
+            </div>
+            <div class="content-padding">
+                <div id="profile-user-card" style="text-align: center; margin-bottom: 25px;">
+                    <!-- ያልገባ ተጠቃሚ እይታ -->
+                    <div id="unregistered-box">
+                        <i class="fa-solid fa-circle-user" style="font-size: 70px; color: #ccc; margin-bottom: 10px;"></i>
+                        <h4 style="margin: 0;" id="lbl-unreg-title">Unregistered Account</h4>
+                        <p style="color: var(--grey-text); font-size: 12px; margin: 5px 0 15px 0;" id="lbl-unreg-sub">Please login to see your profile.</p>
+                        <button class="btn-primary" style="padding: 10px 20px; font-size: 13px;" onclick="showPage('login-page')"><span id="lbl-login-short">Login</span></button>
+                    </div>
+                    <!-- የገባ ተጠቃሚ እይታ -->
+                    <div id="registered-box" class="hidden">
+                        <i class="fa-solid fa-circle-user" style="font-size: 70px; color: var(--primary); margin-bottom: 10px;"></i>
+                        <h3 style="margin: 0;" id="txt-user-name">Ozan</h3>
+                        <p style="color: var(--grey-text); font-size: 14px; margin: 5px 0 0 0;" id="txt-user-phone">+251911223344</p>
+                    </div>
+                </div>
+
+                <!-- ማውጫ ዝርዝሮች -->
+                <div class="menu-item" onclick="showSubSettings('history')">
+                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
+                        <i class="fa-solid fa-clock-rotate-left"></i> <span id="menu-history">History</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
+                </div>
+
+                <div class="menu-item" onclick="showSubSettings('settings')">
+                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
+                        <i class="fa-solid fa-gear"></i> <span id="menu-settings">Settings</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
+                </div>
+
+                <div class="menu-item" onclick="showSubSettings('info')">
+                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-light);">
+                        <i class="fa-solid fa-circle-info"></i> <span id="menu-info">Information</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 14px;"></i>
+                </div>
+
+                <div class="input-group lang-dropdown">
+                    <label id="lbl-lang-option">Language / ቋንቋ</label>
+                    <select class="form-control" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="am" selected>አማርኛ (Amharic)</option>
+                    </select>
+                </div>
+
+                <button id="btn-logout" class="hidden" style="background: none; border: none; color: #FC3424; font-weight: bold; margin-top: 25px; cursor: pointer;" onclick="handleLogout()"></button>
+            </div>
+        </div>
+
+        <!-- 6. SUB-SETTINGS PAGE (HISTORY, SETTINGS, INFO) -->
+        <div id="sub-settings-page" class="page hidden">
+            <div class="sub-header">
+                <button class="icon-btn" onclick="showPage('profile-page')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3 id="sub-page-title">History</h3>
+                <div style="width: 34px;"></div>
+            </div>
+            <div class="content-padding" id="sub-page-content">
+                <!-- ዳይናሚክ ይዘት እዚህ ይገባል -->
+            </div>
+        </div>
+
+        <!-- 7. SUCCESS PAGE -->
+        <div id="success-page" class="page hidden" style="justify-content: center; align-items: center; text-align: center;">
+            <i class="fa-solid fa-circle-check" style="font-size: 65px; color: green; margin-bottom: 15px;"></i>
+            <h2 id="lbl-success-msg" style="margin: 0 15px; font-size: 20px;">Your order has been sent successfully! 🎉</h2>
+            <p id="lbl-success-sub" style="color: var(--grey-text); font-size: 13px; margin: 8px 15px 25px 15px;">We will contact you on your phone soon.</p>
+            <button class="btn-primary" style="max-width: 150px;" onclick="showPage('main-page')">OK</button>
         </div>
     </div>
 
     <script>
-        // Splash Screen fade out
+        // የአፑ ዳታዎች ማከማቻ ስቴት
+        let userState = {
+            loggedIn: false,
+            name: '',
+            phone: '+251',
+            lang: 'am', // መጀመሪያ አማርኛ እንዲሆን
+            darkMode: false
+        };
+
+        // የሂስትሪ ናሙናዎች
+        let pastOrders = [
+            { id: "001", type: "Modern Cafe", date: "2026-05-28", status: "In Progress" },
+            { id: "002", type: "Modern Building", date: "2026-05-15", status: "Completed" }
+        ];
+
+        let currentServiceCategory = "3D Design";
+
+        // የቋንቋዎች መዝገበ ቃላት
+        const strings = {
+            en: {
+                app_subtitle: "Designer",
+                "lbl-3d-title": "3D Design",
+                "lbl-3d-desc": "Architectural Plans",
+                "lbl-ren-title": "Renovation",
+                "lbl-ren-desc": "Modern Materials",
+                "lbl-prompt-msg": "Ready to bring your dream design to life?",
+                "lbl-login-btn": "Login to Order",
+                "lbl-login-header": "Login",
+                "lbl-welcome-msg": "Welcome to FuNet",
+                "lbl-login-sub": "Please login to start your order",
+                "lbl-name-field": "Full Name",
+                "lbl-phone-field": "Phone Number",
+                "lbl-btn-continue": "Login & Continue 🚀",
+                "lbl-order-title": "New Order Form",
+                "lbl-selected-cat": "Selected Category:",
+                "lbl-project-type": "Select Specific Project Type",
+                "lbl-upload-btn": "Upload File 📁",
+                "lbl-camera-btn": "Take Camera 📷",
+                "no_photo": "No photo selected (Optional)",
+                "attached_prefix": "Attached: ",
+                "lbl-desc-title": "Additional Project Guidelines:",
+                "input-desc-placeholder": "Write specific design requirements here...",
+                "lbl-finish-order": "Finish Order 🚀",
+                "lbl-profile-title": "My Profile",
+                "lbl-unreg-title": "Unregistered Account",
+                "lbl-unreg-sub": "Please login to see your profile.",
+                "lbl-login-short": "Login",
+                "menu-history": "History",
+                "menu-settings": "Settings",
+                "menu-info": "Information",
+                "lbl-lang-option": "Language / ቋንቋ",
+                "btn-logout": "Log Out (ውጣ)",
+                "lbl-success-msg": "Your order has been sent successfully! 🎉",
+                "lbl-success-sub": "We will contact you on your phone soon.",
+                "validation_error": "Please write the design description!",
+                "login_error": "Please enter name and phone number correctly!",
+                "allow_push": "Allow Push Notifications",
+                "dark_mode_txt": "Dark Theme Mode",
+                "version_lbl": "FuNet Designer App v1.0.5",
+                "feedback_lbl": "Write your questions or info here:",
+                "send_btn": "Send Feedback",
+                "no_history": "No orders history found."
+            },
+            am: {
+                app_subtitle: "ዲዛይነር",
+                "lbl-3d-title": "3D ዲዛይን",
+                "lbl-3d-desc": "የሕንፃ እና የቤት ፕላኖች",
+                "lbl-ren-title": "እድሳት (Renovation)",
+                "lbl-ren-desc": "ዘமናዊ እቃዎችና ግብዓቶች",
+                "lbl-prompt-msg": "የህልምዎን ዲዛይን ወደ እውነት ለመቀየር ዝግጁ ነዎት?",
+                "lbl-login-btn": "ለመказать መጀመሪያ ይግቡ",
+                "lbl-login-header": "መግቢያ (Login)",
+                "lbl-welcome-msg": "እንኳን ወደ FuNet መጡ",
+                "lbl-login-sub": "ትዕዛዝ ለመጀመር መጀመሪያ ይግቡ",
+                "lbl-name-field": "ሙሉ ስም",
+                "lbl-phone-field": "የስልክ ቁጥር",
+                "lbl-btn-continue": "ግባና ቀጥል 🚀",
+                "lbl-order-title": "አዲስ ትዕዛዝ መሙያ",
+                "lbl-selected-cat": "የተመረጠው ዘርፍ:",
+                "lbl-project-type": "የፕሮጀክቱን አይነት ይምረጡ",
+                "lbl-upload-btn": "ፎቶ ምረጥ 📁",
+                "lbl-camera-btn": "ካሜራ ክፈት 📷",
+                "no_photo": "ምንም ፎቶ አልተመረጠም (አማራጭ)",
+                "attached_prefix": "የተያያዘ ፋይል: ",
+                "lbl-desc-title": "ተጨማሪ ዝርዝር መረጃዎች:",
+                "input-desc-placeholder": "ስለ ዲዛይኑ ዝርዝር ማብራሪያ እዚህ ይጻፉ...",
+                "lbl-finish-order": "ትዕዛዙን ጨርስ 🚀",
+                "lbl-profile-title": "የእኔ ፕሮፋይል",
+                "lbl-unreg-title": "ያልተመዘገበ አካውንት",
+                "lbl-unreg-sub": "መረጃዎን ለማየት መጀመሪያ ሎግኢን ያድርጉ።",
+                "lbl-login-short": "ግባ",
+                "menu-history": "የጥያቄዎች ታሪክ (History)",
+                "menu-settings": "ቅንብሮች (Settings)",
+                "menu-info": "ስለ እኛ መረጃ (Information)",
+                "lbl-lang-option": "ቋንቋ መቀየሪያ (Language)",
+                "btn-logout": "ውጣ (Log Out)",
+                "lbl-success-msg": "ትዕዛዝዎ በተካሄደ ሁኔታ ተልኳል! 🎉",
+                "lbl-success-sub": "በቅርብ ቀን በስልክዎ እናገኝዎታለን።",
+                "validation_error": "እባክዎ የዲዛይኑን ማብራሪያ ይጻፉ!",
+                "login_error": "እባክዎ ስም እና ስልክ ቁጥር በትክክል ያስገቡ!",
+                "allow_push": "ማስታወቂያዎች ይፈቀዱ (Push)",
+                "dark_mode_txt": "ጥቁር ገጽታ (Dark Mode)",
+                "version_lbl": "ፉኔት ዲዛይነር መተግበሪያ v1.0.5",
+                "feedback_lbl": "የሚፈልጉትን መረጃ ወይም ጥያቄ እዚህ ይጻፉ፦",
+                "send_btn": "መረጃውን ላክ",
+                "no_history": "ምንም የተመዘገበ ታሪክ የለም።"
+            }
+        };
+
+        // Splash screen አኒሜሽን ሽግግር
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
             setTimeout(() => {
-                splash.classList.add('hidden');
+                splash.style.visibility = 'hidden';
                 document.getElementById('main-page').classList.remove('hidden');
-            }, 400);
+                updateLanguageUI();
+            }, 500);
         }, 1500);
 
-        let userState = { loggedIn: false, name: '', phone: '', darkMode: false };
-
+        // የገጾች መሸጋገሪያ ተግባር
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(pageId).classList.remove('hidden');
         }
 
-        function doLogin() {
-            const name = document.getElementById('username').value;
-            const phone = document.getElementById('phone').value;
-            if(name.trim() && phone.length > 8) {
+        // የቁጥር ብቻ ኪቦርድ መቆጣጠሪያ ማጣሪያ
+        function validatePhoneNumber(input) {
+            if (!input.value.startsWith('+251')) {
+                input.value = '+251';
+            }
+            // ከ +251 ውጭ ያሉትን ቁጥሮች ብቻ እንዲቀበል ማድረግ (ፊደላትን ያስወግዳል)
+            let suffix = input.value.substring(4);
+            suffix = suffix.replace(/[^0-9]/g, '');
+            input.value = '+251' + suffix;
+        }
+
+        // የሎግኢን ማረጋገጫ
+        function handleLoginSubmit() {
+            const name = document.getElementById('input-name').value.trim();
+            const phone = document.getElementById('input-phone').value.trim();
+            const lang = userState.lang;
+
+            if (name && phone.length > 8) {
                 userState.loggedIn = true;
                 userState.name = name;
                 userState.phone = phone;
-                document.getElementById('profile-info').innerHTML = `<b>Name:</b> ${name} <br> <b>Phone:</b> ${phone}`;
-                document.getElementById('login-trigger-btn').classList.add('hidden');
+
+                // ፕሮፋይል ማደስ
+                document.getElementById('unregistered-box').classList.add('hidden');
+                document.getElementById('registered-box').classList.remove('hidden');
+                document.getElementById('txt-user-name').innerText = name;
+                document.getElementById('txt-user-phone').innerText = phone;
+                document.getElementById('btn-logout').classList.remove('hidden');
+                document.getElementById('login-prompt-box').classList.add('hidden');
+
                 showPage('main-page');
             } else {
-                alert('Please enter correct details!');
+                alert(strings[lang]["login_error"]);
             }
         }
 
-        function openOrder(service) {
-            if(!userState.loggedIn) {
+        function handleLogout() {
+            userState.loggedIn = false;
+            userState.name = '';
+            userState.phone = '+251';
+            document.getElementById('input-name').value = '';
+            document.getElementById('input-phone').value = '+251';
+            
+            document.getElementById('unregistered-box').classList.remove('hidden');
+            document.getElementById('registered-box').classList.add('hidden');
+            document.getElementById('btn-logout').classList.add('hidden');
+            document.getElementById('login-prompt-box').classList.remove('hidden');
+            
+            showPage('main-page');
+        }
+
+        // የትዕዛዝ መስኮት መክፈቻ (Modern Building / Modern Cafe ቀድመው የሚመረጡበት)
+        function openOrderForm(category) {
+            currentServiceCategory = category;
+            if (!userState.loggedIn) {
                 showPage('login-page');
+                return;
+            }
+
+            document.getElementById('txt-selected-service').innerText = 
+                category === '3D Design' ? strings[userState.lang]['lbl-3d-title'] : strings[userState.lang]['lbl-ren-title'];
+
+            const dropdown = document.getElementById('dropdown-project-type');
+            dropdown.innerHTML = '';
+
+            let options = [];
+            if (category === '3D Design') {
+                options = [
+                    "Modern Building / ዘመናዊ ሕንፃ",
+                    "Modern Residential House / ዘመናዊ መኖሪያ ቤት",
+                    "G+1 / G+2 Luxury Villa / ዘመናዊ ቪላ ህንፃ",
+                    "Apartment Building / የአፓርትመንት ዲዛይን"
+                ];
             } else {
-                alert('Opening form for: ' + service);
+                options = [
+                    "Modern Cafe / ዘመናዊ ካፌ",
+                    "Cloth Boutique / የልብስ ሱቅ ቤት",
+                    "Luxury Office / የቢሮ እድሳት",
+                    "Restaurant / የምግብ ቤት ውስጥ ዲዛይን"
+                ];
+            }
+
+            options.forEach(opt => {
+                let el = document.createElement('option');
+                el.value = opt;
+                el.textContent = opt;
+                dropdown.appendChild(el);
+            });
+
+            document.getElementById('input-desc').value = '';
+            document.getElementById('txt-file-status').innerText = strings[userState.lang]['no_photo'];
+            document.getElementById('txt-file-status').style.color = 'var(--grey-text)';
+
+            showPage('order-page');
+        }
+
+        // የፋይል መምረጫ
+        function triggerFilePicker() {
+            document.getElementById('hidden-file-input').click();
+        }
+
+        function handleFileSelected(input) {
+            if (input.files && input.files.length > 0) {
+                const fileName = input.files[0].name;
+                document.getElementById('txt-file-status').innerText = strings[userState.lang]['attached_prefix'] + fileName;
+                document.getElementById('txt-file-status').style.color = 'green';
             }
         }
 
-        function toggleDarkMode(checkbox) {
-            userState.darkMode = checkbox.checked;
-            if(userState.darkMode) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
+        // ትዕዛዝ ማጠናቀቂያ
+        function handleOrderSubmit() {
+            const desc = document.getElementById('input-desc').value.trim();
+            const lang = userState.lang;
+            if (!desc) {
+                alert(strings[lang]['validation_error']);
+                return;
             }
+
+            const projType = document.getElementById('dropdown-project-type').value.split(' / ')[0];
+            pastOrders.unshift({
+                id: "00" + (pastOrders.length + 1),
+                type: projType,
+                date: new Date().toISOString().split('T')[0],
+                status: "In Progress"
+            });
+
+            showPage('success-page');
+        }
+
+        // ንዑስ ገጾችን መሙያ (History, Settings, Info)
+        function showSubSettings(type) {
+            const lang = userState.lang;
+            const container = document.getElementById('sub-page-content');
+            container.innerHTML = '';
+            
+            if (type === 'history') {
+                document.getElementById('sub-page-title').innerText = strings[lang]['menu-history'];
+                if (pastOrders.length === 0) {
+                    container.innerHTML = `<p style="color:var(--grey-text);">${strings[lang]['no_history']}</p>`;
+                } else {
+                    pastOrders.forEach(order => {
+                        let card = document.createElement('div');
+                        card.className = 'history-card';
+                        let bgBadge = order.status === 'Completed' ? 'green' : 'orange';
+                        card.innerHTML = `
+                            <div>
+                                <strong style="color:var(--text-light); font-size:14px;">Order #${order.id} - ${order.type}</strong>
+                                <div style="color:var(--grey-text); font-size:11px; margin-top:3px;">Date: ${order.date}</div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span class="status-badge" style="background-color:${bgBadge};">${order.status}</span>
+                                <i class="fa-solid fa-xmark" style="color:#FC3424; cursor:pointer; padding:5px; font-size:16px;" onclick="deleteHistoryItem('${order.id}')"></i>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+            } 
+            else if (type === 'settings') {
+                document.getElementById('sub-page-title').innerText = strings[lang]['menu-settings'];
+                container.innerHTML = `
+                    <div class="menu-item" style="cursor:default;">
+                        <span style="color:var(--text-light); font-size:14px;">${strings[lang]['allow_push']}</span>
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="menu-item" style="cursor:default;">
+                        <span style="color:var(--text-light); font-size:14px;">${strings[lang]['dark_mode_txt']}</span>
+                        <label class="switch"><input type="checkbox" id="dark-toggle" ${userState.darkMode ? 'checked' : ''} onchange="toggleDarkThemeMode(this.checked)"><span class="slider"></span></label>
+                    </div>
+                `;
+            } 
+            else if (type === 'info') {
+                document.getElementById('sub-page-title').innerText = strings[lang]['menu-info'];
+                container.innerHTML = `
+                    <p style="font-weight:bold; color:var(--text-light); margin-bottom:15px;">${strings[lang]['version_lbl']}</p>
+                    <div class="input-group">
+                        <label>${strings[lang]['feedback_lbl']}</label>
+                        <textarea class="form-control" rows="3" style="resize:none;"></textarea>
+                    </div>
+                    <button class="btn-primary" style="margin-top:5px;" onclick="alert('Feedback sent!'); showPage('profile-page');">${strings[lang]['send_btn']}</button>
+                `;
+            }
+            showPage('sub-settings-page');
+        }
+
+        // የሂስትሪ ማጥፊያ (X) ተግባር
+        function deleteHistoryItem(id) {
+            pastOrders = pastOrders.filter(o => o.id !== id);
+            showSubSettings('history');
+        }
+
+        // ሙሉ ገጽታን ወደ Dark Mode መቀየሪያ
+        function toggleDarkThemeMode(isDark) {
+            userState.darkMode = isDark;
+            if (isDark) {
+                document.body.classList.add('dark-mode-active');
+            } else {
+                document.body.classList.remove('dark-mode-active');
+            }
+        }
+
+        // ቋንቋ መቀየሪያና UI ማደሻ
+        function changeLanguage(val) {
+            userState.lang = val;
+            updateLanguageUI();
+        }
+
+        function updateLanguageUI() {
+            const lang = userState.lang;
+            document.getElementById('app-subtitle').innerText = strings[lang]['app_subtitle'];
+            
+            // የትርጉም መታወቂያዎችን ማደስ
+            const ids = [
+                "lbl-3d-title", "lbl-3d-desc", "lbl-ren-title", "lbl-ren-desc", "lbl-prompt-msg",
+                "lbl-login-btn", "lbl-login-header", "lbl-welcome-msg", "lbl-login-sub", "lbl-name-field",
+                "lbl-phone-field", "lbl-btn-continue", "lbl-order-title", "lbl-selected-cat", "lbl-project-type",
+                "lbl-upload-btn", "lbl-camera-btn", "lbl-desc-title", "lbl-finish-order", "lbl-profile-title",
+                "lbl-unreg-title", "lbl-unreg-sub", "lbl-login-short", "menu-history", "menu-settings",
+                "menu-info", "lbl-lang-option", "btn-logout", "lbl-success-msg", "lbl-success-sub"
+            ];
+
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = strings[lang][id];
+            });
+
+            document.getElementById('input-desc').placeholder = strings[lang]['input-desc-placeholder'];
         }
     </script>
 </body>
