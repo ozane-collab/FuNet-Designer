@@ -8,107 +8,109 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #ff3b30;
-            --secondary-color: #007aff;
-            --bg-light: #f9f9f9;
+            --primary-color: #f33f2d;
+            --primary-hover: #d63022;
+            --bg-color: #f7f7f9;
             --card-bg: #ffffff;
-            --text-dark: #1c1c1e;
-            --text-muted: #8e8e93;
+            --text-main: #1a1a1a;
+            --text-sub: #707070;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
-        /* Mobile Device Container Simulation */
+        /* App Container mimicking Mobile View */
         .app-container {
             width: 100%;
             max-width: 450px;
+            background: #ffffff;
             min-height: 100vh;
-            background: #fff;
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
             position: relative;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* Screen Management */
-        .screen {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            padding: 20px;
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        /* Global Header */
-        .app-header {
+        /* Navigation Bar */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
             background: #fff;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .brand h1 {
-            color: var(--primary-color);
-            font-size: 28px;
+        .brand-zone {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-logo {
+            font-size: 26px;
             font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1;
         }
 
-        .brand span {
-            color: var(--text-dark);
+        .brand-sub {
+            font-size: 13px;
+            font-weight: 700;
             font-style: italic;
-            font-size: 14px;
-            font-weight: 600;
-            display: block;
-            margin-top: -5px;
+            color: #000;
+            margin-top: 2px;
         }
 
-        .header-controls {
+        .nav-right {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
         .lang-switch {
-            background: #eee;
+            background: #f0f0f2;
             border: none;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
+            color: var(--text-main);
         }
 
         .menu-btn {
-            font-size: 22px;
             background: none;
             border: none;
+            font-size: 22px;
             cursor: pointer;
+            color: var(--text-main);
         }
 
-        /* Back Button Header for Sub-screens */
+        /* Dynamic Header for Sub-pages */
         .sub-header {
             display: flex;
             align-items: center;
             padding: 15px 20px;
             background: #fff;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #eee;
         }
 
         .back-btn {
@@ -117,68 +119,88 @@
             font-size: 20px;
             cursor: pointer;
             margin-right: 20px;
+            color: var(--text-main);
         }
 
-        .sub-header h2 {
+        .page-title {
             font-size: 18px;
-            flex: 1;
+            font-weight: 700;
+            flex-grow: 1;
             text-align: center;
-            margin-right: 40px;
+            margin-right: 40px; /* Center balancing */
         }
 
-        /* MAIN HOME SCREEN (Photo 2 & 3) */
+        /* View Management */
+        .view {
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            animation: fadeIn 0.3s ease-in-out;
+            flex-grow: 1;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home View UI Elements */
         .category-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 10px;
+            margin-bottom: 25px;
         }
 
-        .category-card {
-            background: var(--card-bg);
-            border-radius: 20px;
+        .cat-card {
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 24px;
             padding: 25px 15px;
             text-align: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-            border: 1px solid #f2f2f7;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
         }
 
-        .category-card:active {
+        .cat-card:active {
             transform: scale(0.97);
         }
 
-        .category-card i {
-            font-size: 36px;
+        .cat-icon {
+            font-size: 32px;
             color: var(--primary-color);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
-        .category-card h3 {
+        .cat-title {
             font-size: 16px;
+            font-weight: 700;
             margin-bottom: 4px;
         }
 
-        .category-card p {
+        .cat-desc {
             font-size: 12px;
-            color: var(--text-muted);
+            color: var(--text-sub);
         }
 
-        /* Start Next Project Banner */
         .action-banner {
             background: #fff;
-            border: 1px dashed var(--primary-color);
-            border-radius: 15px;
+            border: 2px dashed #fcdad7;
+            border-radius: 16px;
             padding: 15px;
-            margin: 20px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
+            margin-bottom: 25px;
         }
 
-        .banner-content {
+        .banner-left {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -186,7 +208,7 @@
             font-size: 15px;
         }
 
-        .banner-content i {
+        .banner-icon {
             color: var(--primary-color);
             font-size: 18px;
         }
@@ -203,35 +225,33 @@
             font-size: 12px;
         }
 
-        /* Recent Requests Area */
-        .section-title {
+        .section-heading {
             font-size: 16px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 12px;
         }
 
-        .empty-history {
-            color: var(--text-muted);
+        .history-status {
             font-size: 14px;
-            margin: 10px 0 30px 0;
+            color: var(--text-sub);
+            margin-bottom: 25px;
         }
 
-        /* Premium Architecture Promo Card */
         .promo-card {
-            position: relative;
+            background: #fff;
             border-radius: 20px;
             overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            position: relative;
             margin-top: auto;
-            margin-bottom: 15px;
-            height: 160px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .promo-card img {
+        .promo-img {
             width: 100%;
-            height: 100%;
+            height: 180px;
             object-fit: cover;
+            display: block;
         }
 
         .promo-overlay {
@@ -240,186 +260,69 @@
             left: 0;
             right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.85));
-            padding: 15px;
+            padding: 20px;
             color: #fff;
         }
 
-        .promo-overlay h4 {
-            font-size: 18px;
-            margin-bottom: 4px;
-        }
-
-        .promo-overlay p {
-            font-size: 11px;
-            opacity: 0.85;
-            line-height: 1.3;
-        }
-
-        /* Bottom Fixed Login/Action Button */
-        .fixed-bottom-action {
-            margin-top: 15px;
-        }
-
-        .btn-primary {
-            width: 100%;
-            background: var(--primary-color);
-            color: #fff;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 16px;
+        .promo-title {
+            font-size: 20px;
             font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+            margin-bottom: 5px;
         }
 
-        /* LOGIN SCREEN (Transformed to modal or full screen overlay if needed) */
+        .promo-desc {
+            font-size: 12px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* Sticky Footer Login Action Trigger Button */
+        .bottom-action-wrapper {
+            padding: 15px 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+
+        /* Order Form UI Elements */
         .form-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
+        .form-label {
+            font-size: 14px;
             font-weight: 700;
             margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #e5e5ea;
-            border-radius: 12px;
-            font-size: 15px;
-            background: #fafafa;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            background: #fff;
-        }
-
-        /* ORDER INFO & CHAT SCREEN (Photo 4) */
-        .order-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            border: 1px solid #f0f0f0;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .order-header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .order-meta h3 {
-            color: var(--primary-color);
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .order-meta p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* Thumbnail Image Style (The Yellow Box Correction) */
-        .order-thumbnail {
-            width: 70px;
-            height: 70px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid #e5e5ea;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .order-thumbnail:hover {
-            opacity: 0.8;
-        }
-
-        .requirements-box {
-            background: #f2f2f7;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .attached-text {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Telegram Style Chat Implementation */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-            background: #f4f4f7;
-            padding: 15px;
-            border-radius: 16px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .chat-bubble {
-            max-width: 75%;
-            padding: 12px 14px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.4;
-            position: relative;
-        }
-
-        /* Sent by User (Right Side) */
-        .bubble-user {
-            background: #dcf8c6;
-            color: #000;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        /* Sent by Designer (Left Side) */
-        .bubble-designer {
-            background: #ffffff;
-            color: #000;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .chat-time {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-align: right;
-            margin-top: 4px;
             display: block;
         }
 
-        /* NEW ORDER FORM SCREEN (Photo 5 - Telebirr removed) */
-        .media-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        .category-badge {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 16px;
         }
 
-        .btn-media {
+        .custom-select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fff;
+            outline: none;
+        }
+
+        .media-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .media-btn {
             padding: 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
@@ -430,18 +333,160 @@
             color: #fff;
         }
 
-        .btn-upload { background: #3a3a3c; }
+        .btn-upload { background: #3a3b3c; }
         .btn-camera { background: var(--primary-color); }
 
         .file-status {
             text-align: center;
             font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
+            color: var(--text-sub);
         }
 
-        /* Full Screen Image Modal Mechanism */
-        .image-modal {
+        .custom-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            background: #fafafa;
+        }
+
+        /* Chat and Layout elements for Order Details */
+        .order-card {
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-right: 75px; /* Clear thumbnail path spacing */
+        }
+
+        .order-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .order-card-meta {
+            font-size: 13px;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Dynamic Image Thumbnail Box top right */
+        .order-thumbnail-box {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 65px;
+            height: 65px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            background: #eee;
+        }
+
+        .order-thumbnail-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .requirements-box {
+            background: #f2f2f7;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .attached-filename {
+            font-size: 11px;
+            color: var(--text-sub);
+            word-break: break-all;
+            margin-bottom: 15px;
+        }
+
+        .divider-line {
+            border-top: 1px dashed #dcdcdc;
+            margin: 15px 0;
+        }
+
+        /* Telegram-like Chat Mechanism UI */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        /* Sent Message bubble layout right side */
+        .chat-bubble.sent {
+            background: #dcf8c6;
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Received Message bubble layout left side */
+        .chat-bubble.received {
+            background: #f1f0f0;
+            color: #000;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* Core Global Button */
+        .btn-block {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #fff;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Lightbox Image Zoom Mechanics */
+        .lightbox {
             display: none;
             position: fixed;
             top: 0;
@@ -449,319 +494,384 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.9);
-            z-index: 9999;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
         }
 
-        .image-modal.active {
-            display: flex;
-        }
-
-        .image-modal img {
+        .lightbox img {
             max-width: 95%;
-            max-height: 85%;
+            max-height: 90%;
             border-radius: 8px;
             object-fit: contain;
+            animation: zoomIn 0.25s ease-out;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: #fff;
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
-            border: none;
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Hidden standard file inputs */
+        #fileInput, #cameraInput {
+            display: none;
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-
-    <!-- ================= MAIN HOME SCREEN ================= -->
-    <div id="screen-home" class="screen active">
-        <header class="app-header">
-            <div class="brand">
-                <h1>FuNet</h1>
-                <span>Designer</span>
+    <div class="app-container">
+        
+        <!-- Main Navigation Header (Always shared across system states dynamically) -->
+        <div id="appNav" class="navbar">
+            <div class="brand-zone">
+                <span class="brand-logo">FuNet</span>
+                <span class="brand-sub">Designer</span>
             </div>
-            <div class="header-controls">
-                <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">አማርኛ</button>
+            <div class="nav-right">
+                <button class="lang-switch" id="langToggle" onclick="toggleLanguage()">አማርኛ</button>
                 <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
             </div>
-        </header>
-
-        <!-- Category Grid Section -->
-        <div class="category-grid">
-            <div class="category-card" onclick="openNewOrder('3D Design')">
-                <i class="fa-solid fa-layer-group"></i>
-                <h3 data-en="3D Design" data-am="3D ዲዛይን">3D Design</h3>
-                <p data-en="Architectural Plans" data-am="የአርክቴክቸር ፕላን">Architectural Plans</p>
-            </div>
-            <div class="category-card" onclick="openNewOrder('Renovation')">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                <h3 data-en="Renovation" data-am="ዕድሳት">Renovation</h3>
-                <p data-en="Modern Materials" data-am="ዘመናዊ ዕቃዎች">Modern Materials</p>
-            </div>
         </div>
 
-        <!-- Banner -->
-        <div class="action-banner" onclick="openNewOrder('General Project')">
-            <div class="banner-content">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span data-en="Start Your Next Design Project..." data-am="ቀጣዩን የዲዛይን ፕሮጀክት ይጀምሩ...">Start Your Next Design Project...</span>
-            </div>
-            <div class="banner-arrow">
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
+        <!-- Dynamic Page Sub-Header for inner navigation states -->
+        <div id="subNav" style="display: none;" class="sub-header">
+            <button class="back-btn" onclick="navigateHome()"><i class="fa-solid fa-arrow-left"></i></button>
+            <span id="subNavTitle" class="page-title">Form</span>
         </div>
 
-        <!-- Recent Requests Section -->
-        <h2 class="section-title" data-en="Recent Requests" data-am="የቅርብ ጊዜ ጥያቄዎች">Recent Requests</h2>
-        <div class="empty-history" id="emptyHistoryText" data-en="No recent requests available." data-am="ምንም የተቀመጠ የቅርብ ታሪክ የለም፡፡">
-            No recent requests available.
-        </div>
-
-        <!-- Quick Access Mock Link to Order Info (For presentation) -->
-        <div class="order-card" style="cursor: pointer; margin-top: 5px;" onclick="goToScreen('screen-order-info')">
-            <div class="order-header-flex" style="margin-bottom:0;">
-                <div class="order-meta">
-                    <h3 style="font-size:14px;">Modern Cafe / ዘመናዊ ካፌ</h3>
-                    <p>View Status & Chat</p>
+        <!-- 1. Home Base Dashboard View (Activated by Default on startup) -->
+        <div id="homeView" class="view active">
+            <div class="category-grid">
+                <div class="cat-card" onclick="openOrderForm('3D Design', 'Architectural Plans', 'Modern Building / ዘመናዊ ሕንፃ')">
+                    <div class="cat-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="cat-title text-3d-title">3D Design</div>
+                    <div class="cat-desc text-3d-desc">Architectural Plans</div>
                 </div>
-                <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); margin-top:8px;"></i>
+                <div class="cat-card" onclick="openOrderForm('Renovation', 'Modern Materials', 'House Renovation / የቤት እድሳት')">
+                    <div class="cat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <div class="cat-title text-renov-title">Renovation</div>
+                    <div class="cat-desc text-renov-desc">Modern Materials</div>
+                </div>
+            </div>
+
+            <div class="action-banner" onclick="openOrderForm('3D Design', 'Architectural Plans', 'Modern Building / ዘመናዊ ሕንፃ')">
+                <div class="banner-left">
+                    <span class="banner-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                    <span class="text-banner-action">Start Your Next Design Project...</span>
+                </div>
+                <div class="banner-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </div>
+
+            <h3 class="section-heading text-recent-requests">Recent Requests</h3>
+            <div id="historyStatus" class="history-status">No recent request history found.</div>
+
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Premium Architecture" class="promo-img">
+                <div class="promo-overlay">
+                    <div class="promo-title text-promo-title">Premium Architecture</div>
+                    <div class="promo-desc text-promo-desc">Transforming your concept into beautiful realistic design plans.</div>
+                </div>
+            </div>
+
+            <!-- Sticky Base Activation Action Button Grid inside Footer context -->
+            <div class="bottom-action-wrapper" id="homeActionContainer">
+                <button class="btn-block btn-primary" id="loginBtnLabel" onclick="triggerMockLogin()">
+                    <i class="fa-solid fa-lock"></i> Login to Order
+                </button>
             </div>
         </div>
 
-        <!-- Promo Banner Bottom -->
-        <div class="promo-card">
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Premium Architecture">
-            <div class="promo-overlay">
-                <h4 data-en="Premium Architecture" data-am="ከፍተኛ ጥራት ያለው አርክቴክቸር">Premium Architecture</h4>
-                <p data-en="Transforming your concept into beautiful realistic design plans." data-am="ሀሳብዎን ወደ ውብ ተጨባጭ የዲዛይን እቅዶች መለወጥ።">Transforming your concept into beautiful realistic design plans.</p>
+        <!-- 2. Interactive Request Creation Form UI -->
+        <div id="formView" class="view">
+            <div class="form-group">
+                <label class="form-label text-label-cat">Selected Category:</label>
+                <span id="formCategoryLabel" class="category-badge">3D Design</span>
             </div>
-        </div>
 
-        <!-- Bottom Fixed Button Area -->
-        <div class="fixed-bottom-action">
-            <button class="btn-primary" onclick="goToScreen('screen-login')" id="footerActionBtn">
-                <i class="fa-solid fa-right-to-bracket"></i> <span data-en="Login to Order" data-am="ለማዘዝ መጀመሪያ ይግቡ">Login to Order</span>
+            <div class="form-group">
+                <label class="form-label text-label-type">Select Specific Project Type</label>
+                <select id="projectTypeSelect" class="custom-select">
+                    <!-- Options populated inside lifecycle handler dynamically -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="media-actions">
+                    <button class="media-btn btn-upload" onclick="triggerFileInput()"><i class="fa-solid fa-file-arrow-up"></i> Upload File 📂</button>
+                    <button class="media-btn btn-camera" onclick="triggerCameraInput()"><i class="fa-solid fa-camera"></i> Take Camera 📷</button>
+                </div>
+                <!-- Native file fields hidden from accessibility DOM focus structures -->
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelection(event)">
+                <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleFileSelection(event)">
+                <div id="fileStatusText" class="file-status">No photo selected (Optional)</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label text-label-guidelines">Additional Project Guidelines:</label>
+                <textarea id="guidelinesText" class="custom-textarea" placeholder="Write specific design requirements here... (e.g., wall colors, item placements)"></textarea>
+            </div>
+
+            <button class="btn-block btn-primary" onclick="submitDesignOrder()" style="margin-top: 10px;">
+                Finish Order 🚀
             </button>
         </div>
-    </div>
 
-
-    <!-- ================= LOGIN SCREEN ================= -->
-    <div id="screen-login" class="screen">
-        <header class="sub-header">
-            <button class="back-btn" onclick="goToScreen('screen-home')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 data-en="Login" data-am="መግቢያ">Login</h2>
-        </header>
-        
-        <div style="text-align: center; margin: 40px 0 20px 0;">
-            <h2 style="font-size: 26px; margin-bottom: 8px;" data-en="Welcome to FuNet" data-am="ወደ FuNet እንኳን ደህና መጡ">Welcome to FuNet</h2>
-            <p style="color: var(--text-muted);" data-en="Please login to start your order" data-am="እባክዎን ትዕዛዝ ለመጀመር ይግቡ">Please login to start your order</p>
-        </div>
-
-        <div class="form-group">
-            <label data-en="Full Name" data-am="ሙሉ ስም">Full Name</label>
-            <input type="text" placeholder="Enter full name" id="loginName">
-        </div>
-
-        <div class="form-group">
-            <label data-en="Phone Number" data-am="ስልክ ቁጥር">Phone Number</label>
-            <input type="tel" value="+251" id="loginPhone">
-        </div>
-
-        <button class="btn-primary" style="margin-top: 20px;" onclick="handleLogin()">
-            <span data-en="Login & Continue 🚀" data-am="ግቡ እና ቀጥሉ 🚀">Login & Continue 🚀</span>
-        </button>
-    </div>
-
-
-    <!-- ================= NEW ORDER FORM SCREEN ================= -->
-    <div id="screen-new-order" class="screen">
-        <header class="sub-header">
-            <button class="back-btn" onclick="goToScreen('screen-home')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 data-en="New Order Form" data-am="የአዲስ ትዕዛዝ ፎርም">New Order Form</h2>
-        </header>
-
-        <div style="margin: 15px 0;">
-            <span style="font-size: 15px; font-weight:600;" data-en="Selected Category:" data-am="የተመረጠው ዘርፍ:">Selected Category:</span>
-            <span id="selectedCategoryDisplay" style="color: var(--primary-color); font-weight: 700; font-size: 15px; margin-left: 5px;">3D Design</span>
-        </div>
-
-        <div class="form-group">
-            <label data-en="Select Specific Project Type" data-am="የፕሮጀክት አይነት ይምረጡ">Select Specific Project Type</label>
-            <select id="projectType">
-                <option value="Modern Building">Modern Building / ዘመናዊ ህንፃ</option>
-                <option value="Living Room">Living Room / ሳሎን ዲዛይን</option>
-                <option value="Modern Cafe">Modern Cafe / ዘመናዊ ካፌ</option>
-            </select>
-        </div>
-
-        <div class="media-buttons">
-            <button class="btn-media btn-upload"><i class="fa-solid fa-file-arrow-up"></i> <span data-en="Upload File 📁" data-am="ፋይል አያይዝ 📁">Upload File 📁</span></button>
-            <button class="btn-media btn-camera"><i class="fa-solid fa-camera"></i> <span data-en="Take Camera 📷" data-am="ካሜራ አንሳ 📷">Take Camera 📷</span></button>
-        </div>
-        <div class="file-status" data-en="No photo selected (Optional)" data-am="ምንም ፎቶ አልተመረጠም (አማራጭ)">No photo selected (Optional)</div>
-
-        <div class="form-group">
-            <label data-en="Additional Project Guidelines:" data-am="ተጨማሪ የፕሮጀክት መመሪያዎች:">Additional Project Guidelines:</label>
-            <textarea id="projectRequirements" rows="4" placeholder="Write specific design requirements here... (e.g., wall colors, item placements)"></textarea>
-        </div>
-
-        <!-- Note: Telebirr Button completely removed as requested -->
-        <button class="btn-primary" style="margin-top: 10px;" onclick="submitOrder()">
-            <span data-en="Finish Order 🚀" data-am="ትዕዛዙን ጨርስ 🚀">Finish Order 🚀</span>
-        </button>
-    </div>
-
-
-    <!-- ================= ORDER INFO SCREEN (WITH TELEGRAM CHAT Layout) ================= -->
-    <div id="screen-order-info" class="screen">
-        <header class="sub-header">
-            <button class="back-btn" onclick="goToScreen('screen-home')"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 data-en="Order Info" data-am="የትዕዛዝ መረጃ">Order Info</h2>
-        </header>
-
-        <div class="order-card">
-            <div class="order-header-flex">
-                <div class="order-meta">
-                    <h3>Modern Cafe / ዘመናዊ ካፌ</h3>
-                    <p><i class="fa-solid fa-calendar-days"></i> Just now (FN-490)</p>
+        <!-- 3. Telegram styled Delivery Conversation Details View UI -->
+        <div id="infoView" class="view">
+            <div class="order-card">
+                <div class="order-card-header">
+                    <div>
+                        <div id="infoProjectTitle" class="order-card-title">Modern Cafe / ዘመናዊ ካፌ</div>
+                        <div class="order-card-meta">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span id="infoProjectMeta">Just now (FN-490)</span>
+                        </div>
+                    </div>
                 </div>
-                <!-- Thumbnail with click to expand full screen features -->
-                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=150&q=80" class="order-thumbnail" alt="Attached Image" onclick="openFullscreenImage(this.src)">
-            </div>
 
-            <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px;" data-en="Your Requirements:" data-am="የእርስዎ ፍላጎቶች:">Your Requirements:</div>
-            <div class="requirements-box">
-                Blablabla
-            </div>
-            <div class="attached-text">
-                Attached Image: 17807543068056317591290949683953.jpg
+                <!-- Floating Thumbnail Box positioned precisely inside relative layout structures -->
+                <div class="order-thumbnail-box" id="infoThumbnailWrapper" onclick="expandImagePreview()">
+                    <img id="infoImagePreview" src="" alt="Attached Context">
+                </div>
+
+                <div class="divider-line"></div>
+
+                <!-- Conversational Thread UI Frame (Telegram Layout Style) -->
+                <div class="chat-container">
+                    <!-- Client requirement block message -->
+                    <div class="chat-bubble sent" id="infoClientBubble">
+                        <!-- Instantiated client specification copy placeholder -->
+                    </div>
+                    <!-- System designer interactive feedback block message -->
+                    <div class="chat-bubble received" id="infoDesignerBubble">
+                        <!-- Translated localized designer responses handled here -->
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Telegram Style Chat Display Layout Zone -->
-        <h3 style="font-size: 14px; margin-bottom: 8px; color: var(--text-dark);" data-en="Project Conversation" data-am="የፕሮጀክት ውይይት"><i class="fa-regular fa-comments"></i> Project Conversation</h3>
-        
-        <div class="chat-container">
-            <!-- User Message (Right Align) -->
-            <div class="chat-bubble bubble-user">
-                Here are the core files and ideas for the modern cafe concept. I need soft lighting.
-                <span class="chat-time">4:58 PM</span>
-            </div>
-            
-            <!-- Designer Message (Left Align) -->
-            <div class="chat-bubble bubble-designer">
-                Your request is received! Our head designer is working on the interior layout, shelf placements, and the custom wall colors. We will upload the 3D preview model here soon.
-                <span class="chat-time">4:59 PM</span>
-            </div>
-        </div>
     </div>
 
-</div>
+    <!-- Image View Lightbox Overlay Container -->
+    <div id="imageLightbox" class="lightbox" onclick="closeImagePreview()">
+        <img id="lightboxTarget" src="" alt="Fullscreen View">
+    </div>
 
-<!-- Fullscreen Image Viewer Modal Element -->
-<div class="image-modal" id="imageModal">
-    <button class="close-modal" onclick="closeFullscreenImage()">&times;</button>
-    <img id="modalImg" src="" alt="Expanded View">
-</div>
+    <!-- Lifecycle Script System Architectures Manager -->
+    <script>
+        // System wide Reactive Configuration Variables Base
+        let currentLang = 'en'; // Active Language standard track locator state
+        let selectedCategoryGlobal = '';
+        let temporaryCapturedPhotoUrl = '';
+        let dynamicMockFilename = '';
 
-<script>
-    // System State Management
-    let currentLanguage = 'en'; // Default English
-    let isLoggedIn = false;
+        // Mock Static Database Store for App Content Matrix Strings mapping
+        const dictionary = {
+            en: {
+                toggleLabel: "አማርኛ",
+                loginBtn: "Login to Order",
+                recentRequests: "Recent Requests",
+                noHistory: "No recent request history found.",
+                bannerAction: "Start Your Next Design Project...",
+                design3DTitle: "3D Design",
+                design3DDesc: "Architectural Plans",
+                renovTitle: "Renovation",
+                renovDesc: "Modern Materials",
+                promoTitle: "Premium Architecture",
+                promoDesc: "Transforming your concept into beautiful realistic design plans.",
+                formTitle: "New Order Form",
+                infoTitle: "Order Info",
+                lblCat: "Selected Category:",
+                lblType: "Select Specific Project Type",
+                lblGuidelines: "Additional Project Guidelines:",
+                placeholderText: "Write specific design requirements here... (e.g., wall colors, item placements)",
+                noPhoto: "No photo selected (Optional)",
+                photoSelected: "Photo attached successfully",
+                designerMsg: "Your request is received! Our head designer is working on the interior layout, shelf placements, and the custom wall colors. We will upload the 3D preview model here soon."
+            },
+            am: {
+                toggleLabel: "English",
+                loginBtn: "ለማዘዝ መጀመሪያ ይግቡ",
+                recentRequests: "የቅርብ ጊዜ ጥያቄዎች",
+                noHistory: "ምንም የተቀመጠ የቅርብ ጊዜ ታሪክ የለም::",
+                bannerAction: "የንድፍ ፕሮጄክትዎን አሁኑኑ ይጀምሩ...",
+                design3DTitle: "3D ዲዛይን",
+                design3DDesc: "የሕንፃ ፕላኖች",
+                renovTitle: "እድሳት",
+                renovDesc: "ዘመናዊ ዕቃዎች",
+                promoTitle: "ፕሪሚየም አርክቴክቸር",
+                promoDesc: "የእርስዎን ሀሳብ ወደ ውብ እና እውነተኛ የንድፍ እቅዶች መለወጥ::",
+                formTitle: "አዲስ የትዕዛዝ ፎርም",
+                infoTitle: "የትዕዛዝ መረጃ",
+                lblCat: "የተመረጠው ዘርፍ:",
+                lblType: "የፕሮጀክት ዓይነት ይምረጡ",
+                lblGuidelines: "ተጨማሪ የፕሮጀክት መመሪያዎች:",
+                placeholderText: "የተወሰኑ የንድፍ መስፈርቶችን እዚህ ይፃፉ... (ለምሳሌ የግድግዳ ቀለሞች ፣ የዕቃ አቀማመጥ)",
+                noPhoto: "ምንም ፎቶ አልተመረጠም (አማራጭ)",
+                photoSelected: "ፎቶ በትክክል ተያይዟል",
+                designerMsg: "ትዕዛዝዎ ደርሶናል! ዋና ዲዛይነራችን በውስጥ አቀማመጥ፣ በመደርደሪያዎች አቀማመጥ እና በግድግዳ ቀለሞች ላይ እየሰራ ነው። በቅርቡ የ3D እይታውን እዚህ እንጭናለን።"
+            }
+        };
 
-    // View Routing Navigator
-    function goToScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-    }
-
-    // New Order Route Action
-    function openNewOrder(categoryName) {
-        document.getElementById('selectedCategoryDisplay').innerText = categoryName;
-        goToScreen('screen-new-order');
-    }
-
-    // Login Action Logic
-    function handleLogin() {
-        const name = document.getElementById('loginName').value;
-        if(name.trim() !== "") {
-            isLoggedIn = true;
-            updateAuthUI();
-            goToScreen('screen-home');
-        } else {
-            alert(currentLanguage === 'en' ? "Please enter your name." : "እባክዎን ስምዎን ያስገቡ፡፡");
-        }
-    }
-
-    // Mock Submit Handler
-    function submitOrder() {
-        alert(currentLanguage === 'en' ? "Order placed successfully!" : "ትዕዛዝዎ በተሳካ ሁኔታ ተልኳል!");
-        goToScreen('screen-order-info');
-    }
-
-    // Dynamic UI state changes based on language and login status
-    function updateAuthUI() {
-        const footerActionBtn = document.getElementById('footerActionBtn');
-        if (isLoggedIn) {
-            footerActionBtn.style.display = 'none';
-        } else {
-            footerActionBtn.style.display = 'flex';
-            // Set values according to selected global language constraints
-            if(currentLanguage === 'en') {
-                footerActionBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>Login to Order</span>`;
+        // System view switching automation management logic
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            if (viewId === 'homeView') {
+                document.getElementById('appNav').style.display = 'flex';
+                document.getElementById('subNav').style.display = 'none';
             } else {
-                footerActionBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>ለማዘዝ መጀመሪያ ይግቡ</span>`;
+                document.getElementById('appNav').style.display = 'none';
+                document.getElementById('subNav').style.display = 'flex';
             }
         }
-    }
 
-    // Language Engine Switcher
-    function toggleLanguage() {
-        currentLanguage = currentLanguage === 'en' ? 'am' : 'en';
-        document.getElementById('langBtn').innerText = currentLanguage === 'en' ? 'አማርኛ' : 'English';
-        
-        // Translate elements based on dynamic dictionary markers
-        document.querySelectorAll('[data-en]').forEach(el => {
-            el.innerText = currentLanguage === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-am');
-        });
-
-        // Specific placeholder handling overrides
-        const reqTextArea = document.getElementById('projectRequirements');
-        if(reqTextArea) {
-            reqTextArea.placeholder = currentLanguage === 'en' ? 
-                "Write specific design requirements here... (e.g., wall colors, item placements)" : 
-                "የተለዩ የዲዛይን ፍላጎቶችን እዚህ ይጻፉ... (ለምሳሌ የግድግዳ ቀለሞች, የእቃዎች አቀማመጥ)";
+        function navigateHome() {
+            switchView('homeView');
         }
 
-        updateAuthUI();
-    }
+        // Language Translation Renderer Engine Configuration Layout
+        function toggleLanguage() {
+            currentLang = (currentLang === 'en') ? 'am' : 'en';
+            renderSystemLanguage();
+        }
 
-    // Full Screen Zoom Image Actions
-    function openFullscreenImage(src) {
-        const modal = document.getElementById('imageModal');
-        const modalImg = document.getElementById('modalImg');
-        modal.classList.add('active');
-        modalImg.src = src;
-    }
+        function renderSystemLanguage() {
+            const data = dictionary[currentLang];
+            
+            // Layout Top Navbar Elements Strings
+            document.getElementById('langToggle').innerText = data.toggleLabel;
+            
+            // Home Dashboard Strings Translation Mapping Renderers
+            document.getElementById('loginBtnLabel').innerHTML = `<i class="fa-solid fa-lock"></i> ${data.loginBtn}`;
+            document.querySelector('.text-recent-requests').innerText = data.recentRequests;
+            document.getElementById('historyStatus').innerText = data.noHistory;
+            document.querySelector('.text-banner-action').innerText = data.bannerAction;
+            document.querySelector('.text-3d-title').innerText = data.design3DTitle;
+            document.querySelector('.text-3d-desc').innerText = data.design3DDesc;
+            document.querySelector('.text-renov-title').innerText = data.renovTitle;
+            document.querySelector('.text-renov-desc').innerText = data.renovDesc;
+            document.querySelector('.text-promo-title').innerText = data.promoTitle;
+            document.querySelector('.text-promo-desc').innerText = data.promoDesc;
 
-    function closeFullscreenImage() {
-        document.getElementById('imageModal').classList.remove('active');
-    }
+            // Form Interactive Content Component Strings Engine Layout
+            document.querySelector('.text-label-cat').innerText = data.lblCat;
+            document.querySelector('.text-label-type').innerText = data.lblType;
+            document.querySelector('.text-label-guidelines').innerText = data.lblGuidelines;
+            document.getElementById('guidelinesText').placeholder = data.placeholderText;
+            
+            // Check status for file selection
+            if(!temporaryCapturedPhotoUrl) {
+                document.getElementById('fileStatusText').innerText = data.noPhoto;
+            }
 
-    // Initialize layout state constraints ruleset on launch
-    window.onload = function() {
-        updateAuthUI();
-    };
-</script>
+            // Real-time translation update support inside active chat dialogue blocks context
+            const designerBubble = document.getElementById('infoDesignerBubble');
+            if(designerBubble && designerBubble.innerText.trim() !== "") {
+                designerBubble.innerText = data.designerMsg;
+            }
+        }
 
+        // Functional Mock User Session Activator Tracker Trigger Flow
+        function triggerMockLogin() {
+            alert(currentLang === 'en' ? "Login logic bypass completed successfully!" : "የሙከራ መግቢያ በተሳካ ሁኔታ ተጠናቋል!");
+        }
+
+        // Order System Form Initialization Layouts Engine Core
+        function openOrderForm(category, sub, sampleType) {
+            selectedCategoryGlobal = category;
+            document.getElementById('subNavTitle').innerText = dictionary[currentLang].formTitle;
+            document.getElementById('formCategoryLabel').innerText = (currentLang === 'en') ? category : (category === '3D Design' ? '3D ዲዛይን' : 'እድሳት');
+            
+            const dropdown = document.getElementById('projectTypeSelect');
+            dropdown.innerHTML = '';
+            
+            // Populating options inside specialized project selections dynamically
+            const items = (category === '3D Design') 
+                ? ["Modern Building / ዘመናዊ ሕንፃ", "Modern Cafe / ዘመናዊ ካፌ", "Villa Design / የቪላ ዲዛይን"]
+                : ["House Renovation / የቤት እድሳት", "Office Renewal / የቢሮ እድሳት", "Kitchen Update / የወጥ ቤት ማዘመን"];
+                
+            items.forEach(item => {
+                let opt = document.createElement('option');
+                opt.value = item;
+                opt.innerText = item;
+                dropdown.appendChild(opt);
+            });
+
+            // Resets standard entry criteria inputs safely down downstream flows
+            document.getElementById('guidelinesText').value = '';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('cameraInput').value = '';
+            temporaryCapturedPhotoUrl = '';
+            dynamicMockFilename = '';
+            document.getElementById('fileStatusText').innerText = dictionary[currentLang].noPhoto;
+
+            switchView('formView');
+        }
+
+        // Capture trigger abstractions for modular asset management mapping
+        function triggerFileInput() { document.getElementById('fileInput').click(); }
+        function triggerCameraInput() { document.getElementById('cameraInput').click(); }
+
+        // Localized asset intake cache parsing interface core pipeline
+        function handleFileSelection(event) {
+            const file = event.target.files[0];
+            if (file) {
+                temporaryCapturedPhotoUrl = URL.createObjectURL(file);
+                // Setup programmatic unique string filename structure matching requirements layout
+                dynamicMockFilename = Math.floor(Math.random() * 100000000000000000) + "_" + file.name;
+                document.getElementById('fileStatusText').innerText = `${dictionary[currentLang].photoSelected}: ${file.name}`;
+            }
+        }
+
+        // Package generation assembler workflow engine dispatch logic triggers
+        function submitDesignOrder() {
+            const typeValue = document.getElementById('projectTypeSelect').value;
+            const clientNotes = document.getElementById('guidelinesText').value.trim() || "No specific details entered.";
+            
+            // Setup falling fallback preview state in event media stream captures left empty
+            const presentationPhoto = temporaryCapturedPhotoUrl || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=300&q=80";
+            const attachmentLabel = dynamicMockFilename || "default_project_reference_context.jpg";
+
+            // Structural mapping allocation layout assignments to order execution outputs window state variables
+            document.getElementById('subNavTitle').innerText = dictionary[currentLang].infoTitle;
+            document.getElementById('infoProjectTitle').innerText = typeValue;
+            document.getElementById('infoProjectMeta').innerText = `Just now (FN-${Math.floor(Math.random() * 800 + 100)})`;
+            
+            // Set data properties into communication threads safely layout matching requirements spec
+            document.getElementById('infoImagePreview').src = presentationPhoto;
+            
+            // Telegram Content Matrix structural allocation render injection
+            document.getElementById('infoClientBubble').innerHTML = `
+                <strong>${currentLang === 'en' ? 'Your Requirements:' : 'የእርስዎ መስፈርቶች:'}</strong><br>
+                ${clientNotes}
+                <div class="attached-filename" style="margin-top:8px; opacity:0.7;">Attached Image:<br>${attachmentLabel}</div>
+            `;
+            
+            // Setup localized responding dynamic message block text securely mapping output layout 
+            document.getElementById('infoDesignerBubble').innerText = dictionary[currentLang].designerMsg;
+
+            switchView('infoView');
+        }
+
+        // Zoom image activation lightboxes control pipeline handlers
+        function expandImagePreview() {
+            const srcTarget = document.getElementById('infoImagePreview').src;
+            if(srcTarget) {
+                document.getElementById('lightboxTarget').src = srcTarget;
+                document.getElementById('imageLightbox').style.display = 'flex';
+            }
+        }
+
+        function closeImagePreview() {
+            document.getElementById('imageLightbox').style.display = 'none';
+        }
+
+        // Initialize engine sequence triggers safely on execution stack tracking configurations runtime layout
+        renderSystemLanguage();
+    </script>
 </body>
 </html>
